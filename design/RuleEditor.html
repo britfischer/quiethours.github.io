@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>6.7 Edit a rule</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;1,7..72,400&amp;family=Figtree:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[role=switch]:focus-visible{outline:2px solid #4F5121;outline-offset:2px}
+a{color:#2F3020}a:hover{color:#B23A26}
+select{appearance:none;-webkit-appearance:none;width:100%;box-sizing:border-box;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%232F3020' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6'/></svg>");background-repeat:no-repeat;background-position:right 14px center}
+</style>
+<style>body{margin:0}</style>
+</head>
+<body>
+<!-- Board: 6.7 Edit a rule · designed width 1280px · exported from the design canvas, reference only -->
+<div style="width: 1280px; height: 1080px; box-sizing: border-box; background: rgba(47, 48, 32, 0.45); color: #2F3020; font-family: 'Figtree', sans-serif; display: flex; align-items: flex-start; justify-content: center; padding-top: 48px">
+  <section role="dialog" aria-label="Edit rule" style="width: 720px; max-width: calc(100% - 32px); background: #F9F8F4; border-radius: 28px; padding: 32px; box-sizing: border-box; display: flex; flex-direction: column; gap: 24px; box-shadow: 0 24px 60px rgba(47, 48, 32, 0.25)">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px">
+      <div>
+        <h2 style="margin: 0; font-family: 'Literata', serif; font-weight: 400; font-size: 28px">Edit rule</h2>
+        <p style="margin: 6px 0 0; font-size: 15px; color: #5E5D46">Runs automatically on anything new that arrives.</p>
+      </div>
+      <a href="SourcesRules.html" aria-label="Close" style="width: 44px; height: 44px; flex: none; border-radius: 22px; display: flex; align-items: center; justify-content: center; background: #E7E4DA"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2F3020" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></a>
+    </div>
+
+    <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #5E5D46">Rule name
+      <input type="text" value="Weeknight recipes" style="width: 100%; box-sizing: border-box; height: 48px; padding: 0 14px; border: 1px solid #CDCAA6; border-radius: 12px; background: #FFFFFF; color: #2F3020; font: 400 16px 'Figtree', sans-serif">
+    </label>
+
+    <fieldset style="margin: 0; padding: 0; border: none; display: flex; flex-direction: column; gap: 12px">
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding-bottom: 8px; border-bottom: 2px solid #D5D0C3">
+        <legend style="float: left; padding: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase">When something new</legend>
+        <div role="radiogroup" aria-label="Match" style="display: flex; background: #E7E4DA; border-radius: 999px; padding: 4px; font-size: 13px">
+          <span role="radio" aria-checked="true" style="padding: 6px 12px; border-radius: 999px; background: #FFFFFF; font-weight: 600">matches any</span>
+          <span role="radio" aria-checked="false" style="padding: 6px 12px; border-radius: 999px">matches all</span>
+        </div>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
+        <label style="flex: 1 1 150px; min-width: 0"><span style="position: absolute; left: -9999px">Field</span><select style="height: 48px; box-sizing: border-box; padding: 0 42px 0 14px; border: 1px solid #CDCAA6; border-radius: 12px; background-color: #FFFFFF; color: #2F3020; font: 500 15px 'Figtree', sans-serif; cursor: pointer"><option>Title or text</option><option>Source</option><option>Creator</option><option>Type</option><option>Length</option><option>Folder</option><option>Tag</option></select></label>
+        <label style="flex: 1 1 130px; min-width: 0"><span style="position: absolute; left: -9999px">Operator</span><select style="height: 48px; box-sizing: border-box; padding: 0 42px 0 14px; border: 1px solid #CDCAA6; border-radius: 12px; background-color: #FFFFFF; color: #2F3020; font: 500 15px 'Figtree', sans-serif; cursor: pointer"><option>contains</option><option>doesn't contain</option><option>is</option><option>is not</option></select></label>
+        <div style="flex: 3 1 260px; min-width: 0; min-height: 48px; box-sizing: border-box; padding: 6px 8px; border: 1px solid #D5D0C3; border-radius: 12px; background: #FFFFFF; display: flex; flex-wrap: wrap; gap: 6px; align-items: center">
+          <span style="height: 30px; padding: 0 6px 0 10px; border-radius: 10px; background: #EFEDDD; font-size: 14px; display: inline-flex; align-items: center; gap: 4px">sourdough<button aria-label="Remove sourdough" style="width: 24px; height: 24px; border: none; background: transparent; cursor: pointer; color: #5E5D46">×</button></span>
+          <span style="height: 30px; padding: 0 6px 0 10px; border-radius: 10px; background: #EFEDDD; font-size: 14px; display: inline-flex; align-items: center; gap: 4px">soup<button aria-label="Remove soup" style="width: 24px; height: 24px; border: none; background: transparent; cursor: pointer; color: #5E5D46">×</button></span>
+          <span style="height: 30px; padding: 0 6px 0 10px; border-radius: 10px; background: #EFEDDD; font-size: 14px; display: inline-flex; align-items: center; gap: 4px">sheet-pan<button aria-label="Remove sheet-pan" style="width: 24px; height: 24px; border: none; background: transparent; cursor: pointer; color: #5E5D46">×</button></span>
+          <label style="flex: 1; min-width: 80px"><span style="position: absolute; left: -9999px">Add a word</span><input type="text" placeholder="Type a word, press Enter" style="width: 100%; height: 30px; border: none; background: transparent; font: 400 14px 'Figtree', sans-serif; color: #2F3020"></label>
+        </div>
+        <button aria-label="Remove condition" style="width: 44px; height: 44px; flex: none; border: none; background: transparent; border-radius: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5E5D46" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
+        <label style="flex: 1 1 150px; min-width: 0"><span style="position: absolute; left: -9999px">Field</span><select style="height: 48px; box-sizing: border-box; padding: 0 42px 0 14px; border: 1px solid #CDCAA6; border-radius: 12px; background-color: #FFFFFF; color: #2F3020; font: 500 15px 'Figtree', sans-serif; cursor: pointer"><option>Source</option><option>Title or text</option><option>Creator</option><option>Type</option></select></label>
+        <label style="flex: 1 1 130px; min-width: 0"><span style="position: absolute; left: -9999px">Operator</span><select style="height: 48px; box-sizing: border-box; padding: 0 42px 0 14px; border: 1px solid #CDCAA6; border-radius: 12px; background-color: #FFFFFF; color: #2F3020; font: 500 15px 'Figtree', sans-serif; cursor: pointer"><option>is</option><option>is not</option></select></label>
+        <label style="flex: 3 1 260px; min-width: 0"><span style="position: absolute; left: -9999px">Source</span><select style="height: 48px; box-sizing: border-box; padding: 0 42px 0 14px; border: 1px solid #CDCAA6; border-radius: 12px; background-color: #FFFFFF; color: #2F3020; font: 400 15px 'Figtree', sans-serif; cursor: pointer"><option>The Slow Kitchen</option><option>Coach Ana</option><option>Field Notes Weekly</option></select></label>
+        <button aria-label="Remove condition" style="width: 44px; height: 44px; flex: none; border: none; background: transparent; border-radius: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5E5D46" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+      </div>
+      <button style="align-self: flex-start; min-height: 44px; padding: 0; border: none; background: transparent; color: #B23A26; font: 500 15px 'Figtree', sans-serif; cursor: pointer">+ Add condition</button>
+    </fieldset>
+
+    <fieldset style="margin: 0; padding: 0; border: none; display: flex; flex-direction: column; gap: 12px">
+      <legend style="width: 100%; padding: 0 0 8px; border-bottom: 2px solid #D5D0C3; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px">Then</legend>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
+        <label style="flex: 1 1 200px; min-width: 0"><span style="position: absolute; left: -9999px">Action</span><select style="height: 48px; box-sizing: border-box; padding: 0 42px 0 14px; border: 1px solid #CDCAA6; border-radius: 12px; background-color: #FFFFFF; color: #2F3020; font: 500 15px 'Figtree', sans-serif; cursor: pointer"><option>Put it in folder</option><option>Add tag</option><option>Save to Later</option><option>Add to Up next</option><option>Mark as seen</option><option>Hide it</option></select></label>
+        <label style="flex: 2 1 260px; min-width: 0"><span style="position: absolute; left: -9999px">Folder</span><select style="height: 48px; box-sizing: border-box; padding: 0 42px 0 14px; border: 1px solid #CDCAA6; border-radius: 12px; background-color: #FFFFFF; color: #2F3020; font: 400 15px 'Figtree', sans-serif; cursor: pointer"><option>Recipes</option><option>Health</option><option>Wellness</option><option>+ New folder</option></select></label>
+        <button aria-label="Remove action" style="width: 44px; height: 44px; flex: none; border: none; background: transparent; border-radius: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5E5D46" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
+        <label style="flex: 1 1 200px; min-width: 0"><span style="position: absolute; left: -9999px">Action</span><select style="height: 48px; box-sizing: border-box; padding: 0 42px 0 14px; border: 1px solid #CDCAA6; border-radius: 12px; background-color: #FFFFFF; color: #2F3020; font: 500 15px 'Figtree', sans-serif; cursor: pointer"><option>Add tag</option><option>Put it in folder</option><option>Save to Later</option></select></label>
+        <label style="flex: 2 1 260px; min-width: 0"><span style="position: absolute; left: -9999px">Tag</span><input type="text" value="#weeknight" style="width: 100%; box-sizing: border-box; height: 48px; padding: 0 14px; border: 1px solid #CDCAA6; border-radius: 12px; background: #FFFFFF; color: #2F3020; font: 400 15px 'Figtree', sans-serif"></label>
+        <button aria-label="Remove action" style="width: 44px; height: 44px; flex: none; border: none; background: transparent; border-radius: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5E5D46" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+      </div>
+      <button style="align-self: flex-start; min-height: 44px; padding: 0; border: none; background: transparent; color: #B23A26; font: 500 15px 'Figtree', sans-serif; cursor: pointer">+ Add action</button>
+    </fieldset>
+
+    <div style="background: #E8E6D2; border-radius: 16px; padding: 16px 16px; display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between">
+      <span style="font-size: 15px">Runs on <strong>6 items</strong> already in your Feed, and on everything new from now on.</span>
+      <a href="#" style="font-size: 14px; font-weight: 500">See the 6</a>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-top: 12px; border-top: 1px solid #D5D0C3">
+      <button style="min-height: 44px; padding: 0; border: none; background: transparent; color: #8F2E1E; font: 500 14px 'Figtree', sans-serif; cursor: pointer">Delete rule</button>
+      <div style="display: flex; gap: 8px">
+        <a href="SourcesRules.html" style="height: 44px; padding: 0 20px; display: inline-flex; align-items: center; background: #E7E4DA; border-radius: 999px; text-decoration: none; font-weight: 500; font-size: 14px">Cancel</a>
+        <a href="SourcesRules.html" style="height: 44px; padding: 0 24px; display: inline-flex; align-items: center; background: #4F5121; color: #FFFFFF; border-radius: 999px; text-decoration: none; font-weight: 500; font-size: 14px">Save rule</a>
+      </div>
+    </div>
+  </section>
+</div>
+</body>
+</html>

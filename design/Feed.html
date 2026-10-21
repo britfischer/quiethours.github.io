@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3.1 Feed, everything unseen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;1,7..72,400&amp;family=Figtree:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0}
+.tabs{display:flex;flex-wrap:wrap;gap: 16px}.tabs a{padding: 12px 0 10px;text-decoration:none;color:#5E5D46}.tabs a.on{color:#2F3020;font-weight:600;border-bottom:2px solid #B23A26}
+.ctl{display:flex;align-items:center;gap: 4px;color:#5E5D46;font-size: 15px}.ctl select{height:44px;border:none;background:transparent;color:#2F3020;font: 500 15px 'Figtree',sans-serif;cursor:pointer}
+.vr{width:1px;height:20px;background:#D5D0C3}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[role=switch]:focus-visible{outline:2px solid #4F5121;outline-offset:2px}
+a{color:#2F3020}a:hover{color:#B23A26}
+.side-item{transition:background-color .15s ease}
+.side-item:hover{background:#E8E6D2;color:#2F3020}
+.side-current:hover{color:#FFFFFF}
+</style>
+<style>body{margin:0}</style>
+</head>
+<body>
+<!-- Board: 3.1 Feed, everything unseen · designed width 1280px · exported from the design canvas, reference only -->
+<div style="background: #F9F8F4; color: #2F3020; font-family: 'Figtree', sans-serif; min-height: 100vh">
+  <header style="max-width: 1240px; margin: 0 auto; padding: 24px 32px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
+    <div style="display: flex; align-items: center; gap: 8px">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true"><circle cx="14" cy="14" r="12" stroke="#6B6B2F" stroke-width="2"></circle><path d="M8 16c3-4 9-4 12 0" stroke="#6B6B2F" stroke-width="2" stroke-linecap="round"></path><circle cx="20" cy="8" r="3" fill="#B23A26"></circle></svg>
+      <span style="font-family: 'Literata', serif; font-size: 22px; font-weight: 500">quiet hours</span>
+    </div>
+    <nav aria-label="Main" style="display: flex; flex-wrap: wrap; gap: 6px; background: #E7E4DA; padding: 4px; border-radius: 999px">
+      <a href="#" style="text-decoration: none; padding: 12px 18px; border-radius: 999px; font-size: 14px">Home</a>
+      <a href="#" style="text-decoration: none; padding: 12px 18px; border-radius: 999px; background: #FFFFFF; font-weight: 500; font-size: 14px">Feed</a>
+      <a href="#" style="text-decoration: none; padding: 12px 18px; border-radius: 999px; font-size: 14px">Library</a>
+      <a href="#" style="text-decoration: none; padding: 12px 18px; border-radius: 999px; font-size: 14px">Listen</a>
+      <a href="#" style="text-decoration: none; padding: 12px 18px; border-radius: 999px; font-size: 14px">Sources</a>
+    </nav>
+    <div style="display: flex; align-items: center; gap: 8px">
+      <a href="QuickSearch.html" aria-label="Search" style="width: 44px; height: 44px; border-radius: 22px; display: flex; align-items: center; justify-content: center; background: #E7E4DA"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2F3020" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg></a>
+      <button style="height: 44px; padding: 0 20px; border: none; background: #B23A26; color: #FFFFFF; border-radius: 999px; font: 500 14px 'Figtree', sans-serif; cursor: pointer">+ Add</button>
+    </div>
+  </header>
+
+  <div style="max-width: 1240px; margin: 0 auto; padding: 16px 32px 96px; display: flex; flex-wrap: wrap; gap: 48px; align-items: flex-start">
+    <aside aria-label="Folders and sources" style="flex: 1 1 220px; max-width: 260px; display: flex; flex-direction: column; gap: 20px">
+      <a href="#" aria-current="page" class="side-current" style="min-height: 44px; display: flex; align-items: center; gap: 8px; text-decoration: none; padding: 0 12px; border-radius: 12px; background: #4F5121; color: #FFFFFF; font-weight: 600"><span style="width: 6px; height: 6px; border-radius: 3px; background: #F08A6E"></span>Everything</a>
+      <nav aria-label="Folders" style="display: flex; flex-direction: column; gap: 2px">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 2px solid #D5D0C3; padding-top: 4px; margin-bottom: 4px">
+          <h2 style="margin: 0; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase">Folders</h2>
+          <button aria-label="New folder" title="New folder" style="width: 44px; height: 44px; margin-right: -10px; border: none; background: transparent; border-radius: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B23A26" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+        </div>
+        <a href="#" class="side-item" style="min-height: 44px; display: flex; align-items: center; justify-content: space-between; text-decoration: none; padding: 0 12px; border-radius: 12px">Health</a>
+        <a href="#" class="side-item" style="min-height: 44px; display: flex; align-items: center; justify-content: space-between; text-decoration: none; padding: 0 12px; border-radius: 12px">Recipes</a>
+        <a href="#" class="side-item" style="min-height: 44px; display: flex; align-items: center; justify-content: space-between; text-decoration: none; padding: 0 12px; border-radius: 12px">Wellness</a>
+        <a href="#" class="side-item" style="min-height: 44px; display: flex; align-items: center; justify-content: space-between; text-decoration: none; padding: 0 12px; border-radius: 12px">Business</a>
+      </nav>
+      <nav aria-label="Sources" style="display: flex; flex-direction: column; gap: 2px">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 2px solid #D5D0C3; padding-top: 4px; margin-bottom: 4px">
+          <h2 style="margin: 0; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase">Sources</h2>
+          <a href="#" style="min-height: 44px; display: flex; align-items: center; font-size: 14px; font-weight: 500; color: #B23A26; text-decoration: none">Manage</a>
+        </div>
+        <a href="#" class="side-item" style="min-height: 44px; display: flex; align-items: center; gap: 8px; text-decoration: none; padding: 0 12px; font-size: 15px; border-radius: 12px"><span style="width: 20px; height: 20px; border-radius: 6px; background: #CDCAA6"></span>Field Notes Weekly</a>
+        <a href="#" class="side-item" style="min-height: 44px; display: flex; align-items: center; gap: 8px; text-decoration: none; padding: 0 12px; font-size: 15px; border-radius: 12px"><span style="width: 20px; height: 20px; border-radius: 6px; background: #E8D6C8"></span>The Slow Kitchen</a>
+        <a href="#" class="side-item" style="min-height: 44px; display: flex; align-items: center; gap: 8px; text-decoration: none; padding: 0 12px; font-size: 15px; border-radius: 12px"><span style="width: 20px; height: 20px; border-radius: 10px; background: #DCDAC0"></span>Coach Ana</a>
+        <a href="#" class="side-item" style="min-height: 44px; display: flex; align-items: center; gap: 8px; text-decoration: none; padding: 0 12px; font-size: 15px; border-radius: 12px"><span style="width: 20px; height: 20px; border-radius: 6px; background: #DCD7E4"></span>Little Rituals</a>
+      </nav>
+    </aside>
+
+    <main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
+      <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; justify-content: space-between">
+        <div>
+          <h1 style="margin: 0; font-family: 'Literata', serif; font-weight: 400; font-size: 32px">Feed</h1>
+        </div>
+      </div>
+
+      <div style="margin-top: -14px; display: flex; flex-wrap: wrap; gap: 4px 20px; align-items: center; justify-content: space-between">
+        <nav class="tabs" aria-label="Show"><a href="#" class="on">Unseen</a><a href="#">Seen</a><a href="#">All</a></nav>
+        <div style="display: flex; gap: 16px; align-items: center">
+          <label class="ctl">Group by <select><option>Date</option><option>None</option><option>Source</option><option>Folder</option><option>Type</option></select></label>
+          <span class="vr"></span>
+          <label class="ctl">Sort <select><option>Newest first</option><option>Oldest first</option><option>Shortest first</option><option>Source A to Z</option></select></label>
+          <span class="vr"></span>
+          <button aria-label="Filter" style="height: 44px; padding: 0 16px; border: none; border-radius: 999px; background: #EFEDDD; color: #4F5121; font: 600 14px 'Figtree', sans-serif; display: inline-flex; align-items: center; gap: 8px; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4F5121" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"></path></svg>Filter</button>
+        </div>
+      </div>
+
+      <section aria-label="This morning" style="display: flex; flex-direction: column">
+        <div style="padding-bottom: 8px; border-bottom: 2px solid #D5D0C3">
+          <h2 style="margin: 0; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase">This morning</h2>
+        </div>
+        <article style="display: flex; gap: 16px; align-items: center; padding: 16px 0; border-bottom: 1px solid #D5D0C3">
+          <span style="width: 8px; height: 8px; border-radius: 4px; background: #B23A26; flex: none"><span style="position: absolute; left: -9999px">New</span></span>
+          <div style="width: 120px; aspect-ratio: 16 / 9; flex: none; border-radius: 12px; background: #45442A; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="#FFFFFF" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg></div>
+          <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px"><a href="#" style="font-family: 'Literata', serif; font-size: 20px; line-height: 1.3; text-decoration: none">Strength training basics, explained in 12 minutes<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#B23A26" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: inline-block; vertical-align: -5px; margin-left: 6px"><path d="M7 17L17 7M9 7h8v8"></path></svg></a><span style="font-size: 13px; color: #5E5D46; display: flex; flex-wrap: wrap; align-items: center; gap: 8px"><span style="height: 22px; padding: 0 8px; border-radius: 6px; background: #4F5121; color: #FFFFFF; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center">Video</span>Coach Ana · 12 min · Health</span></div>
+          <button aria-label="More actions" style="width: 44px; height: 44px; flex: none; border: none; background: transparent; border-radius: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5E5D46" aria-hidden="true"><circle cx="5" cy="12" r="1.8"></circle><circle cx="12" cy="12" r="1.8"></circle><circle cx="19" cy="12" r="1.8"></circle></svg></button>
+        </article>
+        <article style="display: flex; gap: 16px; align-items: center; padding: 16px 16px; margin: 0 -16px; border-bottom: 1px solid #D5D0C3; background: #FFFFFF; border-radius: 16px">
+          <span style="width: 8px; height: 8px; border-radius: 4px; background: #B23A26; flex: none"><span style="position: absolute; left: -9999px">New</span></span>
+          <div style="width: 120px; aspect-ratio: 16 / 9; flex: none; border-radius: 12px; background: #E8D6C8"></div>
+          <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px"><a href="#" style="font-family: 'Literata', serif; font-size: 20px; line-height: 1.3; text-decoration: none">A one-pan miso salmon you can make while the kettle boils<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#B23A26" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: inline-block; vertical-align: -5px; margin-left: 6px"><path d="M7 17L17 7M9 7h8v8"></path></svg></a><span style="font-size: 13px; color: #5E5D46; display: flex; flex-wrap: wrap; align-items: center; gap: 8px"><span style="height: 22px; padding: 0 8px; border-radius: 6px; background: #EFEDDD; color: #4F5121; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center">Article</span>The Slow Kitchen · 5 min · Recipes</span></div>
+          <div style="display: flex; gap: 4px; flex: none">
+            <button aria-label="Save for later" style="width: 44px; height: 44px; border: none; background: #EFEDDD; border-radius: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2F3020" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="8"></circle><path d="M12 8v4l3 2"></path></svg></button>
+            <button aria-label="Move to folder" style="width: 44px; height: 44px; border: none; background: #EFEDDD; border-radius: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2F3020" stroke-width="1.8" aria-hidden="true"><path d="M3 7h6l2 2h10v10H3z"></path></svg></button>
+            <button aria-label="Archive" style="width: 44px; height: 44px; border: none; background: #EFEDDD; border-radius: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2F3020" stroke-width="1.8" aria-hidden="true"><path d="M4 6h16v4H4zM6 10v9h12v-9M10 14h4"></path></svg></button>
+            <button aria-label="Delete" style="width: 44px; height: 44px; border: none; background: #EFEDDD; border-radius: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2F3020" stroke-width="1.8" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"></path></svg></button>
+          </div>
+        </article>
+        <article style="display: flex; gap: 16px; align-items: center; padding: 16px 0">
+          <span style="width: 8px; height: 8px; border-radius: 4px; background: #B23A26; flex: none"><span style="position: absolute; left: -9999px">New</span></span>
+          <div style="width: 120px; aspect-ratio: 16 / 9; flex: none; border-radius: 12px; background: #DCD7E4; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F3020" stroke-width="2" aria-hidden="true"><path d="M4 12h2l2-5 3 10 3-8 2 3h4"></path></svg></div>
+          <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px"><a href="#" style="font-family: 'Literata', serif; font-size: 20px; line-height: 1.3; text-decoration: none">The slow mornings episode: rituals that stick<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#B23A26" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: inline-block; vertical-align: -5px; margin-left: 6px"><path d="M7 17L17 7M9 7h8v8"></path></svg></a><span style="font-size: 13px; color: #5E5D46; display: flex; flex-wrap: wrap; align-items: center; gap: 8px"><span style="height: 22px; padding: 0 8px; border-radius: 6px; background: #E8E6D2; color: #4F5121; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center">Podcast</span>Little Rituals · 41 min · Wellness</span></div>
+          <button aria-label="Play episode" style="width: 44px; height: 44px; flex: none; border-radius: 22px; border: none; background: #4F5121; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="#FFFFFF" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg></button>
+        </article>
+      </section>
+
+      <section aria-label="Yesterday" style="display: flex; flex-direction: column">
+        <div style="padding-bottom: 8px; border-bottom: 2px solid #D5D0C3">
+          <h2 style="margin: 0; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase">Yesterday</h2>
+        </div>
+        <article style="display: flex; gap: 16px; align-items: center; padding: 16px 0; border-bottom: 1px solid #D5D0C3">
+          <span style="width: 8px; height: 8px; flex: none"></span>
+          <div style="width: 120px; aspect-ratio: 16 / 9; flex: none; border-radius: 12px; background: #DCDAC0"></div>
+          <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px"><a href="#" style="font-family: 'Literata', serif; font-size: 20px; line-height: 1.3; text-decoration: none">The quiet case for walking without headphones<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#B23A26" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: inline-block; vertical-align: -5px; margin-left: 6px"><path d="M7 17L17 7M9 7h8v8"></path></svg></a><span style="font-size: 13px; color: #5E5D46; display: flex; flex-wrap: wrap; align-items: center; gap: 8px"><span style="height: 22px; padding: 0 8px; border-radius: 6px; background: #EFEDDD; color: #4F5121; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center">Article</span>Field Notes Weekly · 8 min · Wellness</span></div>
+          <button aria-label="More actions" style="width: 44px; height: 44px; flex: none; border: none; background: transparent; border-radius: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5E5D46" aria-hidden="true"><circle cx="5" cy="12" r="1.8"></circle><circle cx="12" cy="12" r="1.8"></circle><circle cx="19" cy="12" r="1.8"></circle></svg></button>
+        </article>
+        <article style="display: flex; gap: 16px; align-items: center; padding: 16px 0; border-bottom: 1px solid #D5D0C3">
+          <span style="width: 8px; height: 8px; flex: none"></span>
+          <div style="width: 120px; aspect-ratio: 16 / 9; flex: none; border-radius: 12px; background: #E2DED2"></div>
+          <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px"><a href="#" style="font-family: 'Literata', serif; font-size: 20px; line-height: 1.3; text-decoration: none">How small studios price their first digital product<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#B23A26" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: inline-block; vertical-align: -5px; margin-left: 6px"><path d="M7 17L17 7M9 7h8v8"></path></svg></a><span style="font-size: 13px; color: #5E5D46; display: flex; flex-wrap: wrap; align-items: center; gap: 8px"><span style="height: 22px; padding: 0 8px; border-radius: 6px; background: #EFEDDD; color: #4F5121; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center">Article</span>Maker Letters · 9 min · Business</span></div>
+          <button aria-label="More actions" style="width: 44px; height: 44px; flex: none; border: none; background: transparent; border-radius: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5E5D46" aria-hidden="true"><circle cx="5" cy="12" r="1.8"></circle><circle cx="12" cy="12" r="1.8"></circle><circle cx="19" cy="12" r="1.8"></circle></svg></button>
+        </article>
+        <article style="display: flex; gap: 16px; align-items: center; padding: 16px 0">
+          <span style="width: 8px; height: 8px; flex: none"></span>
+          <div style="width: 120px; aspect-ratio: 16 / 9; flex: none; border-radius: 12px; background: #E8D6C8"></div>
+          <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px"><a href="#" style="font-family: 'Literata', serif; font-size: 20px; line-height: 1.3; text-decoration: none">Five freezer soups for the first cold week <span style="font-family: 'Figtree', sans-serif; font-size: 13px; color: #5E5D46">· also covered by 2 others</span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#B23A26" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: inline-block; vertical-align: -5px; margin-left: 6px"><path d="M7 17L17 7M9 7h8v8"></path></svg></a><span style="font-size: 13px; color: #5E5D46; display: flex; flex-wrap: wrap; align-items: center; gap: 8px"><span style="height: 22px; padding: 0 8px; border-radius: 6px; background: #EFEDDD; color: #4F5121; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center">Article</span>The Slow Kitchen · 7 min · Recipes</span></div>
+          <button aria-label="More actions" style="width: 44px; height: 44px; flex: none; border: none; background: transparent; border-radius: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5E5D46" aria-hidden="true"><circle cx="5" cy="12" r="1.8"></circle><circle cx="12" cy="12" r="1.8"></circle><circle cx="19" cy="12" r="1.8"></circle></svg></button>
+        </article>
+      </section>
+
+      <div style="text-align: center; padding: 24px 0; display: flex; flex-direction: column; gap: 8px; align-items: center">
+        <span style="font-family: 'Literata', serif; font-size: 20px; color: #4D4C38">That's everything unseen. You're all caught up.</span>
+        <a href="#" style="font-size: 15px; font-weight: 500">Browse items you've already seen</a>
+      </div>
+    </main>
+  </div>
+</div>
+</body>
+</html>

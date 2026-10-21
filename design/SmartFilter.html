@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4.5 Smart filter view ★ NEW</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;1,7..72,400&amp;family=Figtree:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[role=switch]:focus-visible{outline:2px solid #4F5121;outline-offset:2px}
+a{color:#2F3020}a:hover{color:#B23A26}
+.top{max-width:1240px;margin:0 auto;padding: 24px 32px;display:flex;flex-wrap:wrap;gap: 16px;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap: 8px;font-family:'Literata',serif;font-size: 22px;font-weight:500}
+.nav{display:flex;flex-wrap:wrap;gap: 6px;background:#E7E4DA;padding: 4px;border-radius: 999px}
+.nav a{text-decoration:none;padding: 12px 18px;border-radius: 999px;font-size: 14px}
+.nav a.on{background:#FFFFFF;font-weight:500}
+.ib{width:44px;height:44px;border-radius: 22px;border:none;background:#E7E4DA;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.add{height:44px;padding:0 20px;border:none;background:#B23A26;color:#FFFFFF;border-radius: 999px;font: 500 14px 'Figtree',sans-serif;cursor:pointer}
+.t1{margin:0;font-family:'Literata',serif;font-weight:400;font-size: 32px;line-height:1.2}
+.lbl{margin:0;font-size: 13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase}
+.side{display:flex;flex-direction:column}
+.side a{min-height:44px;display:flex;align-items:center;gap: 8px;text-decoration:none;padding:0 12px 0 28px;border-radius: 12px}
+.side a:hover{background:#E8E6D2}
+.side a.on{background:#4F5121;color:#FFFFFF;font-weight:600;padding-left: 12px}
+.side a.on::before{content:'';width:6px;height:6px;border-radius: 3px;background:#F08A6E}
+.sh{border-top:2px solid #D5D0C3;padding: 12px 0 8px}
+.ctl{display:flex;align-items:center;gap: 4px;color:#5E5D46;font-size: 15px}.ctl select{height:44px;border:none;background:transparent;color:#2F3020;font: 500 15px 'Figtree',sans-serif}
+.vr{width:1px;height:20px;background:#D5D0C3}
+.row{display:flex;gap: 16px;align-items:center;padding: 16px 0;border-top:1px solid #D5D0C3}
+.th{width:120px;aspect-ratio:16/9;flex:none;border-radius: 12px;background:#E2DED2;display:flex;justify-content:center;align-items:center}
+.th.pod{background:#DCD7E4}.th.pod i{width:100%;height:100%;border-radius: 12px;background:#DCD7E4;display:block}
+.tx{flex:1;min-width:0;display:flex;flex-direction:column;gap: 6px}
+.tt{font-family:'Literata',serif;font-size: 20px;line-height:1.3;text-decoration:none}
+.tt mark{background:#E8E6D2;color:inherit;padding:0 2px}
+.ar{width:24px;height:24px;fill:none;stroke:#B23A26;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;vertical-align:-5px;margin-left:6px}
+.meta{font-size: 13px;color:#5E5D46;display:flex;flex-wrap:wrap;align-items:center;gap: 8px}
+.b{height:22px;padding:0 8px;border-radius: 6px;font-size: 12px;font-weight:600;display:inline-flex;align-items:center;background:#EFEDDD;color:#4F5121}
+.b.v{background:#4F5121;color:#FFFFFF}.b.p{background:#E8E6D2}
+.dot{width:7px;height:7px;border-radius: 4px;background:#B23A26;flex:none}
+.nodot{width:7px;flex:none}
+.cond{display:inline-flex;align-items:center;gap: 6px;height:36px;padding:0 14px;border-radius: 999px;background:#FFFFFF;border:1px solid #CDCAA6;font-size: 14px}
+.cond b{font-weight:600}
+.btn{height:44px;padding:0 20px;border:none;border-radius: 999px;background:#4F5121;color:#FFFFFF;font: 500 14px 'Figtree',sans-serif;display:inline-flex;align-items:center;gap: 8px;text-decoration:none}
+.btn.soft{background:#E7E4DA;color:#2F3020}
+</style>
+<style>body{margin:0}</style>
+</head>
+<body>
+<!-- Board: 4.5 Smart filter view ★ NEW · designed width 1280px · exported from the design canvas, reference only -->
+<div style="background: #F9F8F4; color: #2F3020; font-family: 'Figtree', sans-serif; min-height: 100vh">
+  <header class="top">
+    <div class="brand"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true"><circle cx="14" cy="14" r="12" stroke="#6B6B2F" stroke-width="2"></circle><path d="M8 16c3-4 9-4 12 0" stroke="#6B6B2F" stroke-width="2" stroke-linecap="round"></path><circle cx="20" cy="8" r="3" fill="#B23A26"></circle></svg>quiet hours</div>
+    <nav class="nav" aria-label="Main"><a href="QuietHours2.html">Home</a><a href="Feed.html">Feed</a><a href="Library.html" class="on">Library</a><a href="Listen.html">Listen</a><a href="Sources.html">Sources</a></nav>
+    <div style="display: flex; gap: 8px"><a class="ib" href="QuickSearch.html" aria-label="Search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2F3020" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg></a><button class="add">+ Add</button></div>
+  </header>
+
+  <div style="max-width: 1240px; margin: 0 auto; padding: 16px 32px 96px; box-sizing: border-box; display: flex; flex-wrap: wrap; gap: 48px; align-items: flex-start">
+    <aside style="flex: 1 1 220px; max-width: 260px; display: flex; flex-direction: column; gap: 28px">
+      <nav class="side" aria-label="Shelves"><div class="sh"><h2 class="lbl">Shelves</h2></div><a href="Library.html">Later</a><a href="LibraryArchive.html">Archive</a><a href="Highlights.html">Highlights &amp; notes</a></nav>
+      <nav class="side" aria-label="Smart filters"><div class="sh"><h2 class="lbl">Smart filters</h2></div><a href="#" class="on">Coach Ana, anywhere</a><a href="#">Under 10 minutes</a><a href="#">"pricing" mentions</a></nav>
+    </aside>
+
+    <main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
+      <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; justify-content: space-between">
+        <div>
+          <p class="lbl" style="color: #5E5D46">Smart filter · updates on its own</p>
+          <h1 class="t1" style="margin-top: 6px">Coach Ana, anywhere</h1>
+        </div>
+        <div style="display: flex; gap: 8px"><a href="QuickSearch.html" class="btn soft">Edit filter</a><a href="RuleEditor.html" class="btn soft">Turn into a rule</a></div>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 16px 16px; border-radius: 16px; background: #EFEDDD">
+        <span style="font-size: 14px; color: #5E5D46; margin-right: 4px">Showing items where</span>
+        <span class="cond">Creator is <b>Coach Ana</b></span>
+        <span style="font-size: 14px; color: #5E5D46">or</span>
+        <span class="cond">Text mentions <b>"Coach Ana"</b></span>
+        <span style="font-size: 14px; color: #5E5D46">in</span>
+        <span class="cond"><b>Feed + Library</b></span>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between">
+        <span style="font-size: 15px; color: #5E5D46">9 items · 3 new since you last looked</span>
+        <div style="display: flex; gap: 16px; align-items: center">
+          <label class="ctl">Group by <select><option>Type</option><option>None</option><option>Source</option></select></label>
+          <span class="vr"></span>
+          <label class="ctl">Sort <select><option>Newest first</option><option>Oldest first</option></select></label>
+        </div>
+      </div>
+
+      <section>
+        <div style="border-top: 2px solid #D5D0C3; padding: 12px 0 4px"><h2 class="lbl">Videos · 4</h2></div>
+        <div class="row" style="border-top: none"><span class="dot"></span><div class="th" style="background: #45442A"></div><div class="tx"><a href="#" class="tt">Strength training basics, explained<svg class="ar" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"></path></svg></a><span class="meta"><span class="b v">Video</span>Coach Ana · 12 min · Feed</span></div></div>
+        <div class="row"><span class="nodot"></span><div class="th" style="background: #2F3020"></div><div class="tx"><a href="#" class="tt">The three lifts that cover almost everything<svg class="ar" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"></path></svg></a><span class="meta"><span class="b v">Video</span>Coach Ana · 18 min · Later</span></div></div>
+      </section>
+      <section>
+        <div style="border-top: 2px solid #D5D0C3; padding: 12px 0 4px"><h2 class="lbl">Podcasts · 3</h2></div>
+        <div class="row" style="border-top: none"><span class="dot"></span><div class="th pod"><i></i></div><div class="tx"><a href="#" class="tt">Guest episode: <mark>Coach Ana</mark> on starting small<svg class="ar" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"></path></svg></a><span class="meta"><span class="b p">Podcast</span>The Slow Mornings Pod · 45 min · Mentions her</span></div></div>
+      </section>
+      <section>
+        <div style="border-top: 2px solid #D5D0C3; padding: 12px 0 4px"><h2 class="lbl">Articles · 2</h2></div>
+        <div class="row" style="border-top: none"><span class="dot"></span><div class="th" style="background: #CDCAA6"></div><div class="tx"><a href="#" class="tt">Why form matters more than weight<svg class="ar" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"></path></svg></a><span class="meta"><span class="b">Article</span>Coach Ana's blog · 7 min · Archive</span></div></div>
+      </section>
+    </main>
+  </div>
+</div>
+</body>
+</html>

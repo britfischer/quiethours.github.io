@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>7.1 Settings ★ NEW</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;1,7..72,400&amp;family=Figtree:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[role=switch]:focus-visible{outline:2px solid #4F5121;outline-offset:2px}
+a{color:#2F3020}a:hover{color:#B23A26}
+.top{max-width:1240px;margin:0 auto;padding: 24px 32px;display:flex;flex-wrap:wrap;gap: 16px;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap: 8px;font-family:'Literata',serif;font-size: 22px;font-weight:500}
+.nav{display:flex;flex-wrap:wrap;gap: 6px;background:#E7E4DA;padding: 4px;border-radius: 999px}
+.nav a{text-decoration:none;padding: 12px 18px;border-radius: 999px;font-size: 14px}
+.ib{width:44px;height:44px;border-radius: 22px;border:none;background:#E7E4DA;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.add{height:44px;padding:0 20px;border:none;background:#B23A26;color:#FFFFFF;border-radius: 999px;font: 500 14px 'Figtree',sans-serif;cursor:pointer}
+.lbl{margin:0;font-size: 13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase}
+.side{display:flex;flex-direction:column}
+.side a{min-height:44px;display:flex;align-items:center;gap: 8px;text-decoration:none;padding:0 12px 0 28px;border-radius: 12px}
+.side a:hover{background:#E8E6D2}
+.side a.on{background:#4F5121;color:#FFFFFF;font-weight:600;padding-left: 12px}
+.side a.on::before{content:'';width:6px;height:6px;border-radius: 3px;background:#F08A6E}
+.sec{display:flex;flex-direction:column}
+.sh{border-top:2px solid #D5D0C3;padding: 16px 0 4px;display:flex;flex-direction:column;gap: 4px}
+.st{margin:0;font-family:'Literata',serif;font-weight:400;font-size: 28px}
+.set{display:flex;justify-content:space-between;align-items:center;gap: 24px;min-height:64px;padding: 12px 0;border-top:1px solid #D5D0C3;box-sizing:border-box}
+.set:first-of-type{border-top:none}
+.set b{font-weight:500;font-size: 16px;display:block}
+.set span.h{font-size: 14px;color:#5E5D46;display:block;margin-top: 4px;line-height:1.45}
+.sw{width:46px;height:28px;border-radius: 999px;background:#4F5121;position:relative;flex:none}.sw::after{content:'';position:absolute;top:3px;left:21px;width:22px;height:22px;border-radius: 12px;background:#FFFFFF}
+.sw.off{background:#CDCAA6}.sw.off::after{left:3px}
+.sel{height:48px;box-sizing:border-box;flex:0 1 260px;width:260px;max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;border:1px solid #CDCAA6;border-radius: 12px;background-color:#FFFFFF;padding:0 42px 0 14px;font: 400 15px 'Figtree',sans-serif;color:#2F3020;cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%232F3020' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6'/></svg>");background-repeat:no-repeat;background-position:right 14px center}
+.seg{display:flex;background:#E7E4DA;padding: 4px;border-radius: 999px;flex:none}.seg span{padding: 8px 16px;border-radius: 999px;font-size: 14px}.seg span.on{background:#FFFFFF;font-weight:600}
+.btn{height:44px;padding:0 20px;border:none;border-radius: 999px;background:#4F5121;color:#FFFFFF;font: 500 14px 'Figtree',sans-serif;display:inline-flex;align-items:center;text-decoration:none;flex:none}
+.btn.soft{background:#E7E4DA;color:#2F3020}
+</style>
+<style>body{margin:0}</style>
+</head>
+<body>
+<!-- Board: 7.1 Settings ★ NEW · designed width 1280px · exported from the design canvas, reference only -->
+<div style="background: #F9F8F4; color: #2F3020; font-family: 'Figtree', sans-serif; min-height: 100vh">
+  <header class="top">
+    <div class="brand"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true"><circle cx="14" cy="14" r="12" stroke="#6B6B2F" stroke-width="2"></circle><path d="M8 16c3-4 9-4 12 0" stroke="#6B6B2F" stroke-width="2" stroke-linecap="round"></path><circle cx="20" cy="8" r="3" fill="#B23A26"></circle></svg>quiet hours</div>
+    <nav class="nav" aria-label="Main"><a href="QuietHours2.html">Home</a><a href="Feed.html">Feed</a><a href="Library.html">Library</a><a href="Listen.html">Listen</a><a href="Sources.html">Sources</a></nav>
+    <div style="display: flex; gap: 8px"><a class="ib" href="QuickSearch.html" aria-label="Search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2F3020" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg></a><button class="add">+ Add</button></div>
+  </header>
+
+  <div style="max-width: 1240px; margin: 0 auto; padding: 16px 32px 96px; box-sizing: border-box; display: flex; flex-wrap: wrap; gap: 48px; align-items: flex-start">
+    <aside style="flex: 1 1 220px; max-width: 260px; display: flex; flex-direction: column; gap: 20px">
+      <h1 style="margin: 0; font-family: 'Literata', serif; font-weight: 400; font-size: 32px">Settings</h1>
+      <nav class="side" aria-label="Settings sections"><a href="#home" class="on">Home</a><a href="#reading">Reading &amp; seen</a><a href="#display">Display</a><a href="#news">Newsletters</a><a href="#account">Account &amp; data</a></nav>
+    </aside>
+
+    <main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 40px">
+      <section class="sec" id="home">
+        <div class="sh"><h2 class="st">Home</h2></div>
+        <div class="set"><div><b>Folders on Home</b><span class="h">Health, Wellness, Business</span></div><a href="FolderPicker.html" class="btn soft">Choose folders</a></div>
+        <div class="set"><div><b>Fresh today shows</b><span class="h">Up to 10. Fewer feels calmer.</span></div><select class="sel"><option>6 items</option><option>8 items</option><option>10 items</option></select></div>
+        <div class="set"><div><b>Sections</b><span class="h">Featured, Fresh today, Folders, For your walk, Waiting for you Later</span></div><button class="btn soft">Reorder or hide</button></div>
+        <div class="set"><div><b>Daily reading time</b><span class="h">Shown on Home as a gentle guide, never a streak</span></div><select class="sel"><option>30 minutes</option><option>15 minutes</option><option>1 hour</option><option>Off</option></select></div>
+      </section>
+
+      <section class="sec" id="reading">
+        <div class="sh"><h2 class="st">Reading &amp; seen</h2></div>
+        <div class="set"><div><b>Show unread counts</b><span class="h">Off keeps things calm. Turn on to see numbers next to folders.</span></div><span class="sw off" role="switch" aria-checked="false"></span></div>
+        <div class="set"><div><b>Mark as seen when I scroll past</b><span class="h">Off means items stay new until you open or clear them</span></div><span class="sw off" role="switch" aria-checked="false"></span></div>
+        <div class="set"><div><b>Fresh start each day</b><span class="h">Home rebuilds at this time. Nothing gets deleted.</span></div><select class="sel"><option>5:00 AM</option><option>Midnight</option><option>Off</option></select></div>
+        <div class="set"><div><b>Clear out old unseen items</b><span class="h">Moves them to Seen so the Feed never piles up</span></div><select class="sel"><option>After 14 days</option><option>After 30 days</option><option>Never</option></select></div>
+        <div class="set"><div><b>Muted words</b><span class="h">election, spoilers, giveaway</span></div><button class="btn soft">Edit</button></div>
+      </section>
+
+      <section class="sec" id="display">
+        <div class="sh"><h2 class="st">Display</h2></div>
+        <div class="set"><div><b>Theme</b></div><div class="seg"><span class="on">Light</span><span>Dark</span><span>Match device</span></div></div>
+        <div class="set"><div><b>Reading text size</b></div><div class="seg"><span>S</span><span class="on">M</span><span>L</span><span>XL</span></div></div>
+        <div class="set"><div><b>E-ink mode</b><span class="h">For BOOX and other e-readers: black and white, no motion, pages instead of scrolling</span></div><a href="EinkReader.html" class="sw off" role="switch" aria-checked="false" aria-label="E-ink mode"></a></div>
+      </section>
+
+      <section class="sec" id="news">
+        <div class="sh"><h2 class="st">Newsletters</h2></div>
+        <div class="set"><div><b>Your address</b><span class="h" style="font-family: ui-monospace, Menlo, monospace; color: #2F3020">reads-7f3k@in.quiethours.app</span></div><button class="btn soft">Copy</button></div>
+        <div class="set"><div><b>New senders go to</b></div><select class="sel"><option>Feed, no folder</option><option>Library Later</option></select></div>
+      </section>
+
+      <section class="sec" id="account">
+        <div class="sh"><h2 class="st">Account &amp; data</h2></div>
+        <div class="set"><div><b>Email</b><span class="h">you@example.com</span></div><button class="btn soft">Change</button></div>
+        <div class="set"><div><b>Import feeds</b><span class="h">OPML from another reader</span></div><a href="ImportOPML.html" class="btn soft">Import</a></div>
+        <div class="set"><div><b>Export everything</b><span class="h">Your sources (OPML) plus highlights and notes</span></div><a href="ExportHighlights.html" class="btn soft">Export</a></div>
+        <div class="set"><div><b style="color: #8F2E1E">Delete account</b><span class="h">Removes everything. We'll ask you to confirm first.</span></div><button class="btn soft" style="color: #8F2E1E">Delete</button></div>
+      </section>
+    </main>
+  </div>
+</div>
+</body>
+</html>
