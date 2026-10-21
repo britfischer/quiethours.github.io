@@ -12,6 +12,7 @@ Working name: **Quiet Hours** (placeholder).
 |---|---|
 | `docs/build-spec.md` | The spec. Principles, binding product rules, stack, data model, ingestion, screens by phase, design tokens. Attach this to Claude Code before building. |
 | `docs/the-path.md` | Setup and the working loop, written for a first-time developer. |
+| `docs/kickoff.md` | The prompt to paste into Claude Code to build the interactive prototype. Start here. |
 | `DECISIONS.md` | One dated line per decision. Why things are the way they are. |
 
 The 47 screen designs live on a Claude Design canvas. Board 0 of that canvas is
@@ -20,8 +21,9 @@ version of it.
 
 ## Status
 
-Pre-code. Next step is the ingestion spike in `docs/the-path.md`, part 2:
-prove real feeds parse before any UI gets built.
+Designs done and published as a clickable prototype. Next step is
+`docs/kickoff.md`: build the interactive prototype with sample data, use it for a
+week, then wire real feeds and a database.
 
 ## Phases
 
