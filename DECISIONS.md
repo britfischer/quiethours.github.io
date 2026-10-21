@@ -33,3 +33,15 @@ One line per decision, newest at the bottom. Date, the decision, and why.
   usable in weeks rather than months. Everything else is specced and queued.
 - 2026-10-20: **Ship empty by default, with a seeded demo mode behind a flag,**
   so crowded screens can be tested without waiting for real content.
+- 2026-10-21: **Real toasts replace inline confirmations.** Drop down from the
+  top, hold 10 seconds, pause on hover, carry Undo, no countdown bar. The
+  earlier no-toasts rule is withdrawn; scope for destructive actions is open.
+- 2026-10-21: **The folder chip sits in a row's meta line**, after source, length
+  and time, not floated at the row's right edge.
+- 2026-10-21: **Home folders are cards**, each with a red folder glyph, minutes and
+  a count of what is new. Columns of titles were tried and reverted.
+- 2026-10-21: **Home shows reading progress**: minutes cleared in the last 24 hours
+  against a 30 minute quiet hour.
+- 2026-10-21: **Two prototypes on purpose**: a single HTML file for review and
+  sharing, and the Next.js copy that becomes the app. docs/prototype-spec.md keeps
+  them in step.

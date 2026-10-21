@@ -13,6 +13,9 @@ Working name: **Quiet Hours** (placeholder).
 | `docs/build-spec.md` | The spec. Principles, binding product rules, stack, data model, ingestion, screens by phase, design tokens. Attach this to Claude Code before building. |
 | `docs/the-path.md` | Setup and the working loop, written for a first-time developer. |
 | `docs/kickoff.md` | The prompt to paste into Claude Code to build the interactive prototype. Start here. |
+| `docs/prototype-spec.md` | How the prototype is built and exactly how it behaves, plus the full feedback log. Read with CLAUDE.md. |
+| `prototype-single-file/` | The one-file prototype published as an Artifact. No build step. |
+| `prototype/` | The Next.js version that becomes the real app. |
 | `DECISIONS.md` | One dated line per decision. Why things are the way they are. |
 
 The 47 screen designs live on a Claude Design canvas. Board 0 of that canvas is

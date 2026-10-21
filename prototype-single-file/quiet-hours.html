@@ -1,0 +1,1179 @@
+<title>Quiet Hours</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,500;7..72,600&family=Figtree:wght@400;500;600&display=swap">
+<style>
+/* Layout: paper-warm reading app. Header, left rail of places, one column of rows. */
+:root{
+  --page:#f9f8f4; --card:#ffffff; --soft:#efeddd; --softer:#e8e6d2; --control:#e7e4da;
+  --divider:#d5d0c3; --border:#cdcaa6;
+  --ink:#2f3020; --ink-muted:#5e5d46; --ink-body:#4d4c38;
+  --action:#4f5121; --action-light:#6b6b2f;
+  --attention:#b23a26; --attention-deep:#8f2e1e; --coral:#f08a6e;
+  --m1:#dcd7e4; --m2:#e8d6c8; --m3:#cdcaa6; --m4:#e2ded2; --m5:#45442a; --m6:#dcdac0;
+  --problem:#f3e3de; --scrim:rgba(47,48,32,.45);
+  --serif:'Literata',Georgia,'Times New Roman',serif;
+  --sans:'Figtree',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --menu-shadow:0 16px 48px rgba(47,48,32,.22);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --page:#1b1c14; --card:#24251b; --soft:#2d2e22; --softer:#343527; --control:#343527;
+  --divider:#3d3e2e; --border:#4c4d39;
+  --ink:#f1efe4; --ink-muted:#b3b19b; --ink-body:#d8d6c6;
+  --action:#a3a95a; --action-light:#8d9350;
+  --attention:#e8765c; --attention-deep:#f0937e; --coral:#f08a6e;
+  --m1:#4b4556; --m2:#5b4639; --m3:#6a6848; --m4:#434434; --m5:#2c2d1e; --m6:#575937;
+  --problem:#3d2a24; --scrim:rgba(8,9,5,.6);
+  --menu-shadow:0 16px 48px rgba(0,0,0,.5);
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --page:#1b1c14; --card:#24251b; --soft:#2d2e22; --softer:#343527; --control:#343527;
+  --divider:#3d3e2e; --border:#4c4d39;
+  --ink:#f1efe4; --ink-muted:#b3b19b; --ink-body:#d8d6c6;
+  --action:#a3a95a; --action-light:#8d9350;
+  --attention:#e8765c; --attention-deep:#f0937e; --coral:#f08a6e;
+  --m1:#4b4556; --m2:#5b4639; --m3:#6a6848; --m4:#434434; --m5:#2c2d1e; --m6:#575937;
+  --problem:#3d2a24; --scrim:rgba(8,9,5,.6);
+  --menu-shadow:0 16px 48px rgba(0,0,0,.5);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);font-family:var(--sans);font-size:16px;-webkit-font-smoothing:antialiased}
+a{color:var(--ink);text-decoration:none}
+a:hover{color:var(--attention)}
+:focus-visible{outline:2px solid var(--action);outline-offset:2px}
+button{font-family:inherit;color:inherit}
+.serif{font-family:var(--serif)}
+.wrap{max-width:1240px;margin:0 auto;width:100%;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* header */
+.top{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;padding-block:20px}
+.brand{display:flex;align-items:center;gap:8px;font-family:var(--serif);font-size:22px;font-weight:500}
+.nav{display:flex;flex-wrap:wrap;gap:6px;background:var(--control);padding:4px;border-radius:999px}
+.nav button{padding:12px 18px;border-radius:999px;font-size:14px;border:none;background:none;cursor:pointer}
+.nav button.on{background:var(--card);font-weight:500}
+.ib{width:44px;height:44px;border-radius:999px;border:none;background:var(--control);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:none}
+.ib.bare{background:transparent}
+.add{height:44px;padding:0 20px;border:none;background:var(--attention);color:#fff;border-radius:999px;font:500 14px var(--sans);cursor:pointer}
+
+/* columns */
+.columns{display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start;padding-block:8px 96px}
+.rail{flex:1 1 220px;max-width:260px;min-width:0;display:flex;flex-direction:column;gap:20px}
+.col{flex:999 1 560px;min-width:0;display:flex;flex-direction:column;gap:24px}
+.side{display:flex;flex-direction:column;gap:2px}
+.side button{min-height:44px;display:flex;align-items:center;gap:8px;padding:0 12px;border-radius:12px;border:none;background:none;font:400 16px var(--sans);cursor:pointer;text-align:left;width:100%}
+.side button:hover{background:var(--softer)}
+.side button.on{background:var(--action);color:var(--card);font-weight:600}
+.side button.on::before{content:"";width:6px;height:6px;border-radius:999px;background:var(--coral);flex:none}
+.sh{display:flex;justify-content:space-between;align-items:center;border-top:2px solid var(--divider);padding-top:4px;margin-bottom:4px}
+.lbl{margin:0;font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase}
+h1.page{margin:0;font-family:var(--serif);font-weight:400;font-size:32px;line-height:1.2;text-wrap:balance}
+h1.display{margin:0;font-family:var(--serif);font-weight:400;font-size:44px;line-height:1.15;text-wrap:balance}
+.accent{color:var(--attention)}
+
+/* control row */
+.controls{margin-top:-14px;display:flex;flex-wrap:wrap;gap:4px 20px;align-items:center;justify-content:space-between;position:relative}
+.tabs{display:flex;flex-wrap:wrap;gap:16px}
+.tabs button{padding:12px 0 10px;background:none;border:none;font:400 15px var(--sans);color:var(--ink-muted);cursor:pointer}
+.tabs button.on{color:var(--ink);font-weight:600;border-bottom:2px solid var(--attention)}
+.ctl{display:flex;align-items:center;gap:4px;color:var(--ink-muted);font-size:15px}
+.ctl select{height:44px;border:none;background:transparent;color:var(--ink);font:500 15px var(--sans);cursor:pointer;max-width:9.5em}
+.vr{width:1px;height:20px;background:var(--divider)}
+.fbtn{height:44px;padding:0 16px;border:none;border-radius:999px;background:var(--soft);color:var(--action);font:600 14px var(--sans);display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+.fbtn.on{background:var(--softer)}
+.panel{position:absolute;top:56px;right:0;z-index:20;width:min(320px,calc(100vw - 32px));background:var(--card);border-radius:20px;box-shadow:var(--menu-shadow);padding:16px 20px;display:flex;flex-direction:column;gap:16px}
+.chip{font-size:13px;padding:6px 12px;background:var(--soft);border:none;border-radius:999px;cursor:pointer;font-family:var(--sans)}
+.chip.on{background:var(--action);color:var(--card);font-weight:600}
+.lk{color:var(--action);font-weight:500;font-size:14px;background:none;border:none;cursor:pointer;padding:0;font-family:var(--sans)}
+.fgroup>span{font-size:13px;font-weight:600;display:block;margin-bottom:8px}
+.fgroup>div{display:flex;flex-wrap:wrap;gap:6px}
+
+/* rows */
+.ghead{padding-bottom:8px;border-bottom:2px solid var(--divider)}
+.list{display:flex;flex-direction:column;border-top:2px solid var(--divider)}
+.row{display:flex;gap:16px;align-items:center;padding:16px 0;border-top:1px solid var(--divider);position:relative;min-width:0}
+.list>.row:first-child{border-top:none}
+.dot{width:8px;height:8px;border-radius:999px;background:var(--attention);flex:none}
+.dot.off{background:transparent}
+.th{width:120px;aspect-ratio:16/9;max-width:100%;flex:none;border-radius:12px;background:var(--m4);display:flex;align-items:center;justify-content:center}
+.tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.tt{font-family:var(--serif);font-size:20px;line-height:1.3;text-align:left;background:none;border:none;padding:0;cursor:pointer}
+.tt:hover{color:var(--attention)}
+.meta{font-size:13px;color:var(--ink-muted);display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.b{height:22px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:600;display:inline-flex;align-items:center;background:var(--soft);color:var(--action)}
+.b.video{background:var(--action);color:var(--card)}
+.b.podcast{background:var(--softer);color:var(--action)}
+.fchip{font-size:12px;padding:3px 9px;background:var(--soft);border-radius:999px;flex:none;color:var(--ink-muted)}
+.acts{display:flex;gap:6px;flex:none;opacity:0;transition:opacity .12s ease}
+.row:hover .acts,.row:focus-within .acts{opacity:1}
+.act{width:40px;height:40px;border:1px solid var(--divider);background:var(--card);border-radius:999px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink-muted)}
+.act:hover{border-color:var(--action);color:var(--action)}
+.more{width:44px;height:44px;border:none;background:none;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:none;color:var(--ink-muted)}
+.menu{position:absolute;top:52px;right:0;z-index:25;width:min(260px,calc(100vw - 32px));background:var(--card);border-radius:16px;box-shadow:var(--menu-shadow);padding:8px;display:flex;flex-direction:column}
+.mi{min-height:44px;display:flex;align-items:center;gap:12px;padding:0 12px;border-radius:12px;font-size:15px;background:none;border:none;cursor:pointer;font-family:var(--sans);text-align:left;width:100%}
+.mi:hover{background:var(--soft)}
+.mi.danger{color:var(--attention-deep)}
+.sep{height:1px;background:var(--divider);margin:4px 12px}
+
+/* toasts: drop from the top, hold, carry an Undo */
+#toast-layer{position:fixed;top:calc(16px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);
+  z-index:70;display:flex;flex-direction:column;gap:8px;align-items:center;width:min(520px,calc(100vw - 32px));pointer-events:none}
+.toast{pointer-events:auto;width:100%;background:var(--card);color:var(--ink);border:1px solid var(--border);
+  border-radius:16px;padding:14px 14px 14px 16px;display:flex;align-items:center;gap:14px;
+  box-shadow:0 12px 36px rgba(47,48,32,.18);animation:drop .2s cubic-bezier(.2,.8,.3,1) both}
+.toast.out{animation:lift .16s ease-in both}
+.toast .tick{width:32px;height:32px;border-radius:999px;background:var(--softer);display:flex;align-items:center;justify-content:center;flex:none}
+.toast .tmsg{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.toast .tverb{font-size:15px;font-weight:600;line-height:1.3}
+.toast .tsub{font-size:13px;color:var(--ink-muted);line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.toast .tundo{min-height:40px;padding:0 16px;border:none;border-radius:999px;background:var(--softer);color:var(--action);
+  font:600 15px var(--sans);cursor:pointer;flex:none}
+.toast .tundo:hover{background:var(--action);color:var(--card)}
+.toast .tx{width:36px;height:36px;border:none;border-radius:999px;background:transparent;color:var(--ink-muted);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none}
+.toast .tx:hover{background:var(--soft);color:var(--ink)}
+@keyframes drop{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:none}}
+@keyframes lift{from{opacity:1;transform:none}to{opacity:0;transform:translateY(-10px)}}
+@media (prefers-reduced-motion:reduce){.toast,.toast.out{animation:none}}
+@media (max-width:600px){
+  .toast{padding:12px;gap:10px}
+  .toast .tick{display:none}
+  .toast .tundo{padding:0 12px;font-size:14px}
+}
+
+/* empty, ending */
+.confirm{display:flex;flex-wrap:wrap;align-items:center;gap:8px;border-top:2px solid var(--divider);padding-top:16px;font-size:15px;color:var(--ink-body)}
+.undo{min-height:44px;padding:0 4px;border:none;background:none;color:var(--action);font:600 15px var(--sans);text-decoration:underline;cursor:pointer}
+.empty{padding:32px 16px 48px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;border-top:2px solid var(--divider)}
+.empty h2{margin:0;font-family:var(--serif);font-weight:600;font-size:20px}
+.empty p{margin:0;max-width:46ch;font-size:16px;line-height:1.6;color:var(--ink-body)}
+.ending{font-family:var(--serif);font-size:18px;color:var(--ink-body);padding-top:16px;border-top:1px solid var(--divider);margin:0}
+
+/* buttons, fields, cards */
+.btn{height:44px;padding:0 20px;border:none;border-radius:999px;background:var(--action);color:var(--card);font:500 14px var(--sans);display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+.btn.soft{background:var(--control);color:var(--ink)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--divider);height:40px}
+.field{width:100%;height:48px;border:1px solid var(--border);border-radius:12px;padding:0 16px;font:400 15px var(--sans);color:var(--ink);background:var(--card)}
+label.stack{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600;color:var(--ink-muted)}
+.card{background:var(--card);border-radius:24px;padding:24px;display:flex;flex-direction:column;gap:12px}
+
+/* overlays */
+.scrim{position:fixed;inset:0;background:var(--scrim);z-index:60;display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;
+  padding:10vh max(16px,env(safe-area-inset-right,0px)) 16px max(16px,env(safe-area-inset-left,0px))}
+.dialog{width:100%;max-width:560px;background:var(--card);border-radius:24px;padding:24px;display:flex;flex-direction:column;gap:20px}
+.search-box{width:100%;max-width:720px;background:var(--card);border-radius:24px;box-shadow:var(--menu-shadow);overflow:hidden}
+.alert{margin:0;background:var(--problem);border-radius:12px;padding:12px 16px;font-size:14px;color:var(--attention-deep)}
+
+/* reader */
+.reader{max-width:720px;margin:0 auto;padding-block:24px 96px}
+.reader h1{margin:0;font-family:var(--serif);font-weight:400;font-size:40px;line-height:1.15;text-wrap:balance}
+.standfirst{margin:16px 0 0;font-family:var(--serif);font-size:20px;line-height:1.5;color:var(--ink-body)}
+.bodycopy{font-family:var(--serif);line-height:1.75;display:flex;flex-direction:column;gap:24px;margin-top:24px}
+.bodycopy p{margin:0}
+.rbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--page);border-bottom:1px solid var(--divider)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:40;background:var(--page)}
+.progress{height:3px;background:var(--control)}
+.progress span{display:block;height:3px;background:var(--attention)}
+
+.note{margin:0;font-size:13px;color:var(--ink-muted);line-height:1.6}
+
+/* home: greeting, reading time, featured, folder columns, walk, later */
+.greet{display:flex;flex-wrap:wrap;gap:32px;align-items:flex-end;justify-content:space-between}
+.greet .left{flex:1 1 420px;min-width:0}
+.stamp{margin:0 0 8px;font-size:15px;color:var(--ink-muted)}
+h1.hero{margin:0;font-family:var(--serif);font-weight:400;font-size:clamp(34px,6vw,60px);line-height:1.08;letter-spacing:-.02em;text-wrap:balance}
+.timecard{flex:0 1 300px;background:var(--card);border-radius:24px;padding:20px 24px;display:flex;flex-direction:column;gap:12px}
+.timecard .trow{display:flex;justify-content:space-between;gap:12px;font-size:14px}
+.bar{height:8px;background:var(--control);border-radius:4px}
+.bar span{display:block;height:8px;background:var(--action-light);border-radius:4px}
+.h2{margin:0;font-family:var(--serif);font-weight:400;font-size:32px;line-height:1.2;text-wrap:balance}
+.sechead{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-end;justify-content:space-between}
+.gear{width:44px;height:44px;margin-right:-11px;border-radius:999px;border:none;background:none;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--action);flex:none}
+.featured{background:var(--card);border-radius:28px;overflow:hidden;display:flex;flex-wrap:wrap}
+.featured .art{flex:1 1 300px;min-width:0;aspect-ratio:16/10;max-width:100%}
+.featured .fbody{flex:1 1 340px;min-width:0;padding:28px;display:flex;flex-direction:column;gap:12px;justify-content:center}
+.featured h2{margin:0;font-family:var(--serif);font-weight:400;font-size:28px;line-height:1.22;text-wrap:balance}
+.fcols{display:flex;flex-wrap:wrap;gap:16px}
+.fcard{flex:1 1 220px;min-width:0;background:var(--card);border-radius:20px;padding:20px;border:none;cursor:pointer;
+  text-align:left;display:flex;flex-direction:column;gap:10px}
+.fcard:hover{box-shadow:0 10px 28px rgba(47,48,32,.1)}
+.fcard .ftop{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.fcard .fname{font-family:var(--serif);font-size:22px;line-height:1.2;color:var(--ink)}
+.fcard:hover .fname{color:var(--attention)}
+.fcard .fmeta{font-size:14px;color:var(--ink-muted)}
+.fcol{flex:1 1 220px;min-width:0;border-top:2px solid var(--divider);padding-top:16px;display:flex;flex-direction:column}
+.fcol .ch{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding-bottom:8px}
+.fcol h3{margin:0;font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.ficon{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:999px;background:var(--problem);flex:none}
+.fcol button.pick{font-family:var(--serif);font-size:20px;line-height:26px;height:52px;padding:16px 0 0;margin-bottom:16px;
+  border:none;border-top:1px solid var(--divider);background:none;text-align:left;cursor:pointer;color:var(--ink);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;width:100%}
+.fcol button.pick:hover{color:var(--attention)}
+.fcol .none{font-size:15px;color:var(--ink-muted);border-top:1px solid var(--divider);padding-top:16px;margin:0}
+.walkgrid{display:flex;flex-wrap:wrap;gap:20px}
+.walkcard{flex:1 1 340px;min-width:0;background:var(--softer);border-radius:24px;padding:20px;display:flex;gap:16px;align-items:center}
+.walkcard .art{width:120px;aspect-ratio:16/9;flex:none;border-radius:12px;max-width:100%}
+.walkcard .wtx{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px;text-align:left}
+.walkcard .wtx .wt{font-family:var(--serif);font-size:20px;line-height:1.25;background:none;border:none;padding:0;text-align:left;cursor:pointer;color:var(--ink)}
+.walkcard .wtx .wt:hover{color:var(--attention)}
+.playbtn{width:48px;height:48px;flex:none;border-radius:999px;border:none;background:var(--action);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.latergrid{display:flex;flex-wrap:wrap;gap:20px}
+.latercard{flex:1 1 260px;min-width:0;background:var(--card);border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:8px;
+  border:none;cursor:pointer;text-align:left}
+.latercard .lt{font-family:var(--serif);font-size:20px;line-height:1.25;color:var(--ink)}
+.latercard:hover .lt{color:var(--attention)}
+.player{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:45;
+  width:min(620px,calc(100vw - 32px));background:var(--action);color:#f9f8f4;border-radius:999px;
+  padding:8px 10px;display:flex;align-items:center;gap:12px;box-shadow:0 12px 32px rgba(47,48,32,.3)}
+.player .pbtn{width:40px;height:40px;border-radius:999px;border:none;background:#f9f8f4;color:var(--action);display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none}
+.player .ptrack{flex:1;min-width:0;height:4px;border-radius:999px;background:var(--action-light)}
+.player .ptrack span{display:block;height:4px;border-radius:999px;background:var(--coral)}
+.player .px{width:36px;height:36px;border-radius:999px;border:none;background:transparent;color:#f9f8f4;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none}
+@media (max-width:600px){
+  .featured .fbody{padding:20px}
+  .featured h2{font-size:22px}
+  .h2{font-size:26px}
+  .timecard{flex:1 1 100%}
+  .player{width:calc(100vw - 24px)}
+}
+@media (max-width:900px){
+  .columns{gap:24px}
+  .rail{max-width:none;flex:1 1 100%}
+  .side{flex-direction:row;flex-wrap:wrap;gap:6px}
+  .side button{width:auto;background:var(--soft)}
+  .side button.on{background:var(--action)}
+  .sh{border-top:none;width:100%}
+}
+@media (max-width:600px){
+  .top{padding-block:12px;gap:12px}
+  .nav{order:3;width:100%;justify-content:space-between}
+  .nav button{padding:10px 10px;font-size:13px}
+  h1.page{font-size:28px}
+  h1.display{font-size:30px}
+  .th{width:84px}
+  .tt{font-size:17px}
+  .meta{font-size:12px}
+  .acts{opacity:1}
+  .reader h1{font-size:30px}
+  .controls{margin-top:-6px}
+  .ctl select{max-width:7em}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div id="app"></div>
+<div id="toast-layer" aria-live="polite" aria-atomic="false"></div>
+
+<script>
+/* ---------------------------------------------------------------- icons */
+const I = {
+  mark:'<svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true"><circle cx="14" cy="14" r="12" stroke="var(--action-light)" stroke-width="2"/><path d="M8 16c3-4 9-4 12 0" stroke="var(--action-light)" stroke-width="2" stroke-linecap="round"/><circle cx="20" cy="8" r="3" fill="var(--attention)"/></svg>',
+  search:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>',
+  dots:'<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>',
+  clock:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>',
+  box:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16v4H4zM6 10v9h12v-9M10 14h4"/></svg>',
+  eye:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+  check:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--action)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  filter:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>',
+  play:'<svg width="22" height="22" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>',
+  playDark:'<svg width="18" height="18" viewBox="0 0 24 24" fill="var(--ink)" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>',
+  playOlive:'<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>',
+  pause:'<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>',
+  trash:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>',
+  back:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>',
+  close:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  plus:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
+  folder:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--attention)" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h6l2 2h10v10H3z"/></svg>',
+  arrow:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--attention)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-4px;margin-left:6px"><path d="M7 17L17 7M9 7h8v8"/></svg>',
+};
+
+/* ---------------------------------------------------------------- seed */
+const FOLDERS = [
+  {id:'health',name:'Health'},{id:'recipes',name:'Recipes'},
+  {id:'wellness',name:'Wellness'},{id:'business',name:'Business'}
+];
+const SOURCES = [
+  {id:'field-notes',title:'Field Notes Weekly',kind:'article',site:'fieldnotes.example',color:'var(--m3)',status:'ok',folders:['wellness']},
+  {id:'slow-kitchen',title:'The Slow Kitchen',kind:'video',site:'youtube.example',color:'var(--m2)',status:'ok',folders:['recipes']},
+  {id:'coach-ana',title:'Coach Ana',kind:'video',site:'youtube.example',color:'var(--m5)',status:'ok',folders:['health','wellness']},
+  {id:'little-rituals',title:'Little Rituals',kind:'podcast',site:'littlerituals.example',color:'var(--m1)',status:'ok',folders:['wellness']},
+  {id:'sleep-lab',title:'Sleep Lab',kind:'article',site:'sleeplab.example',color:'var(--m6)',status:'ok',folders:['health','wellness']},
+  {id:'maker-letters',title:'Maker Letters',kind:'article',site:'makerletters.example',color:'var(--m4)',status:'ok',folders:['business']},
+  {id:'pricing-pod',title:'The Pricing Pod',kind:'podcast',site:'pricingpod.example',color:'var(--m3)',status:'needs_attention',folders:['business']},
+  {id:'r-meditation',title:'r/Meditation',kind:'discussion',site:'reddit.example',color:'var(--m4)',status:'ok',folders:[]},
+];
+const DRAFTS = [
+  ['field-notes','The quiet case for walking without headphones','article',8,3,'What happens to your attention when the soundtrack goes away.'],
+  ['coach-ana','Strength training basics, explained in 12 minutes','video',12,4,'A first session you can do with two dumbbells and a mat.'],
+  ['little-rituals','The slow mornings episode: rituals that stick','podcast',41,6,'Why the habits that survive are the ones that cost almost nothing.'],
+  ['slow-kitchen','Fall soups, start to finish','video',24,8,'Five soups, one pot, and a freezer plan for the week.'],
+  ['sleep-lab','What 30 nights of sleep tracking actually taught me','article',9,26,'The data was boring. The boring part was the lesson.'],
+  ['maker-letters','Pricing when the work is slow','article',7,28,'What to change first when the pipeline thins out.'],
+  ['r-meditation',"A beginner's guide to sitting still for five minutes",'discussion',4,30,'The thread that keeps getting reposted, and why it works.'],
+  ['field-notes','The art of the weekly reset','article',6,32,'One hour on Sunday that makes the other six days quieter.'],
+  ['little-rituals','Ten quiet minutes: a walk without a podcast','podcast',10,50,'An experiment in doing one thing at a time.'],
+  ['coach-ana','Mobility routine for desk days','video',15,52,'Eight movements for the hours you spend in a chair.'],
+  ['sleep-lab','The two minute wind-down that actually works','article',3,54,'Shorter than brushing your teeth, and it holds up.'],
+  ['maker-letters','Rest is productive: a conversation on burnout','article',11,72,'What recovery looks like when you work for yourself.'],
+  ['slow-kitchen','A weeknight dinner you can make half asleep','video',9,76,'Six ingredients, one pan, nothing to chop finely.'],
+  ['pricing-pod','Raising your rates without losing the client','podcast',38,80,'The script, and what to do when they push back.'],
+  ['field-notes','Reading more by subscribing to less','article',5,96,'A smaller pile read closely beats a big pile skimmed.'],
+  ['little-rituals','The evening routine episode','podcast',35,100,'Guests describe the hour before bed, in detail.'],
+  ['coach-ana','Walking as training, not just transport','video',18,120,'How to make a daily walk count for something.'],
+  ['sleep-lab','Naps, honestly','article',6,124,"What the research supports, and what it doesn't."],
+  ['r-meditation','What a year of daily practice changed','discussion',7,130,'A long post worth the scroll, and the replies are good too.'],
+  ['maker-letters','The one page business plan','article',8,148,'What to write down before you build anything.'],
+  ['slow-kitchen','Batch cooking without eating the same thing twice','video',21,150,'One prep session, four different plates.'],
+  ['field-notes','Notes on doing nothing on purpose','article',4,170,'A short argument for unscheduled time.'],
+  ['pricing-pod','What to charge for your first product','podcast',44,176,'Pricing from the outcome, not the hours.'],
+  ['little-rituals','Mornings when everything goes wrong','podcast',29,196,'Routines that survive a bad night.'],
+  ['sleep-lab','Light in the morning, dark at night','article',7,200,'The one change with the most evidence behind it.'],
+  ['coach-ana','Twenty minutes, no equipment','video',20,220,'A full session for a hotel room or a small flat.'],
+  ['maker-letters','How to tell if an idea is worth a weekend','article',9,240,'Four questions before you open a code editor.'],
+  ['slow-kitchen','The soup that freezes best','video',14,244,'And how to freeze it flat so it thaws in ten minutes.'],
+  ['field-notes','A small defence of printed things','article',6,264,'On reading away from a screen.'],
+  ['r-meditation','The five minute reset thread','discussion',3,268,'Short, practical, and endlessly reposted.'],
+  ['little-rituals','The season change episode','podcast',32,290,'Adjusting a routine when the light shifts.'],
+  ['sleep-lab','Caffeine, timing and sleep','article',8,300,'The half-life maths nobody does.'],
+  ['coach-ana','Form check: the five lifts','video',16,320,'Slow motion, one cue each.'],
+  ['maker-letters','Invoices, contracts and boring safety','article',10,330,'The admin that prevents the expensive problems.'],
+  ['slow-kitchen','Three breakfasts worth getting up for','video',11,350,'Make-ahead, no blender.'],
+  ['field-notes','What I stopped reading this year','article',7,360,'Subtraction as a reading strategy.'],
+  ['pricing-pod','Clients who ask for a discount','podcast',36,380,'Holding the line without being cold about it.'],
+  ['little-rituals','Walking meetings, actually tried','podcast',27,400,'Two weeks of taking calls outside.'],
+  ['sleep-lab','The weekend lie-in problem','article',5,420,'Why Monday feels like jet lag.'],
+  ['r-meditation','Beginners ask the same six questions','discussion',6,440,'The answers, collected.'],
+];
+function bodyFor(title, standfirst){
+  return [
+    standfirst+' This is placeholder reading copy, set the way a real article will be: a comfortable line length, generous line height, nothing in the margins competing for attention.',
+    'The point of this screen is the reading. Nothing slides in from the side, no related items wait at the bottom to pull you onward, and the only thing after the last paragraph is the end.',
+    "In the finished version this text comes from the source's own feed with the page furniture stripped out. When a feed carries only an excerpt, the full article is fetched and cleaned before it lands here.",
+    '"'+title+'" ends where it ends. The next thing you read is a thing you chose.'
+  ];
+}
+function makeSeed(){
+  const now = Date.now();
+  const H = 3600000, D = 86400000;
+  // read earlier today, so the reading-time bar starts part way along
+  const readToday = {4:3*H, 7:5*H, 10:1*H};
+  // saved a while ago, so the Later shelf reads like a real backlog
+  const savedAgo = {1:2*D, 5:12*D, 9:21*D, 14:34*D};
+  const archivedAgo = {20:4*D, 24:9*D, 29:15*D, 33:26*D, 37:40*D};
+  const items = DRAFTS.map((d,i)=>{
+    const [sourceId,title,kind,minutes,hoursAgo,standfirst] = d;
+    const saved = savedAgo[i] !== undefined;
+    const archived = archivedAgo[i] !== undefined;
+    const readAt = readToday[i];
+    const seen = readAt !== undefined ? now - readAt
+      : (hoursAgo > 36 && !saved) ? now - (hoursAgo-6)*H
+      : null;
+    return {
+      id:'item-'+(i+1), sourceId, title, standfirst, kind, minutes,
+      body: bodyFor(title, standfirst),
+      publishedAt: new Date(now - hoursAgo*H).toISOString(),
+      seenAt: seen ? new Date(seen).toISOString() : null,
+      savedAt: saved ? new Date(now - savedAgo[i]).toISOString() : null,
+      archivedAt: archived ? new Date(now - archivedAgo[i]).toISOString() : null,
+      deletedAt: null,
+    };
+  });
+  return {version:1, sources:SOURCES.map(s=>({...s})), folders:FOLDERS.map(f=>({...f})), items,
+    settings:{markSeenOnScroll:false, showCounts:false, openOriginal:false}};
+}
+function emptySeed(){
+  return {version:1, sources:[], folders:[], items:[], settings:{markSeenOnScroll:false, showCounts:false, openOriginal:false}};
+}
+
+/* ---------------------------------------------------------------- store */
+const KEY = 'quiet-hours-proto-v1';
+let S = load();
+function load(){
+  try{ const raw = localStorage.getItem(KEY); if(raw) return JSON.parse(raw); }catch(e){}
+  return makeSeed();
+}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function patch(id, p){ const it = S.items.find(i=>i.id===id); if(!it) return; Object.assign(it,p); save(); }
+function src(it){ return S.sources.find(s=>s.id===it.sourceId); }
+function foldersOf(it){ const s = src(it); if(!s) return []; return s.folders.map(f=>(S.folders.find(x=>x.id===f)||{}).name).filter(Boolean); }
+
+const live = () => S.items.filter(i=>!i.deletedAt);
+const isUnseen = i => !i.seenAt && !i.archivedAt && !i.deletedAt;
+const isSeen = i => !!i.seenAt && !i.archivedAt && !i.deletedAt;
+const isLater = i => !!i.savedAt && !i.archivedAt && !i.deletedAt;
+const isArchived = i => !!i.archivedAt && !i.deletedAt;
+const KIND = {article:'Article', video:'Video', podcast:'Podcast', discussion:'Discussion'};
+
+function timeAgo(iso){
+  const h = Math.round((Date.now()-new Date(iso))/3600000);
+  if(h<1) return 'Just now';
+  if(h<24) return h+' hour'+(h===1?'':'s')+' ago';
+  const d = Math.round(h/24);
+  if(d===1) return 'Yesterday';
+  if(d<7) return d+' days ago';
+  const w = Math.round(d/7);
+  return w+' week'+(w===1?'':'s')+' ago';
+}
+function dayGroup(iso){
+  const d = new Date(iso), now = new Date();
+  if(d.toDateString()===now.toDateString()) return d.getHours()<12 ? 'This morning' : 'Today';
+  const y = new Date(now); y.setDate(now.getDate()-1);
+  if(d.toDateString()===y.toDateString()) return 'Yesterday';
+  const days = Math.round((now-d)/86400000);
+  if(days<7) return 'Earlier this week';
+  if(days<30) return 'Earlier this month';
+  return 'Older';
+}
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* ---------------------------------------------------------------- view state */
+const VIEWS = ['home','feed','library','listen','sources','settings'];
+let V = {
+  view:'home', folder:null, itemId:null, shelf:'later',
+  overlay:null,            // 'add' | 'search'
+  menuFor:null, filterOpen:false,
+  undo:null,               // {text, apply}
+  readSize:20,
+  player:null, playing:false,  // {itemId}
+  prefs:{}                 // per list: {tab, group, sort, kinds, folder, length}
+};
+function prefs(key, init){
+  if(!V.prefs[key]){
+    let stored = null;
+    try{ stored = JSON.parse(localStorage.getItem('qh-prefs-'+key)||'null'); }catch(e){}
+    V.prefs[key] = stored || init;
+  }
+  return V.prefs[key];
+}
+function setPref(key, p){
+  V.prefs[key] = {...V.prefs[key], ...p};
+  try{ localStorage.setItem('qh-prefs-'+key, JSON.stringify(V.prefs[key])); }catch(e){}
+  render();
+}
+function playerHTML(){
+  if(!V.player) return '';
+  const it = S.items.find(i=>i.id===V.player);
+  if(!it) return '';
+  const s = src(it) || {};
+  return `<div class="player" role="region" aria-label="Now playing">
+    <span style="width:36px;height:36px;border-radius:10px;background:${s.color||'var(--m1)'};flex:none" aria-hidden="true"></span>
+    <span style="min-width:0;flex:0 1 200px;font-size:13px;line-height:1.3">
+      <b style="font-weight:600;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(it.title)}</b>
+      <span style="color:var(--softer)">${esc(s.title||'')} · ${it.minutes} min</span>
+    </span>
+    <button class="pbtn" data-pp="1" aria-label="${V.playing?'Pause':'Play'}">${V.playing?I.pause:I.playOlive}</button>
+    <span class="ptrack" aria-hidden="true"><span style="width:${V.playing?'34%':'8%'}"></span></span>
+    <span style="font-size:12px;color:var(--softer);flex:none">${V.playing?'14:20':'0:00'}</span>
+    <button class="px" data-pclose="1" aria-label="Close player">${I.close}</button>
+  </div>`;
+}
+
+function go(view, extra){
+  V.view = view; V.folder = null; V.itemId = null; V.menuFor = null; V.filterOpen = false;
+  Object.assign(V, extra||{});
+  if(VIEWS.includes(view)) { try{ history.replaceState(null,'','#'+view); }catch(e){} }
+  window.scrollTo(0,0);
+  render();
+}
+
+/* ---------------------------------------------------------------- shared pieces */
+function header(){
+  const places = [['home','Home'],['feed','Feed'],['library','Library'],['listen','Listen'],['sources','Sources']];
+  return `<div class="wrap"><header class="top">
+    <button class="brand" data-go="home" style="border:none;background:none;cursor:pointer">${I.mark}quiet hours</button>
+    <nav class="nav" aria-label="Main">
+      ${places.map(([v,l])=>`<button data-go="${v}" class="${V.view===v||(v==='library'&&V.view==='library')?'on':''}">${l}</button>`).join('')}
+    </nav>
+    <div style="display:flex;gap:8px">
+      <button class="ib" aria-label="Search" data-overlay="search">${I.search}</button>
+      <button class="add" data-overlay="add"><span aria-hidden="true" style="margin-right:6px">+</span>Add</button>
+    </div>
+  </header></div>`;
+}
+
+function controlRow(key, cfg){
+  const p = prefs(key, cfg.init);
+  const fcount = (p.kinds?p.kinds.length:0) + (p.folder&&p.folder!=='Any'?1:0) + (p.length&&p.length!=='Any'?1:0);
+  const folderChips = ['Any', ...S.folders.map(f=>f.name), 'No folder'];
+  return `<div class="controls">
+    <nav class="tabs" aria-label="Show">
+      ${cfg.tabs.map(t=>`<button data-tab="${key}|${t.id}" class="${p.tab===t.id?'on':''}" ${p.tab===t.id?'aria-current="true"':''}>${t.label}</button>`).join('')}
+    </nav>
+    <div style="display:flex;gap:16px;align-items:center">
+      <label class="ctl">Group by
+        <select data-pref="${key}|group">${cfg.groups.map(g=>`<option ${p.group===g?'selected':''}>${g}</option>`).join('')}</select>
+      </label>
+      <span class="vr" aria-hidden="true"></span>
+      <label class="ctl">Sort
+        <select data-pref="${key}|sort">${cfg.sorts.map(s=>`<option ${p.sort===s?'selected':''}>${s}</option>`).join('')}</select>
+      </label>
+      <span class="vr" aria-hidden="true"></span>
+      <button class="fbtn ${V.filterOpen||fcount?'on':''}" data-filter="toggle" aria-expanded="${V.filterOpen}">
+        ${I.filter}Filter${fcount?' · '+fcount:''}
+      </button>
+    </div>
+    ${V.filterOpen?`<div class="panel" role="dialog" aria-label="Filter">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span class="lbl">Filter</span><button class="lk" data-filter="clear|${key}">Clear all</button>
+      </div>
+      <div class="fgroup"><span>Type</span><div>
+        ${[['article','Read'],['video','Watch'],['podcast','Listen'],['discussion','Discussion']].map(([k,l])=>
+          `<button class="chip ${(p.kinds||[]).includes(k)?'on':''}" data-fk="${key}|${k}">${l}</button>`).join('')}
+      </div></div>
+      ${cfg.folderFilter!==false&&S.folders.length?`<div class="fgroup"><span>Folder</span><div>
+        ${folderChips.map(f=>`<button class="chip ${(p.folder||'Any')===f?'on':''}" data-ff="${key}|${esc(f)}">${esc(f)}</button>`).join('')}
+      </div></div>`:''}
+      <div class="fgroup"><span>Length</span><div>
+        ${['Any','Under 5 min','5 to 15','Longer'].map(l=>`<button class="chip ${(p.length||'Any')===l?'on':''}" data-fl="${key}|${l}">${l}</button>`).join('')}
+      </div></div>
+    </div>`:''}
+  </div>`;
+}
+
+function applyFilters(items, p, tabs){
+  const tab = tabs.find(t=>t.id===p.tab) || tabs[0];
+  let list = items.filter(tab.test);
+  if(p.kinds && p.kinds.length) list = list.filter(i=>p.kinds.includes(i.kind));
+  if(p.folder && p.folder!=='Any'){
+    list = list.filter(i=>{
+      const s = src(i);
+      if(p.folder==='No folder') return !s || s.folders.length===0;
+      const f = S.folders.find(x=>x.name===p.folder);
+      return !!(f && s && s.folders.includes(f.id));
+    });
+  }
+  if(p.length==='Under 5 min') list = list.filter(i=>i.minutes<5);
+  if(p.length==='5 to 15') list = list.filter(i=>i.minutes>=5 && i.minutes<=15);
+  if(p.length==='Longer') list = list.filter(i=>i.minutes>15);
+  const sorters = {
+    'Newest first':(a,b)=>new Date(b.publishedAt)-new Date(a.publishedAt),
+    'Oldest first':(a,b)=>new Date(a.publishedAt)-new Date(b.publishedAt),
+    'Shortest first':(a,b)=>a.minutes-b.minutes,
+    'Longest first':(a,b)=>b.minutes-a.minutes,
+    'Source A to Z':(a,b)=>(src(a)||{}).title.localeCompare((src(b)||{}).title),
+    'Recently saved':(a,b)=>new Date(b.savedAt||0)-new Date(a.savedAt||0),
+    'Recently archived':(a,b)=>new Date(b.archivedAt||0)-new Date(a.archivedAt||0),
+  };
+  return list.slice().sort(sorters[p.sort] || sorters['Newest first']);
+}
+
+function groupItems(list, mode){
+  if(mode==='None') return [['', list]];
+  const map = new Map();
+  list.forEach(i=>{
+    let k = '';
+    if(mode==='Date') k = dayGroup(i.publishedAt);
+    else if(mode==='Source') k = (src(i)||{}).title || 'Unknown';
+    else if(mode==='Type') k = KIND[i.kind];
+    else if(mode==='Folder') k = foldersOf(i)[0] || 'No folder';
+    map.set(k, [...(map.get(k)||[]), i]);
+  });
+  return [...map.entries()];
+}
+
+function rowHTML(it){
+  const s = src(it) || {};
+  const f = foldersOf(it)[0];
+  const badge = it.kind==='video' ? 'b video' : it.kind==='podcast' ? 'b podcast' : 'b';
+  const media = (it.kind==='video'||it.kind==='podcast') ? I.play : '';
+  return `<article class="row">
+    <span class="dot ${it.seenAt?'off':''}">${it.seenAt?'':'<span style="position:absolute;left:-9999px">New</span>'}</span>
+    <div class="th" style="background:${s.color||'var(--m4)'}">${media}</div>
+    <div class="tx">
+      <button class="tt" data-read="${it.id}">${esc(it.title)}</button>
+      <span class="meta"><span class="${badge}">${KIND[it.kind]}</span>${esc(s.title||'')} · ${it.minutes} min · ${timeAgo(it.publishedAt)}${f?` <span class="fchip">${esc(f)}</span>`:''}</span>
+    </div>
+    <div class="acts">
+      <button class="act" data-act="later|${it.id}" aria-label="${it.savedAt?'Remove from Later':'Save to Later'}" title="${it.savedAt?'Remove from Later':'Save to Later'}">${I.clock}</button>
+      <button class="act" data-act="archive|${it.id}" aria-label="Archive" title="Archive">${I.box}</button>
+      <button class="act" data-act="seen|${it.id}" aria-label="${it.seenAt?'Mark as unseen':'Mark as seen'}" title="${it.seenAt?'Mark as unseen':'Mark as seen'}">${I.eye}</button>
+    </div>
+    <button class="more" data-menu="${it.id}" aria-label="More actions" aria-expanded="${V.menuFor===it.id}">${I.dots}</button>
+    ${V.menuFor===it.id?`<div class="menu" role="menu" aria-label="Item actions">
+      <button class="mi" data-read="${it.id}">${I.eye} Open</button>
+      <button class="mi" data-act="later|${it.id}">${I.clock} ${it.savedAt?'Remove from Later':'Save to Later'}</button>
+      <button class="mi" data-act="archive|${it.id}">${I.box} Archive</button>
+      <div class="sep"></div>
+      <button class="mi danger" data-act="delete|${it.id}">${I.trash} Delete</button>
+    </div>`:''}
+  </article>`;
+}
+
+/* Toasts: drop down from the top, hold for 10 seconds, carry an Undo.
+   Rendered outside the app's markup so a re-render never kills the timer. */
+const TOAST_MS = 10000;
+let toastSeq = 0;
+function showToast(verb, subject, undoFn){
+  const layer = document.getElementById('toast-layer');
+  if(!layer) return;
+  // one at a time: the newest replaces the last, so they never stack up
+  [...layer.children].forEach(c=>c.remove());
+  const id = 'toast-'+(++toastSeq);
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.id = id;
+  el.setAttribute('role','status');
+  el.innerHTML = `<span class="tick">${I.check}</span>
+    <span class="tmsg"><span class="tverb">${esc(verb)}</span><span class="tsub">${esc(subject)}</span></span>
+    ${undoFn?'<button class="tundo">Undo</button>':''}
+    <button class="tx" aria-label="Dismiss">${I.close}</button>`;
+  layer.appendChild(el);
+  let timer = setTimeout(close, TOAST_MS);
+  function close(){
+    clearTimeout(timer);
+    el.classList.add('out');
+    setTimeout(()=>el.remove(), 200);
+  }
+  const undoBtn = el.querySelector('.tundo');
+  if(undoBtn) undoBtn.addEventListener('click', ()=>{ undoFn(); close(); render(); });
+  el.querySelector('.tx').addEventListener('click', close);
+  // pausing on hover, so a toast you are reading does not vanish mid-sentence
+  // hovering holds it open, so a toast you are reading does not vanish mid-sentence
+  el.addEventListener('mouseenter', ()=>clearTimeout(timer));
+  el.addEventListener('mouseleave', ()=>{ timer = setTimeout(close, 4000); });
+}
+
+function listBlock(key, cfg, items){
+  const p = prefs(key, cfg.init);
+  const shown = applyFilters(items, p, cfg.tabs);
+  const tabLabel = (cfg.tabs.find(t=>t.id===p.tab)||cfg.tabs[0]).label;
+  if(!shown.length) return controlRow(key,cfg) + cfg.empty(p);
+  return controlRow(key,cfg) + groupItems(shown, p.group).map(([k,list])=>
+    `<section style="display:flex;flex-direction:column">
+      ${k?`<div class="ghead"><h2 class="lbl">${esc(k)}</h2></div>`:''}
+      <div class="list" ${k?'style="border-top:none"':''}>${list.map(rowHTML).join('')}</div>
+    </section>`).join('') + `<p class="ending">${esc(cfg.ending(shown.length, tabLabel))}</p>`;
+}
+
+/* ---------------------------------------------------------------- views */
+function viewHome(){
+  const now = new Date();
+  const hour = now.getHours();
+  const greet = hour<12 ? 'Good morning.' : hour<18 ? 'Good afternoon.' : 'Good evening.';
+  const stamp = now.toLocaleDateString(undefined,{weekday:'long'}) + ' ' +
+    (hour<12?'morning':hour<18?'afternoon':'evening') + ', ' +
+    now.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});
+
+  if(!S.sources.length){
+    const steps = [['Pick a few topics','Folders you can sort things into later','sources'],
+      ['Follow your first 3 sources','Paste a link: a blog, a channel, a podcast','sources'],
+      ['Save one thing for later','Anything you have been meaning to read','library']];
+    return `<div class="wrap"><main class="col" style="padding-block:24px 96px;gap:28px">
+      <h1 class="hero">${greet}<br><span class="accent">Let's add some content.</span></h1>
+      <p class="note" style="font-size:16px;color:var(--ink-muted);max-width:60ch">Home builds itself from what you follow. Three small steps and it comes alive.</p>
+      <section>${steps.map((st,n)=>`<button class="step" data-go="${st[2]}" style="${n===0?'border-top:2px solid var(--divider)':''}">
+        <span class="num">${n+1}</span>
+        <span style="flex:1;min-width:0"><span class="serif" style="font-size:22px">${st[0]}${I.arrow}</span><br>
+        <span style="font-size:14px;color:var(--ink-muted)">${st[1]}</span></span>
+      </button>`).join('')}</section>
+      <p class="note">Prototype note: Settings can fill this with sample content again.</p>
+    </main></div>`;
+  }
+
+  const unseen = live().filter(isUnseen), later = live().filter(isLater);
+
+  // reading time: minutes cleared in the last 24 hours, against a 30 minute quiet hour
+  const readToday = live().filter(i=>i.seenAt && (Date.now()-new Date(i.seenAt)) < 86400000)
+                          .reduce((n,i)=>n+i.minutes,0);
+  const goal = 30, pct = Math.min(100, Math.round(readToday/goal*100)), left = Math.max(0, goal-readToday);
+
+  const byNew = (a,b)=>new Date(b.publishedAt)-new Date(a.publishedAt);
+  const featured = unseen.filter(i=>i.kind==='article'||i.kind==='discussion').sort(byNew)[0];
+  const fresh = unseen.filter(i=>!featured || i.id!==featured.id).sort(byNew).slice(0,5);
+  const walk = unseen.filter(i=>i.kind==='podcast'||i.kind==='video').sort(byNew).slice(0,2);
+  const waiting = later.slice().sort((a,b)=>new Date(a.savedAt||0)-new Date(b.savedAt||0)).slice(0,3);
+  const fs = featured ? (src(featured)||{}) : {};
+  const ffolder = featured ? (foldersOf(featured)[0]||'') : '';
+
+  const inFolder = (f,i)=>{ const sc = src(i); return !!(sc && sc.folders.includes(f.id)); };
+
+  return `<div class="wrap"><main class="col" style="padding-block:24px ${V.player?'128px':'96px'};gap:48px">
+    <section class="greet" aria-label="Greeting">
+      <div class="left">
+        <p class="stamp">${esc(stamp)}</p>
+        <h1 class="hero">${greet}<br><span class="accent">${unseen.length?"Here's what's new.":"You're all caught up."}</span></h1>
+      </div>
+      <div class="timecard">
+        <div class="trow"><span style="font-weight:600">Today's reading time</span><span style="color:var(--ink-muted)">${readToday} of ${goal} min</span></div>
+        <div class="bar" role="img" aria-label="${readToday} of ${goal} minutes read today"><span style="width:${pct}%"></span></div>
+        <p style="margin:0;font-size:13px;color:var(--ink-muted);line-height:1.4">${left?left+" minutes left in today's quiet hour.":"That's your quiet hour done. Anything more is a bonus."}</p>
+      </div>
+    </section>
+
+    ${featured?`<section class="featured" aria-label="Featured">
+      <div class="art" style="background:${fs.color||'var(--m6)'}"></div>
+      <div class="fbody">
+        <span class="lbl" style="color:var(--ink-muted)">Featured${ffolder?' · '+esc(ffolder):''}</span>
+        <h2>${esc(featured.title)}</h2>
+        <p style="margin:0;font-size:15px;line-height:1.6;color:var(--ink-body)">${esc(featured.standfirst)}</p>
+        <span class="meta">${esc(fs.title||'')} · ${featured.minutes} min read</span>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
+          <button class="btn" data-read="${featured.id}">Read now</button>
+          <button class="btn soft" data-act="later|${featured.id}">${featured.savedAt?'In Later':'Later'}</button>
+        </div>
+      </div>
+    </section>`:''}
+
+    ${fresh.length?`<section aria-label="Fresh today" style="display:flex;flex-direction:column;gap:20px">
+      <div class="sechead">
+        <div style="flex:1 1 320px;min-width:0">
+          <h2 class="h2">Fresh today</h2>
+          <p style="margin:8px 0 0;font-size:15px;color:var(--ink-muted);line-height:1.55">New since you last stopped by. Skim, save or let it go.</p>
+        </div>
+        <button class="lk" data-go="feed">Open the Feed${I.arrow}</button>
+      </div>
+      <div class="list">${fresh.map(rowHTML).join('')}</div>
+    </section>`:`<section aria-label="Caught up" class="empty">
+      <h2>You're all caught up.</h2>
+      <p>Go enjoy your day. New things will be here when you come back.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
+        ${later.length?`<button class="btn" data-go="library">Open Later</button>`:''}
+        <button class="btn soft" data-go="feed">Browse seen</button>
+      </div>
+    </section>`}
+
+    <section aria-label="Your folders" style="display:flex;flex-direction:column;gap:20px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+        <h2 class="h2">Your folders</h2>
+        ${S.folders.length>4?`<button class="lk" data-go="feed" style="margin-left:auto;margin-right:8px">All ${S.folders.length} folders</button>`:''}
+        <button class="gear" data-go="sources" aria-label="Choose and order folders" title="Choose and order folders">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+      <div class="fcols">${S.folders.slice(0,4).map(f=>{
+        const mine = unseen.filter(i=>inFolder(f,i));
+        const mins = mine.reduce((n,i)=>n+i.minutes,0);
+        return `<button class="fcard" data-folder="${f.id}">
+          <span class="ftop"><span class="ficon">${I.folder}</span>${mine.length?`<span class="fmeta">${mins} min</span>`:''}</span>
+          <span class="fname">${esc(f.name)}</span>
+          <span class="fmeta">${mine.length?mine.length+' to look at':'Nothing new'}</span>
+        </button>`;
+      }).join('')}</div>
+    </section>
+
+    ${walk.length?`<section aria-label="For your walk" style="display:flex;flex-direction:column;gap:20px">
+      <h2 class="h2">For your walk</h2>
+      <div class="walkgrid">${walk.map(i=>{
+        const sc = src(i)||{};
+        return `<article class="walkcard">
+          <div class="art" style="background:${sc.color||'var(--m3)'}"></div>
+          <div class="wtx">
+            <span style="font-size:13px;color:var(--ink-muted)">${KIND[i.kind]} · ${i.minutes} min</span>
+            <button class="wt" data-read="${i.id}">${esc(i.title)}</button>
+          </div>
+          <button class="playbtn" data-play="${i.id}" aria-label="Play ${i.kind==='podcast'?'episode':'video'}">${I.play}</button>
+        </article>`;
+      }).join('')}</div>
+    </section>`:''}
+
+    ${waiting.length?`<section aria-label="Waiting on your Later shelf" style="display:flex;flex-direction:column;gap:20px">
+      <div class="sechead"><h2 class="h2">Waiting for you later</h2>
+        <button class="lk" data-go="library">Open Later${I.arrow}</button></div>
+      <div class="latergrid">${waiting.map(i=>`<button class="latercard" data-read="${i.id}">
+        <span style="font-size:13px;color:var(--ink-muted)">Saved ${esc(timeAgo(i.savedAt||i.publishedAt).toLowerCase())}</span>
+        <span class="lt">${esc(i.title)}</span>
+      </button>`).join('')}</div>
+    </section>`:''}
+  </main></div>`;
+}
+
+function viewFeed(){
+  const folder = S.folders.find(f=>f.id===V.folder);
+  const items = live().filter(i=>!isArchived(i)).filter(i=>{
+    if(!V.folder) return true;
+    const s = src(i); return !!(s && s.folders.includes(V.folder));
+  });
+  const cfg = {
+    init:{tab:'unseen', group:'Date', sort:'Newest first', kinds:[], folder:'Any', length:'Any'},
+    tabs:[{id:'unseen',label:'Unseen',test:isUnseen},{id:'seen',label:'Seen',test:isSeen},{id:'all',label:'All',test:()=>true}],
+    groups:['Date','None','Source','Folder','Type'],
+    sorts:['Newest first','Oldest first','Shortest first','Longest first','Source A to Z'],
+    ending:(n,tab)=> tab==='Unseen'
+      ? `That's all ${n} unseen${folder?' in '+folder.name:''}. You're caught up.`
+      : `That's ${n} item${n===1?'':'s'}${folder?' in '+folder.name:''}.`,
+    empty:p=> !S.sources.length
+      ? `<div class="empty"><h2>Nothing to read yet.</h2><p>Follow a source and whatever it publishes shows up here.</p><button class="btn" data-overlay="add">${I.plus}Add a source</button></div>`
+      : `<div class="empty"><h2>${p.tab==='unseen'?"You're all caught up.":'Nothing matches those filters.'}</h2>
+         <p>${p.tab==='unseen'?"Nothing new since you last looked. We'll check again in about 30 minutes, so go enjoy your day.":'Clear a filter, or switch tabs.'}</p>
+         <button class="btn" data-go="library">Open Later</button></div>`
+  };
+  const key = V.folder ? 'feed-'+V.folder : 'feed';
+  return `<div class="wrap"><div class="columns">
+    <aside class="rail">
+      <nav class="side" aria-label="All items"><button data-folder="" class="${!V.folder?'on':''}">Everything</button></nav>
+      <nav class="side" aria-label="Folders">
+        <div class="sh"><h2 class="lbl">Folders</h2></div>
+        ${S.folders.map(f=>`<button data-folder="${f.id}" class="${V.folder===f.id?'on':''}">${esc(f.name)}</button>`).join('')}
+      </nav>
+      <nav class="side" aria-label="Sources">
+        <div class="sh"><h2 class="lbl">Sources</h2><button class="lk" data-go="sources" style="color:var(--attention)">Manage</button></div>
+        ${S.sources.slice(0,6).map(s=>`<button data-go="sources"><span style="width:20px;height:20px;border-radius:6px;background:${s.color};flex:none" aria-hidden="true"></span>${esc(s.title)}</button>`).join('')}
+      </nav>
+    </aside>
+    <main class="col">
+      <div>${folder?`<p class="lbl" style="color:var(--ink-muted)">Feed · folder</p>`:''}
+        <h1 class="page" style="${folder?'margin-top:6px':''}">${folder?esc(folder.name):'Feed'}</h1></div>
+      ${listBlock(key, cfg, items)}
+    </main>
+  </div></div>`;
+}
+
+function viewLibrary(){
+  const shelf = V.shelf;
+  const items = live().filter(shelf==='later'?isLater:isArchived);
+  const cfg = shelf==='later' ? {
+    init:{tab:'all', group:'None', sort:'Recently saved', kinds:[], folder:'Any', length:'Any'},
+    tabs:[{id:'all',label:'All',test:()=>true},{id:'read',label:'Read',test:i=>i.kind==='article'||i.kind==='discussion'},
+      {id:'watch',label:'Watch',test:i=>i.kind==='video'},{id:'listen',label:'Listen',test:i=>i.kind==='podcast'}],
+    groups:['None','Folder','Type','Date'],
+    sorts:['Recently saved','Newest first','Oldest first','Shortest first','Source A to Z'],
+    ending:n=>`That's your whole Later shelf, ${n} item${n===1?'':'s'}.`,
+    empty:()=>`<div class="empty"><h2>Nothing saved for later.</h2><p>Save something from the Feed with the clock button on a row and it waits here.</p><button class="btn" data-go="feed">Open the Feed</button></div>`
+  } : {
+    init:{tab:'all', group:'None', sort:'Recently archived', kinds:[], folder:'Any', length:'Any'},
+    tabs:[{id:'all',label:'All',test:()=>true},{id:'read',label:'Read',test:i=>i.kind==='article'||i.kind==='discussion'},
+      {id:'watch',label:'Watched',test:i=>i.kind==='video'},{id:'listen',label:'Listened',test:i=>i.kind==='podcast'}],
+    groups:['None','Folder','Type','Date'],
+    sorts:['Recently archived','Newest first','Oldest first','Source A to Z'],
+    ending:n=>`${n} item${n===1?'':'s'} kept. Nothing here needs your attention.`,
+    empty:()=>`<div class="empty"><h2>The archive is empty.</h2><p>Archiving keeps something without leaving it on a pile. Use the box button on any row.</p><button class="btn" data-go="feed">Open the Feed</button></div>`
+  };
+  return `<div class="wrap"><div class="columns">
+    <aside class="rail"><nav class="side" aria-label="Shelves">
+      <div class="sh"><h2 class="lbl">Shelves</h2></div>
+      <button data-shelf="later" class="${shelf==='later'?'on':''}">Later</button>
+      <button data-shelf="archive" class="${shelf==='archive'?'on':''}">Archive</button>
+    </nav></aside>
+    <main class="col">
+      <h1 class="page">${shelf==='later'?'Later':'Archive'}</h1>
+      ${listBlock('lib-'+shelf, cfg, items)}
+    </main>
+  </div></div>`;
+}
+
+function viewListen(){
+  const items = live().filter(i=>!isArchived(i) && (i.kind==='podcast'||i.kind==='video'));
+  const cfg = {
+    init:{tab:'all', group:'None', sort:'Newest first', kinds:[], folder:'Any', length:'Any'},
+    tabs:[{id:'all',label:'All',test:()=>true},{id:'pod',label:'Podcasts',test:i=>i.kind==='podcast'},{id:'vid',label:'Videos',test:i=>i.kind==='video'}],
+    groups:['None','Type','Source','Date'],
+    sorts:['Newest first','Oldest first','Shortest first','Longest first','Source A to Z'],
+    ending:n=>`${n} thing${n===1?'':'s'} to watch or listen to.`,
+    empty:()=>`<div class="empty"><h2>Nothing to play.</h2><p>Follow a podcast or a video channel and new episodes collect here.</p><button class="btn" data-overlay="add">${I.plus}Add a source</button></div>`
+  };
+  return `<div class="wrap"><div class="columns"><main class="col" style="flex:1 1 100%">
+    <h1 class="page">Listen &amp; watch</h1>
+    ${listBlock('listen', cfg, items)}
+    <p class="note">Prototype note: the player is phase 3. Opening something here shows its page, the same as reading.</p>
+  </main></div></div>`;
+}
+
+function viewSources(){
+  const p = prefs('sources', {tab:'all'});
+  const tabs = [['all','All',()=>true],['blogs','Blogs',s=>s.kind==='article'],['video','Video',s=>s.kind==='video'],
+    ['pods','Podcasts',s=>s.kind==='podcast']];
+  const attention = S.sources.filter(s=>s.status==='needs_attention');
+  const test = (tabs.find(t=>t[0]===p.tab)||tabs[0])[2];
+  const shown = p.tab==='attention' ? attention : S.sources.filter(test);
+  return `<div class="wrap"><div class="columns"><main class="col" style="flex:1 1 100%">
+    <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between">
+      <h1 class="page">Sources</h1>
+      <button class="btn" data-overlay="add">${I.plus}Add a source</button>
+    </div>
+    <div class="controls"><nav class="tabs" aria-label="Show">
+      ${tabs.map(t=>`<button data-stab="${t[0]}" class="${p.tab===t[0]?'on':''}">${t[1]}</button>`).join('')}
+      ${attention.length?`<button data-stab="attention" class="${p.tab==='attention'?'on':''}" style="color:var(--attention);font-weight:500">Needs attention · ${attention.length}</button>`:''}
+    </nav></div>
+        ${!S.sources.length?`<div class="empty"><h2>No sources yet.</h2>
+      <p>Paste a link to a blog, a newsletter, a channel or a podcast and it starts filling your Feed.</p>
+      <button class="btn" data-overlay="add">${I.plus}Add your first source</button></div>`
+    :`<div class="list">${shown.map(s=>{
+      const its = live().filter(i=>i.sourceId===s.id).sort((a,b)=>new Date(b.publishedAt)-new Date(a.publishedAt));
+      const f = (s.folders.map(x=>(S.folders.find(y=>y.id===x)||{}).name).filter(Boolean))[0];
+      return `<article class="row">
+        <span style="width:40px;height:40px;border-radius:10px;background:${s.color};flex:none" aria-hidden="true"></span>
+        <div class="tx"><span style="font-size:16px;font-weight:500">${esc(s.title)}</span>
+          <span class="meta"><span class="b">${KIND[s.kind]}</span>${its.length?'Last post '+timeAgo(its[0].publishedAt).toLowerCase():'Nothing yet'}
+          ${s.status==='needs_attention'?`<span style="color:var(--attention);font-weight:500">· Not updating, check the link</span>`:''}</span></div>
+        ${f?`<span class="fchip">${esc(f)}</span>`:''}
+        <button class="lk" data-sfeed="${s.folders[0]||''}" style="flex:none">View items</button>
+      </article>`;
+    }).join('')}</div>
+    <p class="ending">${S.sources.length} source${S.sources.length===1?'':'s'}, checked every 30 minutes.</p>`}
+  </main></div></div>`;
+}
+
+function viewSettings(){
+  const t = [['markSeenOnScroll','Mark as seen when I scroll past','Off means items stay new until you open or clear them'],
+    ['showCounts','Show unread counts','Off by default, and worth leaving off'],
+    ['openOriginal','Open the original site instead of the reading view','Only for sources that need it']];
+  return `<div class="wrap"><div class="columns"><main class="col" style="flex:1 1 100%;max-width:720px">
+    <h1 class="page">Settings</h1>
+    <section style="display:flex;flex-direction:column">
+      <div class="ghead"><h2 class="lbl">Reading</h2></div>
+      ${t.map(([k,label,hint])=>`<label style="display:flex;gap:16px;align-items:center;justify-content:space-between;min-height:64px;border-bottom:1px solid var(--divider);cursor:pointer">
+        <span><b style="font-weight:600">${label}</b><br><span style="font-size:14px;color:var(--ink-muted)">${hint}</span></span>
+        <input type="checkbox" id="set-${k}" data-set="${k}" ${S.settings[k]?'checked':''} style="width:20px;height:20px;accent-color:var(--action);flex:none">
+      </label>`).join('')}
+    </section>
+    <section style="display:flex;flex-direction:column;gap:16px">
+      <div class="ghead"><h2 class="lbl">Prototype</h2></div>
+      <p style="margin:0;font-size:15px;line-height:1.6;color:var(--ink-body)">This runs on sample content saved in your own browser, so your changes survive a refresh and nothing leaves your device. Anyone else opening the link gets their own fresh copy.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" data-seed="demo">Reset demo data</button>
+        <button class="btn soft" data-seed="empty">Start empty</button>
+      </div>
+          </section>
+    <p class="ending">That's everything. There isn't a second page of settings.</p>
+  </main></div></div>`;
+}
+
+function viewRead(){
+  const it = S.items.find(i=>i.id===V.itemId);
+  if(!it) return `<div class="wrap"><div class="reader"><h1>That item isn't here.</h1>
+    <p class="standfirst">It may have been deleted, or the sample data was reset.</p>
+    <p style="margin-top:24px"><button class="btn" data-go="feed">Back to the Feed</button></p></div></div>`;
+  const s = src(it) || {};
+  return `<div class="rbar"><div class="wrap" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;padding-block:6px">
+      <button class="lk" data-back="1" style="display:inline-flex;align-items:center;gap:6px;min-height:44px">${I.back} Back</button>
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+        <button class="ib bare" data-size="1" aria-label="Text size" title="Text size" style="font-family:var(--serif);font-size:16px;font-weight:500">Aa</button>
+        <button class="btn ghost" data-act="later|${it.id}">${I.clock} ${it.savedAt?'In Later':'Later'}</button>
+        <button class="btn ghost" data-act="archive|${it.id}">${I.box} Archive</button>
+        <button class="ib bare" data-act="delete|${it.id}" aria-label="Delete" title="Delete">${I.trash}</button>
+      </div>
+    </div><div class="progress"><span style="width:34%"></span></div></div>
+    <div class="wrap"><article class="reader">
+      <div class="meta" style="margin-bottom:16px">
+        <span style="width:24px;height:24px;border-radius:6px;background:${s.color};flex:none" aria-hidden="true"></span>
+        <span style="font-weight:600;color:var(--ink)">${esc(s.title||'')}</span><span>·</span>
+        <span>${timeAgo(it.publishedAt)}</span><span>·</span><span>${it.minutes} min</span>
+        <span class="b">${KIND[it.kind]}</span>
+      </div>
+      <h1>${esc(it.title)}</h1>
+      <p class="standfirst">${esc(it.standfirst)}</p>
+      <div style="aspect-ratio:16/9;max-width:100%;background:${s.color||'var(--m6)'};border-radius:20px;margin-top:24px"></div>
+      <div class="bodycopy" style="font-size:${V.readSize}px">${it.body.map(p=>`<p>${esc(p)}</p>`).join('')}</div>
+      <p class="ending" style="margin-top:48px">The end. Nothing else is queued up after this.</p>
+    </article></div>`;
+}
+
+/* ---------------------------------------------------------------- overlays */
+let addError = null, searchQ = '', searchScope = 'Everywhere';
+
+function overlayAdd(){
+  return `<div class="scrim" data-scrim="1"><div class="dialog" role="dialog" aria-label="Follow something new" aria-modal="true">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+      <div><p class="lbl" style="color:var(--ink-muted)">Add</p>
+        <h2 class="serif" style="margin:6px 0 0;font-weight:400;font-size:28px">Follow something new</h2></div>
+      <button class="ib" aria-label="Close" data-close="1" style="background:var(--soft)">${I.close}</button>
+    </div>
+    <p style="margin:0;font-size:15px;line-height:1.6;color:var(--ink-body)">Paste a blog, a newsletter, a YouTube channel, a podcast or a subreddit. A feed link works too. In the finished app this resolves the feed and pulls in real posts.</p>
+    <label class="stack">Link<input class="field" id="add-url" placeholder="fieldnotes.example" autofocus></label>
+    ${S.folders.length?`<label class="stack">Folder<select class="field" id="add-folder">
+      <option value="">No folder</option>${S.folders.map(f=>`<option value="${f.id}">${esc(f.name)}</option>`).join('')}
+    </select></label>`:''}
+    ${addError?`<p class="alert" role="alert">${esc(addError)}</p>`:''}
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn soft" data-close="1">Cancel</button>
+      <button class="btn" data-follow="1">Follow</button>
+    </div>
+  </div></div>`;
+}
+
+function overlaySearch(){
+  const term = searchQ.trim().toLowerCase();
+  let items = [], sources = [];
+  if(term){
+    items = live().filter(i=>{
+      if(searchScope==='Feed') return !isLater(i) && !isArchived(i);
+      if(searchScope==='Library') return isLater(i) || isArchived(i);
+      if(searchScope==='Sources') return false;
+      return true;
+    }).filter(i=>i.title.toLowerCase().includes(term) || i.standfirst.toLowerCase().includes(term)
+      || ((src(i)||{}).title||'').toLowerCase().includes(term)).slice(0,8);
+    sources = (searchScope==='Feed'||searchScope==='Library') ? [] :
+      S.sources.filter(s=>s.title.toLowerCase().includes(term)).slice(0,4);
+  }
+  const hl = text => {
+    if(!term) return esc(text);
+    const i = text.toLowerCase().indexOf(term);
+    if(i<0) return esc(text);
+    return esc(text.slice(0,i))+'<mark style="background:var(--problem);color:var(--ink);padding:0 2px">'+esc(text.slice(i,i+term.length))+'</mark>'+esc(text.slice(i+term.length));
+  };
+  return `<div class="scrim" data-scrim="1" style="padding-top:8vh"><div class="search-box" role="dialog" aria-label="Search" aria-modal="true">
+    <div style="display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--divider)">
+      ${I.search}
+      <input id="search-q" value="${esc(searchQ)}" placeholder="Search everything you follow" autofocus
+        style="flex:1;min-width:0;border:none;outline:none;font-size:18px;font-family:var(--sans);color:var(--ink);background:transparent">
+      <button class="lk" data-close="1" style="border:1px solid var(--divider);border-radius:6px;padding:2px 6px;font-size:12px;color:var(--ink-muted)">esc</button>
+    </div>
+    <div style="display:flex;gap:6px;padding:12px 20px;flex-wrap:wrap;border-bottom:1px solid var(--divider)">
+      ${['Everywhere','Feed','Library','Sources'].map(s=>`<button class="chip ${searchScope===s?'on':''}" data-scope="${s}">${s}</button>`).join('')}
+    </div>
+    <div style="max-height:50vh;overflow-y:auto;padding:8px 8px 16px">
+      ${!term?`<p style="margin:0;padding:24px 12px;color:var(--ink-muted);font-size:15px">Type to search titles, descriptions and source names.</p>`:''}
+      ${term && !items.length && !sources.length?`<p style="margin:0;padding:24px 12px;color:var(--ink-muted);font-size:15px">Nothing matches “${esc(searchQ.trim())}”. Try fewer words.</p>`:''}
+      ${items.map(i=>`<button class="mi" data-read="${i.id}" style="align-items:flex-start;padding:12px;min-height:56px">
+        <span style="width:56px;aspect-ratio:16/9;border-radius:8px;background:${(src(i)||{}).color||'var(--m4)'};flex:none" aria-hidden="true"></span>
+        <span style="display:flex;flex-direction:column;gap:4px;min-width:0">
+          <span class="serif" style="font-size:17px;line-height:1.3">${hl(i.title)}</span>
+          <span style="font-size:13px;color:var(--ink-muted)">${KIND[i.kind]} · ${esc((src(i)||{}).title||'')} · ${i.minutes} min</span>
+        </span></button>`).join('')}
+      ${sources.map(s=>`<button class="mi" data-go="sources">
+        <span style="width:28px;height:28px;border-radius:999px;background:${s.color};flex:none" aria-hidden="true"></span>
+        <span style="font-size:15px">${hl(s.title)}</span>
+        <span style="margin-left:auto;font-size:13px;color:var(--ink-muted)">Source</span></button>`).join('')}
+    </div>
+  </div></div>`;
+}
+
+/* ---------------------------------------------------------------- render */
+function render(){
+  const body = V.view==='read' ? viewRead()
+    : V.view==='feed' ? viewFeed()
+    : V.view==='library' ? viewLibrary()
+    : V.view==='listen' ? viewListen()
+    : V.view==='sources' ? viewSources()
+    : V.view==='settings' ? viewSettings()
+    : viewHome();
+  const chrome = V.view==='read' ? '' : header();
+  const foot = V.view==='read' ? '' : `<div class="wrap"><p class="note" style="padding-block:0 32px">
+    Prototype on sample data in your browser. <button class="lk" data-go="settings">Settings</button> can reset it or empty it to see day one.</p></div>`;
+  document.getElementById('app').innerHTML = chrome + body + foot + playerHTML()
+    + (V.overlay==='add' ? overlayAdd() : V.overlay==='search' ? overlaySearch() : '');
+  const focus = document.getElementById(V.overlay==='add' ? 'add-url' : V.overlay==='search' ? 'search-q' : '');
+  if(focus){ focus.focus(); if(focus.value) focus.setSelectionRange(focus.value.length, focus.value.length); }
+}
+
+/* ---------------------------------------------------------------- actions */
+function doAct(verb, id){
+  const it = S.items.find(i=>i.id===id);
+  if(!it) return;
+  const before = {seenAt:it.seenAt, savedAt:it.savedAt, archivedAt:it.archivedAt, deletedAt:it.deletedAt};
+  const now = new Date().toISOString();
+  let text = '';
+  if(verb==='later'){
+    if(it.savedAt){ patch(id,{savedAt:null}); text='Removed from Later'; }
+    else { patch(id,{savedAt:now}); text='Saved to Later'; }
+  } else if(verb==='archive'){
+    patch(id,{archivedAt:now, seenAt:it.seenAt||now}); text='Archived';
+  } else if(verb==='seen'){
+    if(it.seenAt){ patch(id,{seenAt:null}); text='Marked as unseen'; }
+    else { patch(id,{seenAt:now}); text='Marked as seen'; }
+  } else if(verb==='delete'){
+    patch(id,{deletedAt:now}); text='Deleted';
+  }
+  V.menuFor = null;
+  showToast(text, it.title, ()=>{ patch(id, before); });
+  if(V.view==='read' && (verb==='archive'||verb==='delete')){
+    setTimeout(()=>{ V.view='feed'; render(); }, 450);
+  }
+  render();
+}
+
+function followSource(){
+  const input = document.getElementById('add-url');
+  const folderSel = document.getElementById('add-folder');
+  const url = (input ? input.value : '').trim();
+  addError = null;
+  if(!url){ addError = 'Paste a link first.'; render(); return; }
+  if(!/\./.test(url)){ addError = "That doesn't look like a link. Try something like fieldnotes.example or a YouTube channel."; render(); return; }
+  if(S.sources.some(s=>url.includes(s.site))){ addError = "You already follow this one. It's in your Sources list."; render(); return; }
+  const host = url.replace(/^https?:\/\//,'').split('/')[0] || 'example.com';
+  const name = host.replace(/^www\./,'').split('.')[0].replace(/[-_]/g,' ').replace(/\b\w/g, c=>c.toUpperCase());
+  const id = 'src-'+Date.now();
+  const palette = ['var(--m1)','var(--m2)','var(--m3)','var(--m4)','var(--m6)'];
+  const color = palette[Math.floor(Math.random()*palette.length)];
+  const folderId = folderSel ? folderSel.value : '';
+  S.sources.push({id, title:name, kind:'article', site:host, color, status:'ok', folders:folderId?[folderId]:[]});
+  const now = Date.now();
+  [0,1,2].forEach(n=>{
+    const title = [ 'Welcome to '+name, name+': the most recent post', name+': something from last week' ][n];
+    S.items.unshift({id:id+'-item-'+n, sourceId:id, title,
+      standfirst:'Pulled in when you followed this source.',
+      body:['This stands in for a real post from '+name+'.','In the finished version the text comes from the feed, cleaned up for reading.'],
+      kind:'article', minutes:4+n*2,
+      publishedAt:new Date(now-(n+1)*5*3600000).toISOString(),
+      seenAt:null, savedAt:null, archivedAt:null, deletedAt:null});
+  });
+  save();
+  V.overlay = null; addError = null;
+  V.view = 'feed'; V.folder = null;
+  render();
+  showToast('is now in your Feed, with 3 posts', name, ()=>{
+    S.sources = S.sources.filter(s=>s.id!==id);
+    S.items = S.items.filter(i=>i.sourceId!==id);
+    save();
+  });
+}
+
+/* ---------------------------------------------------------------- events */
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-go],[data-overlay],[data-folder],[data-shelf],[data-read],[data-act],[data-menu],[data-tab],[data-filter],[data-fk],[data-ff],[data-fl],[data-close],[data-scrim],[data-follow],[data-scope],[data-stab],[data-sfeed],[data-seed],[data-size],[data-back],[data-play],[data-pp],[data-pclose]');
+  if(!t){ if(V.menuFor || V.filterOpen){ V.menuFor = null; V.filterOpen = false; render(); } return; }
+
+  const d = t.dataset;
+  if(d.scrim !== undefined && t === e.target){ V.overlay = null; addError = null; render(); return; }
+  if(d.close !== undefined){ V.overlay = null; addError = null; render(); return; }
+  if(d.go){ V.overlay = null; go(d.go); return; }
+  if(d.overlay){ V.overlay = d.overlay; addError = null; render(); return; }
+  if(d.folder !== undefined && d.folder !== ''){ go('feed', {folder:d.folder}); return; }
+  if(d.folder === ''){ go('feed', {folder:null}); return; }
+  if(d.shelf){ go('library', {shelf:d.shelf}); return; }
+  if(d.sfeed !== undefined){ go('feed', {folder:d.sfeed||null}); return; }
+  if(d.read){ V.overlay = null; go('read', {itemId:d.read}); const it = S.items.find(i=>i.id===d.read); if(it && !it.seenAt){ patch(it.id,{seenAt:new Date().toISOString()}); } return; }
+  if(d.act){ const [verb,id] = d.act.split('|'); doAct(verb,id); return; }
+  if(d.menu){ V.menuFor = V.menuFor===d.menu ? null : d.menu; render(); return; }
+  if(d.tab){ const [key,tab] = d.tab.split('|'); setPref(key,{tab}); return; }
+  if(d.stab){ setPref('sources',{tab:d.stab}); return; }
+  if(d.filter === 'toggle'){ V.filterOpen = !V.filterOpen; render(); return; }
+  if(d.filter && d.filter.startsWith('clear|')){ setPref(d.filter.split('|')[1], {kinds:[], folder:'Any', length:'Any'}); return; }
+  if(d.fk){ const [key,kind] = d.fk.split('|'); const p = prefs(key,{}); const kinds = p.kinds||[];
+    setPref(key,{kinds: kinds.includes(kind) ? kinds.filter(k=>k!==kind) : [...kinds,kind]}); return; }
+  if(d.ff){ const [key,f] = d.ff.split('|'); setPref(key,{folder:f}); return; }
+  if(d.fl){ const [key,l] = d.fl.split('|'); setPref(key,{length:l}); return; }
+  if(d.follow){ followSource(); return; }
+  if(d.scope){ searchScope = d.scope; render(); return; }
+  if(d.seed){ S = d.seed==='demo' ? makeSeed() : emptySeed(); save();
+    V.prefs = {}; V.player = null;
+    if(d.seed==='empty'){ go('home'); } else { render(); }
+    showToast(d.seed==='demo' ? 'is back: 8 sources, 40 items' : 'is empty, so you can see day one', 'Sample content');
+    return; }
+  if(d.play){ V.player = d.play; V.playing = true;
+    const it = S.items.find(i=>i.id===d.play);
+    if(it && !it.seenAt) patch(it.id,{seenAt:new Date().toISOString()});
+    render(); return; }
+  if(d.pp){ V.playing = !V.playing; render(); return; }
+  if(d.pclose){ V.player = null; V.playing = false; render(); return; }
+  if(d.size){ V.readSize = V.readSize>=24 ? 18 : V.readSize+2; render(); return; }
+  if(d.back){ V.view = 'feed'; render(); return; }
+});
+
+document.addEventListener('change', e => {
+  const d = e.target.dataset;
+  if(d.pref){ const [key,field] = d.pref.split('|'); setPref(key,{[field]: e.target.value}); }
+  if(d.set){ S.settings[d.set] = e.target.checked; save(); }
+});
+
+document.addEventListener('input', e => {
+  if(e.target.id === 'search-q'){ searchQ = e.target.value; render(); }
+});
+
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape'){
+    if(V.overlay){ V.overlay = null; addError = null; render(); }
+    else if(V.menuFor || V.filterOpen){ V.menuFor = null; V.filterOpen = false; render(); }
+  }
+  if(e.key === 'Enter' && V.overlay === 'add' && document.activeElement && document.activeElement.id === 'add-url'){
+    followSource();
+  }
+});
+
+/* open the view named in the artifact link, if any */
+const h = (location.hash || '').replace('#','');
+if(VIEWS.includes(h)) V.view = h;
+render();
+</script>
