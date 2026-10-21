@@ -30,3 +30,8 @@ next-env.d.ts
 
 # macOS
 .DS_Store
+
+# prototype build artifacts (the exported copy lives in /app)
+prototype/node_modules/
+prototype/.next/
+prototype/out/
