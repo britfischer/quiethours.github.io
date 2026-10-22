@@ -210,6 +210,8 @@ h1.display{margin:0;font-family:var(--serif);font-weight:400;font-size:44px;line
 .empty h2{margin:0;font-family:var(--serif);font-weight:600;font-size:20px}
 .empty p{margin:0;max-width:46ch;font-size:16px;line-height:1.6;color:var(--ink-body)}
 .ending{font-family:var(--serif);font-size:18px;color:var(--ink-body);padding-top:16px;border-top:1px solid var(--divider);margin:0}
+/* where a list stops: its closing rule and the count, small, at the right */
+.listcount{margin:0;padding-top:12px;border-top:1px solid var(--divider);font-size:13px;color:var(--ink-muted);text-align:right}
 
 /* buttons, fields, cards */
 .btn{height:44px;padding:0 20px;border:none;border-radius:999px;background:var(--action);color:var(--card);font:500 14px var(--sans);display:inline-flex;align-items:center;gap:8px;cursor:pointer}
@@ -674,11 +676,14 @@ function prefs(key, init){
   if(!V.prefs[key]){
     let stored = null;
     try{ stored = JSON.parse(localStorage.getItem('qh-prefs-'+key)||'null'); }catch(e){}
-    V.prefs[key] = stored || init;
+    // saved settings from an older version can be missing fields, so the
+    // defaults always fill in underneath whatever was saved
+    V.prefs[key] = {...(init||{}), ...(stored||{})};
   }
   return V.prefs[key];
 }
 function setPref(key, p){
+  if(!V.prefs[key]) prefs(key, {});
   V.prefs[key] = {...V.prefs[key], ...p};
   try{ localStorage.setItem('qh-prefs-'+key, JSON.stringify(V.prefs[key])); }catch(e){}
   render();
@@ -936,7 +941,7 @@ function listBlock(key, cfg, items){
     `<section style="display:flex;flex-direction:column">
       ${k?`<div class="ghead"><h2 class="lbl">${esc(k)}</h2></div>`:''}
       <div class="list" ${k?'style="border-top:none"':''}>${list.map(i=>rowHTML(i, cfg.rowOpts)).join('')}</div>
-    </section>`).join('') + `<p class="ending">${esc(cfg.ending(shown.length, tabLabel))}</p>`;
+    </section>`).join('') + `<p class="listcount">${countText}</p>`;
 }
 
 /* ---------------------------------------------------------------- views */
@@ -1254,11 +1259,11 @@ function viewHighlights(){
           <div style="display:flex;justify-content:space-between;align-items:center">
             <span class="lbl">Filter</span><button class="lk" data-filter="clear|high">Clear all</button>
           </div>
-          <div class="fgroup"><span>Show</span><div>
-            ${['Everything','Highlights','Notes'].map(o=>`<button class="chip ${p.only===o?'on':''}" data-htab="${o}">${o}</button>`).join('')}
+          <div class="fgroup"><span>Type</span><div>
+            ${[['Everything','All'],['Highlights','Highlights'],['Notes','Notes']].map(([o,l])=>`<button class="chip ${p.only===o?'on':''}" data-htab="${o}">${l}</button>`).join('')}
           </div></div>
           ${allTags.length?`<div class="fgroup"><span>Tag</span><div>
-            ${['Any',...allTags].map(tg=>`<button class="chip ${p.tag===tg?'on':''}" data-tagpick="${esc(tg)}">${tg==='Any'?'Any':'#'+esc(tg)}</button>`).join('')}
+            ${allTags.map(tg=>`<button class="chip ${p.tag===tg?'on':''}" data-railtag="high|${esc(tg)}">#${esc(tg)}</button>`).join('')}
           </div></div>`:''}
         </div>`:''}
       </div>
@@ -1384,13 +1389,15 @@ function viewSources(){
           <span class="lbl">Filter</span><button class="lk" data-filter="clear|sources">Clear all</button>
         </div>
         <div class="fgroup"><span>Type</span><div>
+          <button class="chip ${p.kinds.length?'':'on'}" data-fk="sources|all">All</button>
           ${SK.map(([k,label])=>`<button class="chip ${p.kinds.includes(k)?'on':''}" data-fk="sources|${k}">${label}</button>`).join('')}
         </div></div>
         ${S.folders.length?`<div class="fgroup"><span>Folder</span><div>
           ${['Any', ...S.folders.map(f=>f.name), 'No folder'].map(f=>`<button class="chip ${p.folder===f?'on':''}" data-ff="sources|${esc(f)}">${esc(f)}</button>`).join('')}
         </div></div>`:''}
         <div class="fgroup"><span>Status</span><div>
-          <button class="chip ${p.attention?'on':''}" data-fattention="sources">Needs attention${attention.length?' · '+attention.length:''}</button>
+          <button class="chip ${p.attention?'':'on'}" data-fattention="sources" data-off="1">All</button>
+          <button class="chip ${p.attention?'on':''}" data-fattention="sources">Needs attention</button>
         </div></div>
       </div>`:''}
     </div>
@@ -1406,7 +1413,7 @@ function viewSources(){
         ${key?`<div class="ghead"><h2 class="lbl">${esc(key)}</h2></div>`:''}
         <div class="list" ${key?'style="border-top:none"':''}>${list.map(rowFor).join('')}</div>
       </section>`).join('')
-      + `<p class="ending">${shown.length} source${shown.length===1?'':'s'}, checked ${checkWords()}. <button class="lk" data-go="settings">Change that</button></p>`}
+      + `<p class="listcount">${shown.length} source${shown.length===1?'':'s'}</p>`}
   </main></div></div>`;
 }
 
@@ -1449,7 +1456,6 @@ function viewSettings(){
         <button class="btn soft" data-seed="empty">Start empty</button>
       </div>
           </section>
-    <p class="ending">That's everything. There isn't a second page of settings.</p>
   </main></div></div>`;
 }
 
@@ -1514,10 +1520,6 @@ function viewRead(){
                </button>`).join('')}
           </span>`:''}
         </span>
-        <button class="ib bare" data-highlight="${it.id}" aria-label="Highlight the selected text" data-tip="Highlight selection">${I.marker}</button>
-        <button class="ib bare" data-focusnote="${it.id}" aria-label="Add a note" data-tip="${it.note?'Edit your note':'Add a note'}"
-          style="${it.note?'color:var(--action)':''}">${I.noteicon}</button>
-        <span class="vr" aria-hidden="true" style="margin:0 2px"></span>
         <button class="btn ghost" data-act="later|${it.id}">${it.savedAt?'In Later':'Later'}</button>
         <button class="btn ghost" data-act="archive|${it.id}">Archive</button>
         <span style="position:relative;display:inline-flex">
@@ -1945,13 +1947,25 @@ function overlaySearch(){
 
 /* ---------------------------------------------------------------- render */
 function render(){
-  const body = V.view==='read' ? viewRead()
-    : V.view==='feed' ? viewFeed()
-    : V.view==='library' ? viewLibrary()
-    : V.view==='listen' ? viewListen()
-    : V.view==='sources' ? viewSources()
-    : V.view==='settings' ? viewSettings()
-    : viewHome();
+  // A screen that fails to draw must say so. Without this, an error leaves the
+  // previous screen up and the click looks like it did nothing.
+  let body;
+  try{
+    body = V.view==='read' ? viewRead()
+      : V.view==='feed' ? viewFeed()
+      : V.view==='library' ? viewLibrary()
+      : V.view==='listen' ? viewListen()
+      : V.view==='sources' ? viewSources()
+      : V.view==='settings' ? viewSettings()
+      : viewHome();
+  }catch(err){
+    console.error(err);
+    body = `<div class="wrap"><div class="empty" style="margin-top:24px">
+      <h2>This screen hit a problem.</h2>
+      <p>Something in the saved sample data did not fit this version. Resetting fixes it. Nothing real is lost, it is all sample data.</p>
+      <button class="btn" data-seed="demo">Reset sample data</button>
+    </div></div>`;
+  }
   // the site header is on every page, the reader included
   const chrome = header();
   const foot = V.view==='read' ? '' : `<div class="wrap"><p class="note" style="padding-block:0 32px">
@@ -2203,7 +2217,7 @@ document.addEventListener('click', e => {
   }
   if(d.ftag){ const [key,tg] = d.ftag.split('|'); const p = prefs(key,{}); setPref(key,{tag: p.tag===tg ? null : tg}); return; }
   if(d.ff){ const [key,f] = d.ff.split('|'); setPref(key,{folder:f}); return; }
-  if(d.fattention){ const pr = prefs(d.fattention,{}); setPref(d.fattention,{attention:!pr.attention}); return; }
+  if(d.fattention){ const pr = prefs(d.fattention,{}); setPref(d.fattention,{attention: d.off ? false : !pr.attention}); return; }
   if(d.fl){ const [key,l] = d.fl.split('|'); const p = prefs(key,{}); setPref(key,{length: p.length===l ? 'Any' : l}); return; }
   if(d.addmode){ addMode = d.addmode; addError = null; render(); return; }
   if(d.saveto){ saveTo = d.saveto; render(); return; }

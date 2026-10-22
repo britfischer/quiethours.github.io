@@ -77,3 +77,7 @@ One line per decision, newest at the bottom. Date, the decision, and why.
   the words washed. Tags sit in the Library rail under the shelves.
 - 2026-10-22: **The reader drops the standfirst;** source, time and length sit
   directly on the title.
+- 2026-10-22: **Lists end with a count, not a sentence.** The closing line is
+  replaced on every page by the list's rule and a small right-aligned count.
+  This retires principle 1 ("Every list finishes with a sentence"); the spec
+  needs updating to match.
