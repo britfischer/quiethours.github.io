@@ -1441,7 +1441,6 @@ function viewSources(){
       ${V.menuFor==='src-'+sc.id?`<div class="menu" role="menu" aria-label="Source options" style="width:min(280px,calc(100vw - 32px))">
         <button class="mi" data-srename="${sc.id}">${I.pencil} Edit details</button>
         <button class="mi" data-ssub="${sc.id}">${I.folder} Move to folder<span class="k">${I.chev}</span></button>
-        <button class="mi" data-source="${sc.id}">${I.eye} See everything from ${esc(sc.title)}</button>
         <div class="sep"></div>
         <button class="mi" data-original="x">${I.external} Open the website</button>
         ${isPaused(sc)
