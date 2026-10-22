@@ -45,3 +45,24 @@ One line per decision, newest at the bottom. Date, the decision, and why.
 - 2026-10-21: **Two prototypes on purpose**: a single HTML file for review and
   sharing, and the Next.js copy that becomes the app. docs/prototype-spec.md keeps
   them in step.
+- 2026-10-21: **The site header is on every page, the reader included.** The
+  reader keeps a second bar under it for what belongs to the piece: Back, Aa,
+  Highlight, Note, Later, Archive, and a ⋯ holding Open original, Copy link and
+  Delete. Board 3.5 has no header and now needs updating.
+- 2026-10-21: **Highlighting happens at the cursor.** Selecting text raises a
+  small bar over the selection; clicking a highlight offers to remove it. The
+  sidebar section is a list, not a button.
+- 2026-10-21: **Highlights, notes and tags live in Library,** on the Highlights
+  and notes shelf, and are reachable by search. The Feed stays about what is new.
+- 2026-10-21: **+ Add does two jobs,** from boards 1.1 and 1.2: save one thing,
+  or follow a source. One-off saves hang off a hidden holder and never appear in
+  Sources.
+- 2026-10-21: **A source is a filter, a folder is a place.** Picking a source
+  keeps you on the Feed with a removable chip; a folder still takes the heading.
+- 2026-10-21: **One section-header rule everywhere:** 2px line, 18px of air, the
+  label, 10px to the first item. Rails and the reader sidebar share it.
+- 2026-10-21: **One row pattern:** title clamped to two lines, meta on one line
+  in the order source, when it arrived, length. On a shelf "when" is when you
+  put it there.
+- 2026-10-21: **Fetch frequency is one global setting,** in Settings, not a
+  per-source option.

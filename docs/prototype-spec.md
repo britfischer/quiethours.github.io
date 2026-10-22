@@ -227,6 +227,25 @@ Every change the owner has asked for, newest last. Treat these as settled.
 - A red folder icon on each folder for a pop of colour.
 - Home folders are **cards**, not columns. (Reverted after trying columns.)
 
+- The site header is on every page, the reader included; the reader's own bar
+  sits under it and holds Back, Aa, Highlight, Note, Later, Archive and a ⋯ for
+  Open original, Copy link and Delete.
+- Highlighting happens where the cursor is: select text and a bar appears over
+  the selection. Clicking a highlight in the text offers to remove it.
+- Highlights are painted back into the body wherever they were made, all of them.
+- Highlights, notes and tags live on the Library's Highlights and notes shelf,
+  which groups by item, folder or tag, filters, and exports. They are searchable,
+  and search has a scope chip for them.
+- + Add does two jobs: save one thing, or follow a source. One-off saves never
+  become a subscription and stay off the Sources page.
+- Picking a source filters the Feed and shows a removable chip; the heading stays
+  "Feed". A folder still takes the heading.
+- One section-header rule everywhere: 2px line, 18px of air, label, 10px of air.
+- One row pattern: title clamped to two lines, meta on one line as source, when
+  it arrived, length. On Later and Archive that is when you put it there.
+- Rows end in the red arrow glyph the boards have.
+- How often feeds are checked is one global setting in Settings.
+
 ---
 
 ## 8. Still open
@@ -241,7 +260,9 @@ Every change the owner has asked for, newest last. Treat these as settled.
    rules, real playback, creators, discover, learning paths, OPML, e-ink.
 5. **Ingestion is still untested.** No feed has been fetched. This remains the
    largest unknown in the project and no amount of prototype polish reduces it.
-6. **GitHub Pages deploy is failing** on the deploy step; the logs are not
+6. **Board 3.5 and the design system board need updating** to match the reader's
+   new header, and the toast rule still contradicts board 0.
+7. **GitHub Pages deploy is failing** on the deploy step; the logs are not
    reachable from the session. The repo's Settings → Pages source needs a look.
 
 ---

@@ -2,7 +2,7 @@ const { chromium } = require('/opt/npm-tools/node_modules/playwright');
 const fs = require('fs');
 
 (async () => {
-const body = fs.readFileSync(require('path').join(__dirname,'..','quiet-hours.html'),'utf8');
+const body = fs.readFileSync('quiet-hours.html', 'utf8');
 const page_html = `<!doctype html><html><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <style>:root{color-scheme:light}body{margin:0;font:14px system-ui}img{max-width:100%}[hidden]{display:none!important}</style>
