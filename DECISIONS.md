@@ -66,3 +66,7 @@ One line per decision, newest at the bottom. Date, the decision, and why.
   put it there.
 - 2026-10-21: **Fetch frequency is one global setting,** in Settings, not a
   per-source option.
+- 2026-10-22: **The filter panel matches the boards:** an All chip on Type, the
+  "Sources in this list" checklist with counts from the folder board, Tag chips
+  from the Library board, and Length with no Any chip. Counts here are the
+  documented exception to the no-counts rule.

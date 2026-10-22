@@ -103,12 +103,24 @@ h1.display{margin:0;font-family:var(--serif);font-weight:400;font-size:44px;line
 .vr{width:1px;height:20px;background:var(--divider)}
 .fbtn{height:44px;padding:0 16px;border:none;border-radius:999px;background:var(--soft);color:var(--action);font:600 14px var(--sans);display:inline-flex;align-items:center;gap:8px;cursor:pointer}
 .fbtn.on{background:var(--softer)}
-.panel{position:absolute;top:56px;right:0;z-index:20;width:min(320px,calc(100vw - 32px));background:var(--card);border-radius:20px;box-shadow:var(--menu-shadow);padding:16px 20px;display:flex;flex-direction:column;gap:16px}
+.panel{position:absolute;top:56px;right:0;z-index:20;width:min(320px,calc(100vw - 32px));background:var(--card);border-radius:20px;box-shadow:var(--menu-shadow);padding:16px 20px;display:flex;flex-direction:column;gap:16px;
+  max-height:min(640px,calc(100vh - 150px));overflow-y:auto}
 .chip{font-size:13px;padding:6px 12px;background:var(--soft);border:none;border-radius:999px;cursor:pointer;font-family:var(--sans)}
 .chip.on{background:var(--action);color:var(--card);font-weight:600}
 .lk{color:var(--action);font-weight:500;font-size:14px;background:none;border:none;cursor:pointer;padding:0;font-family:var(--sans)}
 .fgroup>span{font-size:13px;font-weight:600;display:block;margin-bottom:8px}
+.fgroup.tight>span{margin-bottom:4px}
 .fgroup>div{display:flex;flex-wrap:wrap;gap:6px}
+/* the source checklist from the folder board: a box, a name, a count */
+.cklist{flex-direction:column;gap:0;max-height:208px;overflow-y:auto}
+.ck{display:flex;align-items:center;gap:8px;min-height:40px;width:100%;font-size:15px;
+  background:none;border:none;padding:0;cursor:pointer;color:var(--ink);font-family:var(--sans);text-align:left}
+.ck .box{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--border);background:var(--card);flex:none;
+  display:flex;align-items:center;justify-content:center;box-sizing:border-box}
+.ck .box.on{background:var(--action);border-color:var(--action)}
+.ck .cname{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ck .cnum{margin-left:auto;color:var(--ink-muted);font-size:13px;flex:none}
+.ck:hover .cname{color:var(--action)}
 
 /* hover labels on icon-only controls. Hidden with display, not opacity, so an
    unshown label cannot widen the page. No labels where there is no pointer. */
@@ -421,6 +433,7 @@ const I = {
   rule:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h10M4 17h6M18 4v6M15 7h6M16 14l4 4-4 4"/></svg>',
   mute:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M16 9l5 6M21 9l-5 6"/></svg>',
   folder:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--attention)" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h6l2 2h10v10H3z"/></svg>',
+  tick:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--card)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>',
   marker:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h6M14.5 4.5l5 5L9 20H4v-5L14.5 4.5z"/></svg>',
   noteicon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h14v11l-4 5H5V4zM8 9h8M8 13h5"/></svg>',
   arrow:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--attention)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-4px;margin-left:6px"><path d="M7 17L17 7M9 7h8v8"/></svg>',
@@ -671,11 +684,23 @@ function header(){
   </header></div></div>`;
 }
 
-function controlRow(key, cfg, count){
+function controlRow(key, cfg, count, pool){
   const p = prefs(key, cfg.init);
   const hasTabs = Array.isArray(cfg.tabs) && cfg.tabs.length > 1;
-  const fcount = (p.kinds?p.kinds.length:0) + (p.folder&&p.folder!=='Any'?1:0) + (p.length&&p.length!=='Any'?1:0);
+  const picked = p.sources || [];
+  const fcount = (p.kinds?p.kinds.length:0) + (p.folder&&p.folder!=='Any'?1:0)
+    + (p.length&&p.length!=='Any'?1:0) + picked.length + (p.tag?1:0);
   const folderChips = ['Any', ...S.folders.map(f=>f.name), 'No folder'];
+  // the sources list and the tags come from what is actually in this list, with
+  // a count each, the way the folder board draws it
+  const items = pool || [];
+  const srcCounts = new Map();
+  items.forEach(i=>srcCounts.set(i.sourceId, (srcCounts.get(i.sourceId)||0) + 1));
+  const srcRows = [...srcCounts.entries()]
+    .map(([id,n])=>({sc:S.sources.find(s=>s.id===id), n}))
+    .filter(r=>r.sc && !r.sc.oneoff)
+    .sort((a,b)=>b.n-a.n).slice(0,8);
+  const tagList = [...new Set(items.flatMap(i=>i.tags||[]))].sort().slice(0,10);
   return `<div class="controls">
     ${hasTabs?`<nav class="tabs" aria-label="Show">
       ${cfg.tabs.map(t=>`<button data-tab="${key}|${t.id}" class="${p.tab===t.id?'on':''}" ${p.tab===t.id?'aria-current="true"':''}>${t.label}</button>`).join('')}
@@ -698,14 +723,24 @@ function controlRow(key, cfg, count){
         <span class="lbl">Filter</span><button class="lk" data-filter="clear|${key}">Clear all</button>
       </div>
       <div class="fgroup"><span>Type</span><div>
+        <button class="chip ${(p.kinds||[]).length?'':'on'}" data-fk="${key}|all">All</button>
         ${[['article','Read'],['video','Watch'],['podcast','Listen'],['discussion','Discussion']].map(([k,l])=>
           `<button class="chip ${(p.kinds||[]).includes(k)?'on':''}" data-fk="${key}|${k}">${l}</button>`).join('')}
       </div></div>
+      ${srcRows.length>1?`<div class="fgroup tight"><span>Sources in this list</span><div class="cklist">
+        ${srcRows.map(({sc,n})=>`<button class="ck" data-fsrc="${key}|${sc.id}" aria-pressed="${picked.includes(sc.id)}">
+          <span class="box ${picked.length===0||picked.includes(sc.id)?'on':''}">${picked.length===0||picked.includes(sc.id)?I.tick:''}</span>
+          <span class="cname">${esc(sc.title)}</span><span class="cnum">${n}</span>
+        </button>`).join('')}
+      </div></div>`:''}
       ${cfg.folderFilter!==false&&S.folders.length?`<div class="fgroup"><span>Folder</span><div>
         ${folderChips.map(f=>`<button class="chip ${(p.folder||'Any')===f?'on':''}" data-ff="${key}|${esc(f)}">${esc(f)}</button>`).join('')}
       </div></div>`:''}
+      ${tagList.length?`<div class="fgroup"><span>Tag</span><div>
+        ${tagList.map(tg=>`<button class="chip ${p.tag===tg?'on':''}" data-ftag="${key}|${esc(tg)}">#${esc(tg)}</button>`).join('')}
+      </div></div>`:''}
       <div class="fgroup"><span>Length</span><div>
-        ${['Any','Under 5 min','5 to 15','Longer'].map(l=>`<button class="chip ${(p.length||'Any')===l?'on':''}" data-fl="${key}|${l}">${l}</button>`).join('')}
+        ${['Under 5 min','5 to 15','Longer'].map(l=>`<button class="chip ${(p.length||'Any')===l?'on':''}" data-fl="${key}|${l}">${l}</button>`).join('')}
       </div></div>
     </div>`:''}
   </div>`;
@@ -715,6 +750,8 @@ function applyFilters(items, p, tabs){
   const tab = tabs.find(t=>t.id===p.tab) || tabs[0];
   let list = items.filter(tab.test);
   if(p.kinds && p.kinds.length) list = list.filter(i=>p.kinds.includes(i.kind));
+  if(p.sources && p.sources.length) list = list.filter(i=>p.sources.includes(i.sourceId));
+  if(p.tag) list = list.filter(i=>(i.tags||[]).includes(p.tag));
   if(p.folder && p.folder!=='Any'){
     list = list.filter(i=>{
       const s = src(i);
@@ -850,8 +887,9 @@ function listBlock(key, cfg, items){
   const shown = applyFilters(items, p, cfg.tabs);
   const tabLabel = (cfg.tabs.find(t=>t.id===p.tab)||cfg.tabs[0]).label;
   const countText = `${shown.length} item${shown.length===1?'':'s'}`;
-  if(!shown.length) return controlRow(key,cfg,countText) + cfg.empty(p);
-  return controlRow(key,cfg,countText) + groupItems(shown, p.group).map(([k,list])=>
+  const pool = items.filter((cfg.tabs.find(t=>t.id===p.tab)||cfg.tabs[0]).test);
+  if(!shown.length) return controlRow(key,cfg,countText,pool) + cfg.empty(p);
+  return controlRow(key,cfg,countText,pool) + groupItems(shown, p.group).map(([k,list])=>
     `<section style="display:flex;flex-direction:column">
       ${k?`<div class="ghead"><h2 class="lbl">${esc(k)}</h2></div>`:''}
       <div class="list" ${k?'style="border-top:none"':''}>${list.map(i=>rowHTML(i, cfg.rowOpts)).join('')}</div>
@@ -1932,7 +1970,7 @@ function createFolder(){
 
 /* ---------------------------------------------------------------- events */
 document.addEventListener('click', e => {
-  const t = e.target.closest('[data-go],[data-overlay],[data-folder],[data-shelf],[data-read],[data-act],[data-menu],[data-tab],[data-filter],[data-fk],[data-ff],[data-fl],[data-fattention],[data-close],[data-scrim],[data-follow],[data-scope],[data-sfeed],[data-seed],[data-size],[data-back],[data-play],[data-pp],[data-pclose],[data-fadd],[data-fremove],[data-goaledit],[data-goalsave],[data-sizeopen],[data-newfolder],[data-tagstart],[data-untag],[data-highlight],[data-unhigh],[data-hmark],[data-focusnote],[data-unsource],[data-addmode],[data-saveone],[data-saveto],[data-htab],[data-tagpick],[data-hexport],[data-sub],[data-subback],[data-smenu],[data-ssub],[data-sfolder],[data-srename],[data-savesource],[data-unfollow],[data-source],[data-movefolder],[data-movenew],[data-mute],[data-copy],[data-original],[data-soon]');
+  const t = e.target.closest('[data-go],[data-overlay],[data-folder],[data-shelf],[data-read],[data-act],[data-menu],[data-tab],[data-filter],[data-fk],[data-ff],[data-fl],[data-fsrc],[data-ftag],[data-fattention],[data-close],[data-scrim],[data-follow],[data-scope],[data-sfeed],[data-seed],[data-size],[data-back],[data-play],[data-pp],[data-pclose],[data-fadd],[data-fremove],[data-goaledit],[data-goalsave],[data-sizeopen],[data-newfolder],[data-tagstart],[data-untag],[data-highlight],[data-unhigh],[data-hmark],[data-focusnote],[data-unsource],[data-addmode],[data-saveone],[data-saveto],[data-htab],[data-tagpick],[data-hexport],[data-sub],[data-subback],[data-smenu],[data-ssub],[data-sfolder],[data-srename],[data-savesource],[data-unfollow],[data-source],[data-movefolder],[data-movenew],[data-mute],[data-copy],[data-original],[data-soon]');
   if(!t){ if(V.menuFor || V.filterOpen || V.sizeOpen){ V.menuFor = null; V.menuSub = null; V.filterOpen = false; V.sizeOpen = false; render(); } return; }
 
   const d = t.dataset;
@@ -2043,7 +2081,7 @@ document.addEventListener('click', e => {
   if(d.soon){ const what = d.soon; V.menuFor = null; render(); showToast(what + ' arrive in phase 2 of the build.'); return; }
   if(d.tab){ const [key,tab] = d.tab.split('|'); setPref(key,{tab}); return; }
   if(d.filter === 'toggle'){ V.filterOpen = !V.filterOpen; render(); return; }
-  if(d.filter && d.filter.startsWith('clear|')){ setPref(d.filter.split('|')[1], {kinds:[], folder:'Any', length:'Any', attention:false, only:'Everything', tag:'Any'}); return; }
+  if(d.filter && d.filter.startsWith('clear|')){ setPref(d.filter.split('|')[1], {kinds:[], folder:'Any', length:'Any', attention:false, only:'Everything', tag:null, sources:[]}); return; }
   if(d.htab){ setPref('high', {only:d.htab}); return; }
   if(d.tagpick){ go('library', {shelf:'highlights'}); setPref('high', {tag:d.tagpick, group:'Item'}); return; }
   if(d.hexport){
@@ -2059,10 +2097,18 @@ document.addEventListener('click', e => {
     return;
   }
   if(d.fk){ const [key,kind] = d.fk.split('|'); const p = prefs(key,{}); const kinds = p.kinds||[];
+    if(kind==='all'){ setPref(key,{kinds:[]}); return; }
     setPref(key,{kinds: kinds.includes(kind) ? kinds.filter(k=>k!==kind) : [...kinds,kind]}); return; }
+  if(d.fsrc){
+    // no boxes ticked means everything, so the first tick starts from that source alone
+    const [key,id] = d.fsrc.split('|'); const p = prefs(key,{}); const on = p.sources||[];
+    setPref(key,{sources: on.length===0 ? [id] : on.includes(id) ? on.filter(x=>x!==id) : [...on,id]});
+    return;
+  }
+  if(d.ftag){ const [key,tg] = d.ftag.split('|'); const p = prefs(key,{}); setPref(key,{tag: p.tag===tg ? null : tg}); return; }
   if(d.ff){ const [key,f] = d.ff.split('|'); setPref(key,{folder:f}); return; }
   if(d.fattention){ const pr = prefs(d.fattention,{}); setPref(d.fattention,{attention:!pr.attention}); return; }
-  if(d.fl){ const [key,l] = d.fl.split('|'); setPref(key,{length:l}); return; }
+  if(d.fl){ const [key,l] = d.fl.split('|'); const p = prefs(key,{}); setPref(key,{length: p.length===l ? 'Any' : l}); return; }
   if(d.addmode){ addMode = d.addmode; addError = null; render(); return; }
   if(d.saveto){ saveTo = d.saveto; render(); return; }
   if(d.saveone){ saveOneThing(); return; }
