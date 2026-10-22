@@ -84,3 +84,7 @@ One line per decision, newest at the bottom. Date, the decision, and why.
 - 2026-10-22: **One count per list, at the end, small and right-aligned.** The
   count under the list's opening rule is removed everywhere. Export on
   Highlights & Notes sits on that end line, opposite the count.
+- 2026-10-22: **Highlights & Notes is a running list, newest first,** after
+  Instapaper's Highlights list. Each entry is the marked words with the article
+  and source under them; opening it lands at that highlight. Group by Article or
+  Tag is available but off by default, since articles carry few highlights.

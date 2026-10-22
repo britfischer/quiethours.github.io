@@ -307,6 +307,16 @@ label.stack{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weigh
 .hlwrap .lk{margin-left:21px}
 .hlwrap .hl.small + .lk{margin-left:17px}
 /* a piece and everything you marked on it, on the Highlights and notes shelf */
+/* the running list: the words first, where they came from underneath */
+.hgroup{display:flex;flex-direction:column}
+.hgroup.flat{border-top:2px solid var(--divider)}
+.hentry{display:flex;flex-direction:column;gap:10px;padding:20px 0;border-top:1px solid var(--divider)}
+.hgroup.flat > .hentry:first-child,.hgroup > .ghead + .hentry{border-top:none}
+.hfoot{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.hfrom{display:flex;flex-direction:column;gap:2px;min-width:0;padding-left:21px;font-size:13px;color:var(--ink-muted)}
+.hentry > .hfrom{padding-left:0}
+.hsrc{font-family:var(--serif);font-size:16px;line-height:1.35;color:var(--ink);background:none;border:none;padding:0;cursor:pointer;text-align:left}
+.hsrc:hover{color:var(--attention)}
 .hcard{display:flex;flex-direction:column;gap:14px;border-top:1px solid var(--divider);padding:20px 0 4px}
 .hcard:first-of-type{border-top:none}
 .nb{padding:16px;border-radius:16px;background:var(--softer)}
@@ -710,7 +720,7 @@ function playerHTML(){
 }
 
 function go(view, extra){
-  V.view = view; V.folder = null; V.source = null; V.itemId = null; V.menuFor = null; V.menuSub = null; V.filterOpen = false;
+  V.view = view; V.folder = null; V.source = null; V.tag = null; V.itemId = null; V.menuFor = null; V.menuSub = null; V.filterOpen = false;
   Object.assign(V, extra||{});
   if(VIEWS.includes(view)) { try{ history.replaceState(null,'','#'+view); }catch(e){} }
   window.scrollTo(0,0);
@@ -1136,8 +1146,9 @@ function viewFeed(){
 /* Library's rail: the three shelves, then your tags, as the Library board has it.
    A tag narrows whichever shelf you are on. */
 function libraryRail(shelf){
-  const key = shelf==='highlights' ? 'high' : 'lib-'+shelf;
-  const on = prefs(key,{}).tag;
+  // a tag is a place, like a folder: it opens a page of everything carrying it
+  const on = V.tag;
+  if(on) shelf = null;
   const tags = [...new Set(live().flatMap(i=>i.tags||[]))].sort();
   return `<aside class="rail">
     <nav class="side" aria-label="Shelves">
@@ -1149,13 +1160,36 @@ function libraryRail(shelf){
     ${tags.length?`<div class="side" aria-label="Tags">
       <div class="sh"><h2 class="lbl">Tags</h2></div>
       <div class="railtags">
-        ${tags.map(tg=>`<button class="chip ${on===tg?'on':''}" data-railtag="${key}|${esc(tg)}" aria-pressed="${on===tg}">#${esc(tg)}</button>`).join('')}
+        ${tags.map(tg=>`<button class="chip ${on===tg?'on':''}" data-libtag="${esc(tg)}" ${on===tg?'aria-current="page"':''}>#${esc(tg)}</button>`).join('')}
       </div>
     </div>`:''}
   </aside>`;
 }
 
+function viewTag(){
+  const tg = V.tag;
+  const items = live().filter(i=>(i.tags||[]).includes(tg));
+  const cfg = {
+    slim:true,
+    init:{tab:'all', group:'None', sort:'Newest first', kinds:[], folder:'Any', length:'Any'},
+    tabs:[{id:'all',label:'All',test:()=>true}],
+    groups:['None','Type','Source','Date'],
+    sorts:['Newest first','Oldest first','Shortest first','Longest first','Source A to Z'],
+    ending:()=>'',
+    empty:()=>`<div class="empty"><h2>Nothing tagged #${esc(tg)}.</h2><p>Add the tag from the sidebar while you read and the piece shows up here.</p></div>`
+  };
+  return `<div class="wrap"><div class="columns">
+    ${libraryRail(null)}
+    <main class="col">
+      <div><p class="lbl" style="color:var(--ink-muted)">Library · tag</p>
+        <h1 class="page" style="margin-top:6px">#${esc(tg)}</h1></div>
+      ${listBlock('tag-'+tg, cfg, items)}
+    </main>
+  </div></div>`;
+}
+
 function viewLibrary(){
+  if(V.tag) return viewTag();
   const shelf = V.shelf;
   if(shelf==='highlights') return viewHighlights();
   const items = live().filter(shelf==='later'?isLater:isArchived);
@@ -1191,59 +1225,79 @@ function annotated(){
   return live().filter(i=>(i.highlights||[]).length || (i.note||'').trim() || (i.tags||[]).length);
 }
 
+/* Highlights & Notes is one running list, newest first, the way Instapaper's
+   Highlights list works. Each entry is the words you marked, with where they came
+   from underneath; opening one lands you in the article at that highlight.
+   Articles carry one to three marks each, so grouping by article mostly adds a
+   header per quote. Grouping is still there for when you want it. */
+function marksList(){
+  const out = [];
+  live().forEach(it=>{
+    const when = it.seenAt || it.publishedAt;
+    if((it.note||'').trim()) out.push({kind:'note', it, text:it.note, when, order:-1});
+    (it.highlights||[]).forEach((h,n)=>out.push({kind:'highlight', it, text:h, n, when, order:n}));
+  });
+  return out;
+}
+
 function viewHighlights(){
-  const p = prefs('high', {group:'Item', sort:'Newest first', only:'Everything', tag:'Any'});
-  let list = annotated();
-  if(p.only==='Highlights') list = list.filter(i=>(i.highlights||[]).length);
-  if(p.only==='Notes') list = list.filter(i=>(i.note||'').trim());
-  if(p.tag && p.tag!=='Any') list = list.filter(i=>(i.tags||[]).includes(p.tag));
-  const sorters = {
-    'Newest first':(a,b)=>new Date(b.publishedAt)-new Date(a.publishedAt),
-    'Oldest first':(a,b)=>new Date(a.publishedAt)-new Date(b.publishedAt),
-    'Item A to Z':(a,b)=>a.title.localeCompare(b.title),
-  };
-  list = list.slice().sort(sorters[p.sort]||sorters['Newest first']);
-  const allTags = [...new Set(S.items.flatMap(i=>i.tags||[]))].sort();
-  const marks = list.reduce((n,i)=>n+(i.highlights||[]).length, 0);
-  const notes = list.filter(i=>(i.note||'').trim()).length;
-  const countText = `${marks} highlight${marks===1?'':'s'} and ${notes} note${notes===1?'':'s'} across ${list.length} item${list.length===1?'':'s'}`;
+  const p = prefs('high', {group:'None', sort:'Newest first', only:'Everything', tag:'Any'});
+  if(!['None','Article','Tag'].includes(p.group)) p.group = 'None';
+  let list = marksList();
+  if(p.only==='Highlights') list = list.filter(m=>m.kind==='highlight');
+  if(p.only==='Notes') list = list.filter(m=>m.kind==='note');
+  if(p.tag && p.tag!=='Any') list = list.filter(m=>(m.it.tags||[]).includes(p.tag));
+  const dir = p.sort==='Oldest first' ? 1 : -1;
+  // newest piece first; inside one piece, your note first, then highlights in reading order
+  list.sort((a,b)=> (new Date(a.when)-new Date(b.when))*dir || (a.it.id===b.it.id ? a.order-b.order : 0));
+  const allTags = [...new Set(live().flatMap(i=>i.tags||[]))].sort();
+  const marks = list.filter(m=>m.kind==='highlight').length;
+  const notes = list.filter(m=>m.kind==='note').length;
+  const countText = [marks?`${marks} highlight${marks===1?'':'s'}`:'', notes?`${notes} note${notes===1?'':'s'}`:''].filter(Boolean).join(' · ') || '0 items';
+  const fcount = (p.only!=='Everything'?1:0)+(p.tag&&p.tag!=='Any'?1:0);
 
-  const card = it => {
-    const sc = src(it) || {};
-    const fname = foldersOf(it)[0];
-    const hs = it.highlights || [];
-    return `<article class="hcard">
-      <button class="tt" data-read="${it.id}" style="font-size:22px">${esc(it.title)}<span class="rarrow">${I.arrow}</span></button>
-      <span class="meta">${esc(sc.title||'')}${fname?' · '+esc(fname):''} · ${hs.length} highlight${hs.length===1?'':'s'}${(it.note||'').trim()?' · 1 note':''}</span>
-      ${(it.note||'').trim()?`<div class="nb">
-        <span class="sl">Your note</span>
-        <p style="margin:0;font-size:15px;line-height:1.5">${esc(it.note)}</p>
-      </div>`:''}
-      ${hs.length?`<div style="display:flex;flex-direction:column;gap:12px">
-        <span class="sl">Highlights · in reading order</span>
-        ${hs.map((h,n)=>`<div class="hlwrap"><p class="hl"><mark>${esc(h)}</mark></p>
-          <button class="lk" data-unhigh="${it.id}|${n}" style="font-size:13px">Remove</button></div>`).join('')}
-      </div>`:''}
-      ${(it.tags||[]).length?`<div style="display:flex;flex-wrap:wrap;gap:8px">
-        ${it.tags.map(tg=>`<button class="chip ${p.tag===tg?'on':''}" data-tagpick="${esc(tg)}">#${esc(tg)}</button>`).join('')}
-      </div>`:''}
-    </article>`;
+  const entry = (m, showFrom) => {
+    const sc = src(m.it) || {};
+    const from = showFrom ? `<span class="hfrom">
+        <button class="hsrc" data-readat="${m.it.id}|${m.kind==='highlight'?m.n:'note'}">${esc(m.it.title)}<span class="rarrow">${I.arrow}</span></button>
+        <span>${esc(sc.title||'')} · ${timeAgo(m.when)}</span>
+      </span>` : '';
+    if(m.kind==='note') return `<article class="hentry">
+        <div class="nb"><span class="sl">Your note</span><p style="margin:0;font-size:16px;line-height:1.55">${esc(m.text)}</p></div>
+        ${from}
+      </article>`;
+    return `<article class="hentry">
+        <p class="hl"><mark>${esc(m.text)}</mark></p>
+        <span class="hfoot">${from}<button class="lk" data-unhigh="${m.it.id}|${m.n}" style="font-size:13px;flex:none">Remove</button></span>
+      </article>`;
   };
 
-  const groups = () => {
-    if(p.group==='Folder'){
+  const sections = () => {
+    if(p.group==='Article'){
       const map = new Map();
-      list.forEach(i=>{ const k = foldersOf(i)[0] || 'No folder'; map.set(k, [...(map.get(k)||[]), i]); });
-      return [...map.entries()];
+      list.forEach(m=>map.set(m.it.id, [...(map.get(m.it.id)||[]), m]));
+      return [...map.values()].map(ms=>[ms[0].it, ms]);
     }
     if(p.group==='Tag'){
       const map = new Map();
-      list.forEach(i=>{ const tg = (i.tags||[]); if(!tg.length){ map.set('No tags', [...(map.get('No tags')||[]), i]); }
-        tg.forEach(x=>map.set('#'+x, [...(map.get('#'+x)||[]), i])); });
+      list.forEach(m=>{ const tg = m.it.tags||[]; (tg.length?tg.map(t=>'#'+t):['No tag']).forEach(k=>map.set(k, [...(map.get(k)||[]), m])); });
       return [...map.entries()];
     }
     return [['', list]];
   };
+
+  const body = p.group==='Article'
+    ? sections().map(([it, ms])=>`<section class="hgroup">
+        <div class="ghead" style="display:flex;justify-content:space-between;gap:12px;align-items:baseline">
+          <button class="hsrc" data-readat="${it.id}|top" style="font-size:20px">${esc(it.title)}<span class="rarrow">${I.arrow}</span></button>
+          <span class="meta" style="flex:none">${esc((src(it)||{}).title||'')}</span>
+        </div>
+        ${ms.map(m=>entry(m,false)).join('')}
+      </section>`).join('')
+    : sections().map(([k, ms])=>`<section class="hgroup ${k?'':'flat'}">
+        ${k?`<div class="ghead"><h2 class="lbl">${esc(k)}</h2></div>`:''}
+        ${ms.map(m=>entry(m,true)).join('')}
+      </section>`).join('');
 
   return `<div class="wrap"><div class="columns">
     ${libraryRail('highlights')}
@@ -1253,15 +1307,15 @@ function viewHighlights(){
         <span></span>
         <div class="ctlgroup">
           <label class="ctl">Group by
-            <select data-pref="high|group">${['Item','Folder','Tag'].map(g=>`<option ${p.group===g?'selected':''}>${g}</option>`).join('')}</select>
+            <select data-pref="high|group">${['None','Article','Tag'].map(g=>`<option ${p.group===g?'selected':''}>${g}</option>`).join('')}</select>
           </label>
           <span class="vr" aria-hidden="true"></span>
           <label class="ctl">Sort
-            <select data-pref="high|sort">${['Newest first','Oldest first','Item A to Z'].map(s=>`<option ${p.sort===s?'selected':''}>${s}</option>`).join('')}</select>
+            <select data-pref="high|sort">${['Newest first','Oldest first'].map(s=>`<option ${p.sort===s?'selected':''}>${s}</option>`).join('')}</select>
           </label>
           <span class="vr" aria-hidden="true"></span>
-          <button class="fbtn ${V.filterOpen||p.only!=='Everything'||p.tag!=='Any'?'on':''}" data-filter="toggle" aria-expanded="${V.filterOpen}">
-            ${I.filter}Filter${(p.only!=='Everything'?1:0)+(p.tag!=='Any'?1:0)?' · '+((p.only!=='Everything'?1:0)+(p.tag!=='Any'?1:0)):''}
+          <button class="fbtn ${V.filterOpen||fcount?'on':''}" data-filter="toggle" aria-expanded="${V.filterOpen}">
+            ${I.filter}Filter${fcount?' · '+fcount:''}
           </button>
         </div>
         ${V.filterOpen?`<div class="panel" role="dialog" aria-label="Filter">
@@ -1278,13 +1332,9 @@ function viewHighlights(){
       </div>
       ${!list.length?`<div class="empty">
         <h2>Nothing marked yet.</h2>
-        <p>Select a sentence while you are reading and press Highlight. Your highlights, your one
-        note per piece and your tags all collect here, and search finds them.</p>
+        <p>Select a sentence while you are reading and press Highlight. What you mark and the notes you write collect here, newest first, and search finds them.</p>
         <button class="btn" data-go="feed">Open the Feed</button>
-      </div>`:groups().map(([k,group])=>`<section style="display:flex;flex-direction:column;gap:20px;${k?'':'border-top:2px solid var(--divider)'}">
-        ${k?`<div class="ghead"><h2 class="lbl">${esc(k)}</h2></div>`:''}
-        ${group.map(card).join('')}
-      </section>`).join('')}
+      </div>`:body}
       ${list.length?`<div class="listcount" style="display:flex;justify-content:space-between;align-items:center;gap:12px">
         ${marks?`<button class="lk" data-hexport="1" style="font-size:13px">Export</button>`:'<span></span>'}<span>${countText}</span>
       </div>`:''}
@@ -1502,7 +1552,7 @@ function viewRead(){
   const fnames = sc.folders || [];
   const currentFolder = fnames[0] || '';
   const backLabel = V.readFrom === 'home' ? 'Home' : V.readFrom === 'library' ? 'Later'
-    : V.readFrom === 'archive' ? 'Archive' : V.readFrom === 'listen' ? 'Listen' : 'Feed';
+    : V.readFrom === 'archive' ? 'Archive' : V.readFrom === 'highlights' ? 'Highlights & Notes' : V.readFrom === 'tag' ? '#'+(V.readTag||'') : V.readFrom === 'listen' ? 'Listen' : 'Feed';
 
   // what to read next: something else in the same folder, then the newest unseen
   const sameFolder = audible().filter(x=>x.id!==it.id && !isArchived(x) && isUnseen(x))
@@ -1986,6 +2036,12 @@ function render(){
       : V.overlay==='newfolder' ? overlayNewFolder()
       : V.overlay==='editsource' ? overlayEditSource() : '');
   wireReaderProgress();
+  if(V.view==='read' && V.jump!=null && V.jump!=='top'){
+    const target = V.jump==='note' ? document.getElementById('reader-notes')
+      : document.querySelector('mark[data-hmark="'+V.itemId+'|'+V.jump+'"]');
+    V.jump = null;
+    if(target) requestAnimationFrame(()=>target.scrollIntoView({block:'center'}));
+  } else if(V.jump==='top'){ V.jump = null; }
   wireHeaderShadow();
   const focus = document.getElementById(V.overlay==='add' ? 'add-url' : V.overlay==='search' ? 'search-q'
     : V.overlay==='newfolder' ? 'folder-name' : '');
@@ -2085,7 +2141,7 @@ function createFolder(){
 
 /* ---------------------------------------------------------------- events */
 document.addEventListener('click', e => {
-  const t = e.target.closest('[data-go],[data-overlay],[data-folder],[data-shelf],[data-read],[data-act],[data-menu],[data-tab],[data-filter],[data-fk],[data-ff],[data-fl],[data-fsrc],[data-ftag],[data-fattention],[data-close],[data-scrim],[data-follow],[data-scope],[data-sfeed],[data-seed],[data-size],[data-back],[data-play],[data-pp],[data-pclose],[data-fadd],[data-fremove],[data-goaledit],[data-goalsave],[data-sizeopen],[data-newfolder],[data-tagstart],[data-untag],[data-highlight],[data-unhigh],[data-hmark],[data-focusnote],[data-unsource],[data-addmode],[data-saveone],[data-saveto],[data-htab],[data-railtag],[data-tagpick],[data-hexport],[data-sub],[data-subback],[data-smenu],[data-ssub],[data-sfolder],[data-srename],[data-savesource],[data-unfollow],[data-source],[data-movefolder],[data-movenew],[data-mute],[data-copy],[data-original],[data-soon]');
+  const t = e.target.closest('[data-go],[data-overlay],[data-folder],[data-shelf],[data-read],[data-act],[data-menu],[data-tab],[data-filter],[data-fk],[data-ff],[data-fl],[data-fsrc],[data-ftag],[data-fattention],[data-close],[data-scrim],[data-follow],[data-scope],[data-sfeed],[data-seed],[data-size],[data-back],[data-play],[data-pp],[data-pclose],[data-fadd],[data-fremove],[data-goaledit],[data-goalsave],[data-sizeopen],[data-newfolder],[data-tagstart],[data-untag],[data-highlight],[data-unhigh],[data-readat],[data-hmark],[data-focusnote],[data-unsource],[data-addmode],[data-saveone],[data-saveto],[data-htab],[data-railtag],[data-libtag],[data-tagpick],[data-hexport],[data-sub],[data-subback],[data-smenu],[data-ssub],[data-sfolder],[data-srename],[data-savesource],[data-unfollow],[data-source],[data-movefolder],[data-movenew],[data-mute],[data-copy],[data-original],[data-soon]');
   if(!t){ if(V.menuFor || V.filterOpen || V.sizeOpen){ V.menuFor = null; V.menuSub = null; V.filterOpen = false; V.sizeOpen = false; render(); } return; }
 
   const d = t.dataset;
@@ -2150,10 +2206,18 @@ document.addEventListener('click', e => {
     }
     V.menuFor = null; render(); return;
   }
+  if(d.readat){
+    // open the piece and land on the highlight, not at the top
+    const [id, n] = d.readat.split('|');
+    V.overlay = null;
+    go('read', {itemId:id, readFrom:'highlights', jump: (n==='top'||n==='note') ? n : Number(n)});
+    const it = S.items.find(i=>i.id===id); if(it && !it.seenAt) patch(it.id,{seenAt:new Date().toISOString()});
+    return;
+  }
   if(d.read){
-    const from = V.view==='home' ? 'home' : V.view==='library' ? (V.shelf==='archive'?'archive':'library')
+    const from = V.view==='home' ? 'home' : V.view==='library' ? (V.tag?'tag':V.shelf==='archive'?'archive':V.shelf==='highlights'?'highlights':'library')
       : V.view==='listen' ? 'listen' : 'feed';
-    V.overlay = null; go('read', {itemId:d.read, readFrom:from}); const it = S.items.find(i=>i.id===d.read); if(it && !it.seenAt){ patch(it.id,{seenAt:new Date().toISOString()}); } return; }
+    const readTag = V.tag; V.overlay = null; go('read', {itemId:d.read, readFrom:from, readTag}); const it = S.items.find(i=>i.id===d.read); if(it && !it.seenAt){ patch(it.id,{seenAt:new Date().toISOString()}); } return; }
   if(d.act){ const [verb,id] = d.act.split('|'); doAct(verb,id); return; }
   if(d.menu){ V.menuFor = V.menuFor===d.menu ? null : d.menu; V.menuSub = null; render(); return; }
   if(d.sub){ V.menuSub = d.sub; render(); return; }
@@ -2198,6 +2262,7 @@ document.addEventListener('click', e => {
   if(d.filter === 'toggle'){ V.filterOpen = !V.filterOpen; render(); return; }
   if(d.filter && d.filter.startsWith('clear|')){ setPref(d.filter.split('|')[1], {kinds:[], folder:'Any', length:'Any', attention:false, only:'Everything', tag:null, sources:[]}); return; }
   if(d.htab){ setPref('high', {only:d.htab}); return; }
+  if(d.libtag){ go('library', {tag:d.libtag}); return; }
   if(d.railtag){
     const [key, tg] = d.railtag.split('|'); const p = prefs(key,{});
     const off = key==='high' ? 'Any' : null;
@@ -2310,8 +2375,9 @@ document.addEventListener('click', e => {
     S.settings.readerSize = V.readSize; save(); render(); return; }
   if(d.back){
     const to = V.readFrom === 'home' ? 'home' : V.readFrom === 'library' ? 'library'
-      : V.readFrom === 'archive' ? 'library' : V.readFrom === 'listen' ? 'listen' : 'feed';
-    const shelf = V.readFrom === 'archive' ? 'archive' : 'later';
+      : V.readFrom === 'archive' || V.readFrom === 'highlights' ? 'library' : V.readFrom === 'listen' ? 'listen' : 'feed';
+    const shelf = V.readFrom === 'archive' ? 'archive' : V.readFrom === 'highlights' ? 'highlights' : 'later';
+    if(V.readFrom === 'tag'){ go('library', {tag:V.readTag}); return; }
     go(to, {shelf}); return;
   }
 });
