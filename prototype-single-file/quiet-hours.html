@@ -733,8 +733,8 @@ function controlRow(key, cfg, count, pool){
   const p = prefs(key, cfg.init);
   const hasTabs = Array.isArray(cfg.tabs) && cfg.tabs.length > 1;
   const picked = p.sources || [];
-  const fcount = (p.kinds?p.kinds.length:0) + (p.folder&&p.folder!=='Any'?1:0)
-    + (p.length&&p.length!=='Any'?1:0) + picked.length + (p.tag?1:0);
+  const fcount = (p.kinds?p.kinds.length:0) + (p.length&&p.length!=='Any'?1:0)
+    + (cfg.slim ? 0 : (p.folder&&p.folder!=='Any'?1:0) + picked.length + (p.tag?1:0));
   const folderChips = ['Any', ...S.folders.map(f=>f.name), 'No folder'];
   // the sources list and the tags come from what is actually in this list, with
   // a count each, the way the folder board draws it
@@ -772,16 +772,16 @@ function controlRow(key, cfg, count, pool){
         ${[['article','Read'],['video','Watch'],['podcast','Listen'],['discussion','Discussion']].map(([k,l])=>
           `<button class="chip ${(p.kinds||[]).includes(k)?'on':''}" data-fk="${key}|${k}">${l}</button>`).join('')}
       </div></div>
-      ${srcRows.length>1?`<div class="fgroup tight"><span>Sources in this list</span><div class="cklist">
+      ${!cfg.slim&&srcRows.length>1?`<div class="fgroup tight"><span>Sources in this list</span><div class="cklist">
         ${srcRows.map(({sc,n})=>`<button class="ck" data-fsrc="${key}|${sc.id}" aria-pressed="${picked.includes(sc.id)}">
           <span class="box ${picked.length===0||picked.includes(sc.id)?'on':''}">${picked.length===0||picked.includes(sc.id)?I.tick:''}</span>
           <span class="cname">${esc(sc.title)}</span><span class="cnum">${n}</span>
         </button>`).join('')}
       </div></div>`:''}
-      ${cfg.folderFilter!==false&&S.folders.length?`<div class="fgroup"><span>Folder</span><div>
+      ${!cfg.slim&&cfg.folderFilter!==false&&S.folders.length?`<div class="fgroup"><span>Folder</span><div>
         ${folderChips.map(f=>`<button class="chip ${(p.folder||'Any')===f?'on':''}" data-ff="${key}|${esc(f)}">${esc(f)}</button>`).join('')}
       </div></div>`:''}
-      ${tagList.length?`<div class="fgroup"><span>Tag</span><div>
+      ${!cfg.slim&&tagList.length?`<div class="fgroup"><span>Tag</span><div>
         ${tagList.map(tg=>`<button class="chip ${p.tag===tg?'on':''}" data-ftag="${key}|${esc(tg)}">#${esc(tg)}</button>`).join('')}
       </div></div>`:''}
       <div class="fgroup"><span>Length</span><div>
@@ -929,7 +929,8 @@ function showToast(message, undoFn){
 
 function listBlock(key, cfg, items){
   const p = prefs(key, cfg.init);
-  const shown = applyFilters(items, p, cfg.tabs);
+  // a filter you cannot see must not apply: a slim panel ignores the hidden groups
+  const shown = applyFilters(items, cfg.slim ? {...p, sources:[], folder:'Any', tag:null} : p, cfg.tabs);
   const tabLabel = (cfg.tabs.find(t=>t.id===p.tab)||cfg.tabs[0]).label;
   const countText = `${shown.length} item${shown.length===1?'':'s'}`;
   const pool = items.filter((cfg.tabs.find(t=>t.id===p.tab)||cfg.tabs[0]).test);
@@ -1083,6 +1084,8 @@ function viewFeed(){
     const s = src(i); return !!(s && s.folders.includes(V.folder));
   });
   const cfg = {
+    // inside one folder or one source, Filter narrows by type and length only
+    slim: !!(V.folder || V.source),
     init:{tab:'unseen', group:'Date', sort:'Newest first', kinds:[], folder:'Any', length:'Any'},
     tabs:[{id:'unseen',label:'Unseen',test:isUnseen},{id:'seen',label:'Seen',test:isSeen},{id:'all',label:'All',test:()=>true}],
     groups:['Date','None','Source','Folder','Type'],
