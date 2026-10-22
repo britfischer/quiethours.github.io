@@ -99,3 +99,6 @@ One line per decision, newest at the bottom. Date, the decision, and why.
   source; archived items can be moved back out; the Feed rail lists every
   source; Back returns to the exact page, folder or source you came from; row
   menu Add tags opens the tag field; on phones the site header scrolls away.
+- 2026-10-22: **Pausing a source offers a length:** 3 days, 1 week, 2 weeks,
+  1 month, or until you resume. The source comes back on its own when the date
+  passes, and its row says "Paused until <date>". "Mute" is renamed "Pause".

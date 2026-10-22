@@ -653,7 +653,14 @@ function src(it){ return S.sources.find(s=>s.id===it.sourceId); }
 function foldersOf(it){ const s = src(it); if(!s) return []; return s.folders.map(f=>(S.folders.find(x=>x.id===f)||{}).name).filter(Boolean); }
 
 const live = () => S.items.filter(i=>!i.deletedAt);
-const muted = i => { const sc = S.sources.find(x=>x.id===i.sourceId); return !!(sc && sc.muted); };
+/* A pause can run for a set time or until you resume it. Once its date passes,
+   the source simply comes back; nothing has to run to un-pause it. */
+const isPaused = sc => !!(sc && sc.muted && (!sc.pausedUntil || new Date(sc.pausedUntil) > new Date()));
+const pausedLabel = sc => !isPaused(sc) ? '' : sc.pausedUntil
+  ? 'Paused until ' + new Date(sc.pausedUntil).toLocaleDateString(undefined,{month:'short', day:'numeric'})
+  : 'Paused';
+const PAUSES = [[3,'3 days'],[7,'1 week'],[14,'2 weeks'],[30,'1 month'],[0,'Until I resume']];
+const muted = i => isPaused(S.sources.find(x=>x.id===i.sourceId));
 const audible = () => live().filter(i=>!muted(i));
 const isUnseen = i => !i.seenAt && !i.archivedAt && !i.deletedAt;
 const isSeen = i => !!i.seenAt && !i.archivedAt && !i.deletedAt;
@@ -911,7 +918,7 @@ function rowHTML(it, opts){
         <button class="mi" data-original="${it.id}">${I.external} Open original</button>
         <button class="mi" data-copy="${it.id}">${I.link} Copy link</button>
         <button class="mi" data-soon="Rules">${I.rule} Make a rule from this…</button>
-        <button class="mi" data-mute="${it.sourceId}">${I.mute} Mute ${esc(s.title||'this source')}</button>
+        <button class="mi" data-mute="${it.sourceId}">${I.mute} Pause ${esc(s.title||'this source')}</button>
         <div class="sep"></div>
         <button class="mi danger" data-act="delete|${it.id}">${I.trash} Delete<span class="k">#</span></button>
       `}
@@ -1425,7 +1432,7 @@ function viewSources(){
     const fnames = sc.folders.map(x=>(S.folders.find(y=>y.id===x)||{}).name).filter(Boolean);
     return `<article class="row" style="position:relative">
       <span class="savatar" style="background:${sc.color}" aria-hidden="true">${esc(sc.title.slice(0,1))}</span>
-      <div class="tx"><span style="font-size:16px;font-weight:500">${esc(sc.title)}${sc.muted?' <span class="b">Paused</span>':''}</span>
+      <div class="tx"><span style="font-size:16px;font-weight:500">${esc(sc.title)}${isPaused(sc)?` <span class="b">${pausedLabel(sc)}</span>`:''}</span>
         <span class="meta"><span class="b">${SKIND[sc.kind]||KIND[sc.kind]}</span>${newest?'Last post '+timeAgo(newest.publishedAt).toLowerCase():'Nothing yet'}
         ${fnames.length?' · '+esc(fnames.join(', ')):' · No folder'}
         ${sc.status==='needs_attention'?`<span style="color:var(--attention);font-weight:500">· Not updating, check the link</span>`:''}</span></div>
@@ -1437,9 +1444,16 @@ function viewSources(){
         <button class="mi" data-source="${sc.id}">${I.eye} See everything from ${esc(sc.title)}</button>
         <div class="sep"></div>
         <button class="mi" data-original="x">${I.external} Open the website</button>
-        <button class="mi" data-mute="${sc.id}">${I.mute} ${sc.muted?'Resume':'Pause for 2 weeks'}</button>
+        ${isPaused(sc)
+          ? `<button class="mi" data-mute="${sc.id}">${I.mute} Resume</button>`
+          : `<button class="mi" data-spausesub="${sc.id}">${I.mute} Pause<span class="k">${I.chev}</span></button>`}
         <div class="sep"></div>
         <button class="mi danger" data-unfollow="${sc.id}">${I.trash} Unfollow</button>
+      </div>`:''}
+      ${V.menuFor==='srcpause-'+sc.id?`<div class="menu" role="menu" aria-label="Pause for how long" style="width:min(260px,calc(100vw - 32px))">
+        <button class="mi" data-smenu="${sc.id}">${I.back} Pause for how long?</button>
+        <div class="sep"></div>
+        ${PAUSES.map(([d,l])=>`<button class="mi" data-spause="${sc.id}|${d}">${l}</button>`).join('')}
       </div>`:''}
       ${V.menuFor==='srcfolder-'+sc.id?`<div class="menu" role="menu" aria-label="Move to folder" style="width:min(280px,calc(100vw - 32px))">
         <button class="mi" data-smenu="${sc.id}">${I.back} Move to folder</button>
@@ -2239,7 +2253,7 @@ function createFolder(){
 
 /* ---------------------------------------------------------------- events */
 document.addEventListener('click', e => {
-  const t = e.target.closest('[data-go],[data-overlay],[data-folder],[data-shelf],[data-read],[data-act],[data-menu],[data-tab],[data-filter],[data-fk],[data-ff],[data-fl],[data-fsrc],[data-ftag],[data-fattention],[data-close],[data-scrim],[data-follow],[data-scope],[data-sfeed],[data-seed],[data-size],[data-back],[data-play],[data-pp],[data-pclose],[data-fadd],[data-fremove],[data-goaledit],[data-goalsave],[data-sizeopen],[data-newfolder],[data-frename],[data-fdelete],[data-fsaverename],[data-fconfirmdelete],[data-tagstart],[data-untag],[data-highlight],[data-unhigh],[data-readat],[data-hmark],[data-focusnote],[data-unsource],[data-addmode],[data-saveone],[data-saveto],[data-htab],[data-railtag],[data-libtag],[data-tagopen],[data-tagpick],[data-hexport],[data-sub],[data-subback],[data-smenu],[data-ssub],[data-sfolder],[data-srename],[data-savesource],[data-unfollow],[data-source],[data-movefolder],[data-movenew],[data-mute],[data-copy],[data-original],[data-soon]');
+  const t = e.target.closest('[data-go],[data-overlay],[data-folder],[data-shelf],[data-read],[data-act],[data-menu],[data-tab],[data-filter],[data-fk],[data-ff],[data-fl],[data-fsrc],[data-ftag],[data-fattention],[data-close],[data-scrim],[data-follow],[data-scope],[data-sfeed],[data-seed],[data-size],[data-back],[data-play],[data-pp],[data-pclose],[data-fadd],[data-fremove],[data-goaledit],[data-goalsave],[data-sizeopen],[data-newfolder],[data-frename],[data-fdelete],[data-fsaverename],[data-fconfirmdelete],[data-tagstart],[data-untag],[data-highlight],[data-unhigh],[data-readat],[data-hmark],[data-focusnote],[data-unsource],[data-addmode],[data-saveone],[data-saveto],[data-htab],[data-railtag],[data-libtag],[data-tagopen],[data-tagpick],[data-hexport],[data-sub],[data-subback],[data-smenu],[data-ssub],[data-spausesub],[data-spause],[data-sfolder],[data-srename],[data-savesource],[data-unfollow],[data-source],[data-movefolder],[data-movenew],[data-mute],[data-copy],[data-original],[data-soon]');
   if(!t){ if(V.menuFor || V.filterOpen || V.sizeOpen){ V.menuFor = null; V.menuSub = null; V.filterOpen = false; V.sizeOpen = false; render(); } return; }
 
   const d = t.dataset;
@@ -2254,6 +2268,18 @@ document.addEventListener('click', e => {
   if(d.unsource){ go('feed'); return; }
   if(d.smenu){ V.menuFor = V.menuFor==='src-'+d.smenu ? null : 'src-'+d.smenu; render(); return; }
   if(d.ssub){ V.menuFor = 'srcfolder-'+d.ssub; render(); return; }
+  if(d.spausesub){ V.menuFor = 'srcpause-'+d.spausesub; render(); return; }
+  if(d.spause){
+    const [id, days] = d.spause.split('|'); const n = Number(days);
+    const sc = S.sources.find(x=>x.id===id);
+    if(sc){
+      const before = {muted:sc.muted, pausedUntil:sc.pausedUntil};
+      sc.muted = true; sc.pausedUntil = n ? new Date(Date.now() + n*86400000).toISOString() : null; save();
+      const label = (PAUSES.find(x=>x[0]===n)||[0,''])[1];
+      showToast(sc.title + (n ? ' paused for ' + label + '.' : ' paused until you resume it.'), ()=>{ Object.assign(sc, before); save(); });
+    }
+    V.menuFor = null; render(); return;
+  }
   if(d.sfolder){
     const [sid, fid] = d.sfolder.split('|');
     const sc = S.sources.find(x=>x.id===sid);
@@ -2338,8 +2364,9 @@ document.addEventListener('click', e => {
   if(d.mute){
     const sc = S.sources.find(x=>x.id===d.mute);
     // the same control pauses and resumes, so it has to read the current state
-    if(sc){ const was = !!sc.muted; sc.muted = !was; save();
-      showToast(sc.title + (was ? ' resumed.' : ' paused.'), ()=>{ sc.muted = was; save(); }); }
+    if(sc){ const was = isPaused(sc), before = {muted:sc.muted, pausedUntil:sc.pausedUntil};
+      sc.muted = !was; sc.pausedUntil = null; save();
+      showToast(sc.title + (was ? ' resumed.' : ' paused until you resume it.'), ()=>{ Object.assign(sc, before); save(); }); }
     V.menuFor = null; render(); return;
   }
   if(d.copy){
