@@ -88,3 +88,6 @@ One line per decision, newest at the bottom. Date, the decision, and why.
   Instapaper's Highlights list. Each entry is the marked words with the article
   and source under them; opening it lands at that highlight. Group by Article or
   Tag is available but off by default, since articles carry few highlights.
+- 2026-10-22: **A tag is a place, not a filter.** A tag in the Library rail opens
+  its own page of everything carrying it, like a folder; Filter there is Type and
+  Length only.
