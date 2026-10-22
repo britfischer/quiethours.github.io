@@ -285,6 +285,10 @@ label.stack{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weigh
 .pcard .ptx{display:flex;flex-direction:column;gap:6px;min-width:0}
 .frow{display:flex;gap:16px;flex-wrap:wrap}
 .frow > .stack{flex:1 1 180px;min-width:0}
+/* following a source: name first, then folder, one above the other */
+.frow.stacked{flex-direction:column}
+.frow.stacked > .stack{flex:none}
+.frow.stacked .namefield{order:-1}
 .optsec{display:flex;flex-direction:column;gap:4px}
 .optrow{display:flex;gap:16px;align-items:center;justify-content:space-between;min-height:48px;font-size:15px;line-height:1.5}
 .optrow input{width:20px;height:20px;accent-color:var(--action);flex:none}
@@ -1700,7 +1704,7 @@ function overlayAdd(){
 
       ${addPreview(one, typed, host, guess)}
 
-      <div class="frow">
+      <div class="frow ${one?'':'stacked'}">
         ${one?`<label class="stack">Save to
           <select class="field" id="add-saveto">
             <option value="later" ${saveTo==='later'?'selected':''}>Later</option>
@@ -1715,7 +1719,7 @@ function overlayAdd(){
         </label>
         ${one?`<label class="stack">Tags
           <input class="field" id="add-tags" placeholder="#wardrobe">
-        </label>`:`<label class="stack">Display name
+        </label>`:`<label class="stack namefield">Display name
           <input class="field" id="add-name" value="${esc(guess)}" placeholder="Field Notes Weekly">
         </label>`}
       </div>
