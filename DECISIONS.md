@@ -70,3 +70,10 @@ One line per decision, newest at the bottom. Date, the decision, and why.
   "Sources in this list" checklist with counts from the folder board, Tag chips
   from the Library board, and Length with no Any chip. Counts here are the
   documented exception to the no-counts rule.
+- 2026-10-22: **The item count sits under the line that starts the list,**
+  bottom left, on every list page without tabs. Export on Highlights & Notes is
+  a text button on that same line.
+- 2026-10-22: **Highlights are drawn as board 4.3 has them:** a red rule with
+  the words washed. Tags sit in the Library rail under the shelves.
+- 2026-10-22: **The reader drops the standfirst;** source, time and length sit
+  directly on the title.

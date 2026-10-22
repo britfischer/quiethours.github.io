@@ -110,6 +110,7 @@ h1.display{margin:0;font-family:var(--serif);font-weight:400;font-size:44px;line
 .lk{color:var(--action);font-weight:500;font-size:14px;background:none;border:none;cursor:pointer;padding:0;font-family:var(--sans)}
 .fgroup>span{font-size:13px;font-weight:600;display:block;margin-bottom:8px}
 .fgroup.tight>span{margin-bottom:4px}
+.railtags{display:flex;flex-wrap:wrap;gap:8px}
 .fgroup>div{display:flex;flex-wrap:wrap;gap:6px}
 /* the source checklist from the folder board: a box, a name, a count */
 .cklist{flex-direction:column;gap:0;max-height:208px;overflow-y:auto}
@@ -136,6 +137,13 @@ h1.display{margin:0;font-family:var(--serif);font-weight:400;font-size:44px;line
 
 /* rows */
 .ghead{padding-bottom:12px;border-bottom:2px solid var(--divider);margin-bottom:8px}
+/* the item count: under the rule that starts the list, bottom left */
+.countline{border-top:2px solid var(--divider);padding-top:10px;margin-top:-8px;
+  display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:13px;color:var(--ink-muted)}
+.countline .lk{font-size:13px}
+/* the rule above the count already starts the list, so the first row needs no second rule */
+.countline + section{margin-top:-12px}
+.countline + section > .list:first-child{border-top:none}
 .list{display:flex;flex-direction:column;border-top:2px solid var(--divider)}
 .row{display:flex;gap:16px;align-items:center;padding:16px 0;border-top:1px solid var(--divider);position:relative;min-width:0}
 .list>.row:first-child{border-top:none}
@@ -253,15 +261,45 @@ label.stack{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weigh
 .ulabel{width:130px;flex:none;font-size:13px;color:var(--ink-muted);display:flex;align-items:center;gap:8px}
 .utitle{flex:1;min-width:0;font-family:var(--serif);font-size:20px;line-height:1.3}
 /* the two jobs + Add can do, side by side at the top of the overlay */
-.addpick{display:flex;gap:10px;flex-wrap:wrap}
-.addpick > button{flex:1 1 200px;min-width:0;text-align:left;display:flex;flex-direction:column;gap:4px;
-  padding:14px 16px;border:1px solid var(--control);border-radius:16px;background:var(--card);cursor:pointer}
-.addpick > button:hover{border-color:var(--action)}
-.addpick > button.on{border-color:var(--action);background:var(--softer);box-shadow:inset 0 0 0 1px var(--action)}
-.addpick .pt{font:600 15px var(--sans);color:var(--ink)}
-.addpick .pd{font-size:13px;color:var(--ink-muted)}
-.rowset{display:flex;gap:12px;align-items:flex-start;font-size:15px;line-height:1.5}
-.rowset input{margin-top:3px;width:18px;height:18px;accent-color:var(--action)}
+/* the Add overlay, drawn from boards 1.1 and 1.2 */
+.dialog.addsheet{max-width:700px;background:var(--page)}
+.dialog.addsheet .dhead{padding:32px 32px 20px}
+.dialog.addsheet .dbody{padding:0 32px 8px;gap:20px}
+.dialog.addsheet .dfoot{padding:20px 32px 28px;align-items:center;gap:12px;border-top:1px solid var(--divider);margin:8px 32px 0;padding-inline:0}
+.foottip{flex:1;min-width:0;font-size:13px;color:var(--ink-muted)}
+.foottip .lk{font-size:13px;text-decoration:underline}
+/* one pill, two halves, the chosen half in white: the segmented control */
+.seg{display:flex;background:var(--control);border-radius:999px;padding:4px;gap:4px}
+.seg > button{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px;
+  padding:12px 16px;border:none;border-radius:999px;background:transparent;cursor:pointer;text-align:center}
+.seg > button.on{background:var(--card);box-shadow:0 1px 2px rgba(47,48,32,.12)}
+.seg .pt{font:400 15px var(--sans);color:var(--ink)}
+.seg > button.on .pt{font-weight:600}
+.seg .pd{font-size:13px;color:var(--ink-muted)}
+/* what you are about to add, in the shape the boards give it */
+.pcard{display:flex;gap:16px;align-items:center;background:var(--card);border-radius:16px;padding:16px}
+.pcard.empty{background:transparent;border:1px dashed var(--border);justify-content:center;text-align:center;padding:20px 16px}
+.pthumb{width:120px;aspect-ratio:16/9;border-radius:12px;background:var(--m3);flex:none}
+.pcard .ptx{display:flex;flex-direction:column;gap:6px;min-width:0}
+.frow{display:flex;gap:16px;flex-wrap:wrap}
+.frow > .stack{flex:1 1 180px;min-width:0}
+.optsec{display:flex;flex-direction:column;gap:4px}
+.optrow{display:flex;gap:16px;align-items:center;justify-content:space-between;min-height:48px;font-size:15px;line-height:1.5}
+.optrow input{width:20px;height:20px;accent-color:var(--action);flex:none}
+@media (max-width:600px){
+  .dialog.addsheet .dhead{padding:24px 20px 16px}
+  .dialog.addsheet .dbody{padding:0 20px 8px}
+  .dialog.addsheet .dfoot{margin:8px 20px 0;padding:16px 0 24px;flex-wrap:wrap}
+  .seg{flex-direction:column}
+  .pthumb{width:84px}
+}
+/* a highlight, as board 4.3 draws it: red rule, the words washed */
+.hlwrap{display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+.hl{margin:0;font-family:var(--serif);font-size:18px;line-height:1.6;padding:2px 0 2px 18px;border-left:3px solid var(--attention)}
+.hl.small{font-size:16px;line-height:1.55;padding-left:14px}
+.hl mark{background:var(--softer);color:var(--ink);padding:1px 2px}
+.hlwrap .lk{margin-left:21px}
+.hlwrap .hl.small + .lk{margin-left:17px}
 /* a piece and everything you marked on it, on the Highlights and notes shelf */
 .hcard{display:flex;flex-direction:column;gap:14px;border-top:1px solid var(--divider);padding:20px 0 4px}
 .hcard:first-of-type{border-top:none}
@@ -290,7 +328,9 @@ mark.high:hover{background:var(--soft)}
 
 /* reader */
 .reader{max-width:720px;margin:0 auto;padding-block:24px 96px}
-.reader h1{margin:0;font-family:var(--serif);font-weight:400;font-size:40px;line-height:1.15;text-wrap:balance}
+.reader h1,.readcol h1{margin:0;font-family:var(--serif);font-weight:400;font-size:40px;line-height:1.15;text-wrap:balance}
+/* source, time and length sit right on top of the title they describe */
+.readcol > .meta + h1{margin-top:-14px}
 .standfirst{margin:16px 0 0;font-family:var(--serif);font-size:20px;line-height:1.5;color:var(--ink-body)}
 .bodycopy{font-family:var(--serif);line-height:1.75;display:flex;flex-direction:column;gap:24px;margin-top:24px}
 .bodycopy p{margin:0}
@@ -385,7 +425,7 @@ h1.hero{margin:0;font-family:var(--serif);font-weight:400;font-size:clamp(34px,6
   .tt{font-size:17px}
   .meta{font-size:12px}
   .acts{opacity:1}
-  .reader h1{font-size:30px}
+  .reader h1,.readcol h1{font-size:30px}
   .controls{margin-top:-6px;flex-direction:column;align-items:stretch;gap:8px}
   .tabs{gap:14px}
   .ctlgroup{width:100%;gap:6px 12px;justify-content:space-between}
@@ -704,7 +744,7 @@ function controlRow(key, cfg, count, pool){
   return `<div class="controls">
     ${hasTabs?`<nav class="tabs" aria-label="Show">
       ${cfg.tabs.map(t=>`<button data-tab="${key}|${t.id}" class="${p.tab===t.id?'on':''}" ${p.tab===t.id?'aria-current="true"':''}>${t.label}</button>`).join('')}
-    </nav>`:`<span class="meta">${count}</span>`}
+    </nav>`:`<span></span>`}
     <div class="ctlgroup">
       <label class="ctl">Group by
         <select data-pref="${key}|group">${cfg.groups.map(g=>`<option ${p.group===g?'selected':''}>${g}</option>`).join('')}</select>
@@ -888,8 +928,11 @@ function listBlock(key, cfg, items){
   const tabLabel = (cfg.tabs.find(t=>t.id===p.tab)||cfg.tabs[0]).label;
   const countText = `${shown.length} item${shown.length===1?'':'s'}`;
   const pool = items.filter((cfg.tabs.find(t=>t.id===p.tab)||cfg.tabs[0]).test);
-  if(!shown.length) return controlRow(key,cfg,countText,pool) + cfg.empty(p);
-  return controlRow(key,cfg,countText,pool) + groupItems(shown, p.group).map(([k,list])=>
+  const tabbed = Array.isArray(cfg.tabs) && cfg.tabs.length > 1;
+  // the count lives under the rule, bottom left, the same on every page that has one
+  const countLine = tabbed ? '' : `<div class="countline"><span>${countText}</span></div>`;
+  if(!shown.length) return controlRow(key,cfg,countText,pool) + countLine + cfg.empty(p);
+  return controlRow(key,cfg,countText,pool) + countLine + groupItems(shown, p.group).map(([k,list])=>
     `<section style="display:flex;flex-direction:column">
       ${k?`<div class="ghead"><h2 class="lbl">${esc(k)}</h2></div>`:''}
       <div class="list" ${k?'style="border-top:none"':''}>${list.map(i=>rowHTML(i, cfg.rowOpts)).join('')}</div>
@@ -1076,6 +1119,28 @@ function viewFeed(){
   </div></div>`;
 }
 
+/* Library's rail: the three shelves, then your tags, as the Library board has it.
+   A tag narrows whichever shelf you are on. */
+function libraryRail(shelf){
+  const key = shelf==='highlights' ? 'high' : 'lib-'+shelf;
+  const on = prefs(key,{}).tag;
+  const tags = [...new Set(live().flatMap(i=>i.tags||[]))].sort();
+  return `<aside class="rail">
+    <nav class="side" aria-label="Shelves">
+      <div class="sh"><h2 class="lbl">Shelves</h2></div>
+      <button data-shelf="later" class="${shelf==='later'?'on':''}">Later</button>
+      <button data-shelf="archive" class="${shelf==='archive'?'on':''}">Archive</button>
+      <button data-shelf="highlights" class="${shelf==='highlights'?'on':''}">Highlights &amp; Notes</button>
+    </nav>
+    ${tags.length?`<div class="side" aria-label="Tags">
+      <div class="sh"><h2 class="lbl">Tags</h2></div>
+      <div class="railtags">
+        ${tags.map(tg=>`<button class="chip ${on===tg?'on':''}" data-railtag="${key}|${esc(tg)}" aria-pressed="${on===tg}">#${esc(tg)}</button>`).join('')}
+      </div>
+    </div>`:''}
+  </aside>`;
+}
+
 function viewLibrary(){
   const shelf = V.shelf;
   if(shelf==='highlights') return viewHighlights();
@@ -1098,12 +1163,7 @@ function viewLibrary(){
     empty:()=>`<div class="empty"><h2>The archive is empty.</h2><p>Archiving keeps something without leaving it on a pile. Use the box button on any row.</p><button class="btn" data-go="feed">Open the Feed</button></div>`
   };
   return `<div class="wrap"><div class="columns">
-    <aside class="rail"><nav class="side" aria-label="Shelves">
-      <div class="sh"><h2 class="lbl">Shelves</h2></div>
-      <button data-shelf="later" class="${shelf==='later'?'on':''}">Later</button>
-      <button data-shelf="archive" class="${shelf==='archive'?'on':''}">Archive</button>
-      <button data-shelf="highlights" class="${shelf==='highlights'?'on':''}">Highlights &amp; notes</button>
-    </nav></aside>
+    ${libraryRail(shelf)}
     <main class="col">
       <h1 class="page">${shelf==='later'?'Later':'Archive'}</h1>
       ${listBlock('lib-'+shelf, cfg, items)}
@@ -1147,8 +1207,8 @@ function viewHighlights(){
       </div>`:''}
       ${hs.length?`<div style="display:flex;flex-direction:column;gap:12px">
         <span class="sl">Highlights · in reading order</span>
-        ${hs.map((h,n)=>`<p class="hquote" style="font-size:18px">${esc(h)}
-          <button class="lk" data-unhigh="${it.id}|${n}" style="font-size:13px">Remove</button></p>`).join('')}
+        ${hs.map((h,n)=>`<div class="hlwrap"><p class="hl"><mark>${esc(h)}</mark></p>
+          <button class="lk" data-unhigh="${it.id}|${n}" style="font-size:13px">Remove</button></div>`).join('')}
       </div>`:''}
       ${(it.tags||[]).length?`<div style="display:flex;flex-wrap:wrap;gap:8px">
         ${it.tags.map(tg=>`<button class="chip ${p.tag===tg?'on':''}" data-tagpick="${esc(tg)}">#${esc(tg)}</button>`).join('')}
@@ -1172,19 +1232,11 @@ function viewHighlights(){
   };
 
   return `<div class="wrap"><div class="columns">
-    <aside class="rail"><nav class="side" aria-label="Shelves">
-      <div class="sh"><h2 class="lbl">Shelves</h2></div>
-      <button data-shelf="later">Later</button>
-      <button data-shelf="archive">Archive</button>
-      <button data-shelf="highlights" class="on">Highlights &amp; notes</button>
-    </nav></aside>
+    ${libraryRail('highlights')}
     <main class="col">
-      <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between">
-        <h1 class="page">Highlights &amp; notes</h1>
-        ${marks?`<button class="btn soft" data-hexport="1">Export</button>`:''}
-      </div>
+      <h1 class="page">Highlights &amp; Notes</h1>
       <div class="controls">
-        <span class="meta">${countText}</span>
+        <span></span>
         <div class="ctlgroup">
           <label class="ctl">Group by
             <select data-pref="high|group">${['Item','Folder','Tag'].map(g=>`<option ${p.group===g?'selected':''}>${g}</option>`).join('')}</select>
@@ -1210,6 +1262,7 @@ function viewHighlights(){
           </div></div>`:''}
         </div>`:''}
       </div>
+      <div class="countline"><span>${countText}</span>${marks?`<button class="lk" data-hexport="1">Export</button>`:''}</div>
       ${!list.length?`<div class="empty">
         <h2>Nothing marked yet.</h2>
         <p>Select a sentence while you are reading and press Highlight. Your highlights, your one
@@ -1219,7 +1272,6 @@ function viewHighlights(){
         ${k?`<div class="ghead"><h2 class="lbl">${esc(k)}</h2></div>`:''}
         ${group.map(card).join('')}
       </section>`).join('')}
-      ${list.length?`<p class="ending">That's everything you marked. ${marks} highlight${marks===1?'':'s'} in all.</p>`:''}
     </main>
   </div></div>`;
 }
@@ -1237,7 +1289,6 @@ function viewListen(){
   return `<div class="wrap"><div class="columns"><main class="col" style="flex:1 1 100%">
     <h1 class="page">Listen &amp; watch</h1>
     ${listBlock('listen', cfg, items)}
-    <p class="note">Prototype note: the player is phase 3. Opening something here shows its page, the same as reading.</p>
   </main></div></div>`;
 }
 
@@ -1314,7 +1365,7 @@ function viewSources(){
     <h1 class="page">Sources</h1>
 
     ${S.sources.length?`<div class="controls">
-      <span class="meta">${S.sources.length} following${attention.length?' · '+attention.length+' need attention':''}</span>
+      <span></span>
       <div class="ctlgroup">
         <label class="ctl">Group by
           <select data-pref="sources|group">${['None','Type','Folder'].map(g=>`<option ${p.group===g?'selected':''}>${g}</option>`).join('')}</select>
@@ -1342,7 +1393,8 @@ function viewSources(){
           <button class="chip ${p.attention?'on':''}" data-fattention="sources">Needs attention${attention.length?' · '+attention.length:''}</button>
         </div></div>
       </div>`:''}
-    </div>`:''}
+    </div>
+    <div class="countline"><span>${S.sources.filter(x=>!x.oneoff).length} following${attention.length?' · '+attention.length+' need attention':''}</span></div>`:''}
 
     ${!S.sources.length?`<div class="empty"><h2>No sources yet.</h2>
       <p>Paste a link to a blog, a newsletter, a channel or a podcast and it starts filling your Feed.</p>
@@ -1487,7 +1539,6 @@ function viewRead(){
           <span>${timeAgo(it.publishedAt)}</span><span>·</span><span>${it.minutes} min read</span>
         </div>
         <h1>${esc(it.title)}</h1>
-        <p class="standfirst">${esc(it.standfirst)}</p>
         <div style="aspect-ratio:16/9;max-width:100%;background:${sc.color||'var(--m6)'};border-radius:20px"></div>
 
         <div class="bodycopy" id="read-body" style="font-size:${V.readSize}px">
@@ -1536,15 +1587,14 @@ function viewRead(){
           <h2 class="lbl"><label for="reader-notes">Notes</label></h2>
           <textarea id="reader-notes" rows="7" placeholder="Your thoughts on this piece..." data-note="${it.id}"
             style="border:1px solid var(--border);border-radius:12px;padding:10px;font:400 15px var(--sans);background:var(--card);color:var(--ink);resize:vertical">${esc(it.note||'')}</textarea>
-          <span style="font-size:13px;color:var(--ink-muted)">One note per item. Saves as you type.</span>
         </div>
 
         <div class="rsec">
           <h2 class="lbl">Highlights${highs.length?' · '+highs.length:''}</h2>
-          ${highs.map((h,n)=>`<p class="hquote">${esc(h)}
-            <button class="lk" data-unhigh="${it.id}|${n}" style="font-size:13px">Remove</button></p>`).join('')}
+          ${highs.map((h,n)=>`<div class="hlwrap"><p class="hl small"><mark>${esc(h)}</mark></p>
+            <button class="lk" data-unhigh="${it.id}|${n}" style="font-size:13px">Remove</button></div>`).join('')}
           <span style="font-size:13px;color:var(--ink-muted)">${highs.length
-            ? 'Click a highlight in the article to take it off. They all collect in Library, under Highlights &amp; notes.'
+            ? 'Click a highlight in the article to take it off. They all collect in Library, under Highlights &amp; Notes.'
             : 'Select any sentence in the article and a Highlight button appears where you selected it.'}</span>
         </div>
       </aside>
@@ -1577,66 +1627,108 @@ function viewRead(){
 
 /* ---------------------------------------------------------------- overlays */
 let addError = null, folderError = null, sourceError = null, searchQ = '', searchScope = 'Everywhere';
-let addMode = 'follow', saveTo = 'later';
+let addMode = 'follow', saveTo = 'later', addUrl = '';
 
 /* + Add does the two jobs the designs give it: save one thing you want to read,
    or follow a source so everything it publishes arrives on its own. */
+/* the card under the link field: a placeholder until you type, then what we can
+   say about the link without fetching it. Updated in place while you type, so the
+   other fields keep what you chose. */
+function addPreview(one, typed, host, guess){
+  if(!typed) return `<div class="pcard empty" id="add-preview">
+    <span class="ptx"><span style="font-size:15px;color:var(--ink-muted)">${one
+      ? 'Paste a link and what you are about to save shows up here.'
+      : 'Paste a link and the feed we found shows up here, before you follow it.'}</span></span>
+  </div>`;
+  return `<div class="pcard" id="add-preview">
+    <span class="pthumb" aria-hidden="true"></span>
+    <span class="ptx">
+      <span class="lbl" style="color:var(--ink-muted)">Not checked yet · ${one?'Link':'Feed'}</span>
+      <span class="serif" style="font-size:22px;line-height:1.3">${esc(guess||host)}</span>
+      <span style="font-size:14px;color:var(--ink-muted)">${esc(host)} · we confirm this once feed fetching is built</span>
+    </span>
+  </div>`;
+}
+function addParts(v){
+  const typed = (v||'').trim();
+  const host = typed ? (typed.replace(/^https?:\/\//,'').split('/')[0] || typed) : '';
+  const guess = host ? host.replace(/^www\./,'').split('.')[0].replace(/[-_]/g,' ').replace(/\b\w/g,c=>c.toUpperCase()) : '';
+  return {typed, host, guess};
+}
+
 function overlayAdd(){
   const one = addMode === 'save';
-  return `<div class="scrim" data-scrim="1"><div class="dialog" role="dialog" aria-label="Add" aria-modal="true">
+  // the link you have typed, so the preview card can say something true about it
+  const typed = (addUrl||'').trim();
+  const host = typed ? (typed.replace(/^https?:\/\//,'').split('/')[0] || typed) : '';
+  const guess = host ? host.replace(/^www\./,'').split('.')[0].replace(/[-_]/g,' ').replace(/\b\w/g,c=>c.toUpperCase()) : '';
+  return `<div class="scrim" data-scrim="1"><div class="dialog addsheet" role="dialog" aria-label="Add" aria-modal="true">
     <div class="dhead">
       <div>
-        <p class="lbl" style="color:var(--ink-muted)">Add</p>
-        <h2 class="serif" style="margin:6px 0 0;font-weight:400;font-size:28px">${one?'Save one thing':'Follow a source'}</h2>
+        <h2 class="serif" style="margin:0;font-weight:400;font-size:32px;line-height:1.2">Add</h2>
+        <p style="margin:8px 0 0;font-size:15px;line-height:1.5;color:var(--ink-body);max-width:62ch">
+          ${one ? "Paste any link to one piece. It lands on the shelf you pick and nothing else comes with it."
+                : "Paste a website address, RSS or Atom link, YouTube channel or playlist, podcast or Substack. We'll find the feed and show you what you're getting."}
+        </p>
       </div>
-      <button class="ib" aria-label="Close" data-close="1" style="background:var(--soft)">${I.close}</button>
+      <button class="ib" aria-label="Close" data-close="1" style="background:var(--control);flex:none">${I.close}</button>
     </div>
 
     <div class="dbody">
-      <div class="addpick">
+      <div class="seg" role="group" aria-label="What are you adding">
         <button class="${one?'on':''}" data-addmode="save" aria-pressed="${one}">
           <span class="pt">Save one thing</span>
           <span class="pd">An article, video or episode</span>
         </button>
         <button class="${one?'':'on'}" data-addmode="follow" aria-pressed="${!one}">
           <span class="pt">Follow a source</span>
-          <span class="pd">Blog, channel, podcast, newsletter</span>
+          <span class="pd">RSS, channel, podcast, newsletter</span>
         </button>
       </div>
 
-      <p style="margin:0;font-size:15px;line-height:1.6;color:var(--ink-body)">
-        ${one ? 'Paste a link to one piece. It lands on the shelf you pick and nothing else comes with it.'
-              : 'Paste a website, a feed link, a YouTube channel, a podcast or a newsletter. Everything it publishes from now on arrives in your Feed.'}
-      </p>
-
-      <label class="stack">Link
-        <input class="field" id="add-url" placeholder="${one?'fieldnotes.example/the-quiet-case':'fieldnotes.example'}" autofocus>
+      <label>
+        <span style="position:absolute;left:-9999px">Link</span>
+        <input class="field" id="add-url" value="${esc(addUrl||'')}"
+          placeholder="${one?'youtube.com/watch?v=capsule-wardrobe':'fieldnotesweekly.com/feed.xml'}" autofocus>
       </label>
 
-      ${one?`<div class="stack">Save to
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          ${[['later','Later'],['archive','Archive']].map(([k,l])=>
-            `<button class="chip ${saveTo===k?'on':''}" data-saveto="${k}">${l}</button>`).join('')}
-        </div>
-      </div>`:''}
+      ${addPreview(one, typed, host, guess)}
 
-      ${S.folders.length?`<label class="stack">Folder
-        <select class="field" id="add-folder">
-          <option value="">No folder</option>
-          ${S.folders.map(f=>`<option value="${f.id}">${esc(f.name)}</option>`).join('')}
-        </select>
-      </label>`:''}
+      <div class="frow">
+        ${one?`<label class="stack">Save to
+          <select class="field" id="add-saveto">
+            <option value="later" ${saveTo==='later'?'selected':''}>Later</option>
+            <option value="archive" ${saveTo==='archive'?'selected':''}>Archive</option>
+          </select>
+        </label>`:''}
+        <label class="stack">Folder
+          <select class="field" id="add-folder">
+            <option value="">No folder</option>
+            ${S.folders.map(f=>`<option value="${f.id}">${esc(f.name)}</option>`).join('')}
+          </select>
+        </label>
+        ${one?`<label class="stack">Tags
+          <input class="field" id="add-tags" placeholder="#wardrobe">
+        </label>`:`<label class="stack">Display name
+          <input class="field" id="add-name" value="${esc(guess)}" placeholder="Field Notes Weekly">
+        </label>`}
+      </div>
 
-      ${one?'':`<label class="rowset">
-        <input type="checkbox" id="add-auto">
-        <span><b style="font-weight:600">Save new posts to Later automatically</b><br>
-        <span style="font-size:13px;color:var(--ink-muted)">For a source you always read.</span></span>
-      </label>`}
+      ${one?'':`<div class="optsec">
+        <h3 class="lbl" style="padding-bottom:10px;border-bottom:2px solid var(--divider)">Options</h3>
+        <label class="optrow">
+          <span>Automatically save new posts to Later <span style="color:var(--ink-muted)">(for sources you always read)</span></span>
+          <input type="checkbox" id="add-auto">
+        </label>
+      </div>`}
 
       ${addError?`<p class="alert" role="alert">${esc(addError)}</p>`:''}
     </div>
 
     <div class="dfoot">
+      <span class="foottip">${one
+        ? 'Tip: one-off saves never become a subscription.'
+        : 'Moving from another reader? <button class="lk" data-soon="OPML imports">Import OPML</button>'}</span>
       <button class="btn soft" data-close="1">Cancel</button>
       ${one?`<button class="btn" data-saveone="1">Save</button>`
            :`<button class="btn" data-follow="1">Follow</button>`}
@@ -1649,6 +1741,11 @@ function overlayAdd(){
 function saveOneThing(){
   const input = document.getElementById('add-url');
   const folderSel = document.getElementById('add-folder');
+  const shelfSel = document.getElementById('add-saveto');
+  const tagField = document.getElementById('add-tags');
+  if(shelfSel) saveTo = shelfSel.value;
+  const tags = (tagField ? tagField.value : '').split(/[,\s]+/)
+    .map(t=>t.replace(/^#/,'').trim()).filter(Boolean).slice(0,6);
   const url = (input ? input.value : '').trim();
   addError = null;
   if(!url){ addError = 'Paste a link first.'; render(); return; }
@@ -1669,10 +1766,10 @@ function saveOneThing(){
     standfirst:'Saved from ' + host + '.',
     body:['This stands in for the piece you saved. In the finished app the text is pulled from the page and cleaned up for reading.',
           'Nothing else from ' + host + ' comes with it, because you saved one thing rather than following the source.'],
-    kind:'article', minutes:6, publishedAt:now,
+    kind:'article', minutes:6, publishedAt:now, tags, note:'', highlights:[],
     seenAt:null, savedAt:saveTo==='later'?now:null, archivedAt:saveTo==='archive'?now:null, deletedAt:null});
   save();
-  V.overlay = null; addError = null;
+  V.overlay = null; addError = null; addUrl = '';
   go('library', {shelf:saveTo==='archive'?'archive':'later'});
   showToast('Saved to ' + (saveTo==='archive'?'Archive':'Later') + '.', ()=>{
     S.items = S.items.filter(i=>i.id!==id); save();
@@ -1819,7 +1916,7 @@ function overlaySearch(){
       <button class="lk" data-close="1" style="border:1px solid var(--divider);border-radius:6px;padding:2px 6px;font-size:12px;color:var(--ink-muted)">esc</button>
     </div>
     <div style="flex:none;display:flex;gap:6px;padding:12px 20px;flex-wrap:wrap;border-bottom:1px solid var(--divider)">
-      ${['Everywhere','Feed','Library','Marks','Sources'].map(s=>`<button class="chip ${searchScope===s?'on':''}" data-scope="${s}">${s==='Marks'?'Highlights &amp; notes':s}</button>`).join('')}
+      ${['Everywhere','Feed','Library','Marks','Sources'].map(s=>`<button class="chip ${searchScope===s?'on':''}" data-scope="${s}">${s==='Marks'?'Highlights &amp; Notes':s}</button>`).join('')}
     </div>
     <div class="search-hits">
       ${!term?`<p style="margin:0;padding:24px 12px;color:var(--ink-muted);font-size:15px">Type to search titles, descriptions, source names, your highlights, your notes and your tags.</p>`:''}
@@ -1907,7 +2004,9 @@ function followSource(){
   if(!/\./.test(url)){ addError = "That doesn't look like a link. Try something like fieldnotes.example or a YouTube channel."; render(); return; }
   if(S.sources.some(s=>url.includes(s.site))){ addError = "You already follow this one. It's in your Sources list."; render(); return; }
   const host = url.replace(/^https?:\/\//,'').split('/')[0] || 'example.com';
-  const name = host.replace(/^www\./,'').split('.')[0].replace(/[-_]/g,' ').replace(/\b\w/g, c=>c.toUpperCase());
+  const nameField = document.getElementById('add-name');
+  const typedName = (nameField ? nameField.value : '').trim();
+  const name = typedName || host.replace(/^www\./,'').split('.')[0].replace(/[-_]/g,' ').replace(/\b\w/g, c=>c.toUpperCase());
   const id = 'src-'+Date.now();
   const palette = ['var(--m1)','var(--m2)','var(--m3)','var(--m4)','var(--m6)'];
   const color = palette[Math.floor(Math.random()*palette.length)];
@@ -1926,7 +2025,7 @@ function followSource(){
       seenAt:null, savedAt:null, archivedAt:null, deletedAt:null});
   });
   save();
-  V.overlay = null; addError = null;
+  V.overlay = null; addError = null; addUrl = '';
   V.view = 'feed'; V.folder = null;
   render();
   const fname = folderId ? (S.folders.find(f=>f.id===folderId)||{}).name : null;
@@ -1962,7 +2061,7 @@ function createFolder(){
 
 /* ---------------------------------------------------------------- events */
 document.addEventListener('click', e => {
-  const t = e.target.closest('[data-go],[data-overlay],[data-folder],[data-shelf],[data-read],[data-act],[data-menu],[data-tab],[data-filter],[data-fk],[data-ff],[data-fl],[data-fsrc],[data-ftag],[data-fattention],[data-close],[data-scrim],[data-follow],[data-scope],[data-sfeed],[data-seed],[data-size],[data-back],[data-play],[data-pp],[data-pclose],[data-fadd],[data-fremove],[data-goaledit],[data-goalsave],[data-sizeopen],[data-newfolder],[data-tagstart],[data-untag],[data-highlight],[data-unhigh],[data-hmark],[data-focusnote],[data-unsource],[data-addmode],[data-saveone],[data-saveto],[data-htab],[data-tagpick],[data-hexport],[data-sub],[data-subback],[data-smenu],[data-ssub],[data-sfolder],[data-srename],[data-savesource],[data-unfollow],[data-source],[data-movefolder],[data-movenew],[data-mute],[data-copy],[data-original],[data-soon]');
+  const t = e.target.closest('[data-go],[data-overlay],[data-folder],[data-shelf],[data-read],[data-act],[data-menu],[data-tab],[data-filter],[data-fk],[data-ff],[data-fl],[data-fsrc],[data-ftag],[data-fattention],[data-close],[data-scrim],[data-follow],[data-scope],[data-sfeed],[data-seed],[data-size],[data-back],[data-play],[data-pp],[data-pclose],[data-fadd],[data-fremove],[data-goaledit],[data-goalsave],[data-sizeopen],[data-newfolder],[data-tagstart],[data-untag],[data-highlight],[data-unhigh],[data-hmark],[data-focusnote],[data-unsource],[data-addmode],[data-saveone],[data-saveto],[data-htab],[data-railtag],[data-tagpick],[data-hexport],[data-sub],[data-subback],[data-smenu],[data-ssub],[data-sfolder],[data-srename],[data-savesource],[data-unfollow],[data-source],[data-movefolder],[data-movenew],[data-mute],[data-copy],[data-original],[data-soon]');
   if(!t){ if(V.menuFor || V.filterOpen || V.sizeOpen){ V.menuFor = null; V.menuSub = null; V.filterOpen = false; V.sizeOpen = false; render(); } return; }
 
   const d = t.dataset;
@@ -2075,6 +2174,11 @@ document.addEventListener('click', e => {
   if(d.filter === 'toggle'){ V.filterOpen = !V.filterOpen; render(); return; }
   if(d.filter && d.filter.startsWith('clear|')){ setPref(d.filter.split('|')[1], {kinds:[], folder:'Any', length:'Any', attention:false, only:'Everything', tag:null, sources:[]}); return; }
   if(d.htab){ setPref('high', {only:d.htab}); return; }
+  if(d.railtag){
+    const [key, tg] = d.railtag.split('|'); const p = prefs(key,{});
+    const off = key==='high' ? 'Any' : null;
+    setPref(key, {tag: p.tag===tg ? off : tg}); return;
+  }
   if(d.tagpick){ go('library', {shelf:'highlights'}); setPref('high', {tag:d.tagpick, group:'Item'}); return; }
   if(d.hexport){
     const text = annotated().map(i=>{
@@ -2245,6 +2349,16 @@ document.addEventListener('change', e => {
 
 document.addEventListener('input', e => {
   if(e.target.id === 'search-q'){ searchQ = e.target.value; render(); }
+  if(e.target.id === 'add-url'){
+    addUrl = e.target.value;
+    const {typed, host, guess} = addParts(addUrl);
+    const card = document.getElementById('add-preview');
+    if(card) card.outerHTML = addPreview(addMode==='save', typed, host, guess);
+    // the display name follows the link until you type your own
+    const nm = document.getElementById('add-name');
+    if(nm && !nm.dataset.touched) nm.value = guess;
+  }
+  if(e.target.id === 'add-name'){ e.target.dataset.touched = '1'; }
   if(e.target.dataset && e.target.dataset.note){
     const item = S.items.find(i=>i.id===e.target.dataset.note);
     if(item){ item.note = e.target.value; save(); }   // saves as you type, no button
