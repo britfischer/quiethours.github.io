@@ -940,7 +940,8 @@ function listBlock(key, cfg, items){
   const pool = items.filter((cfg.tabs.find(t=>t.id===p.tab)||cfg.tabs[0]).test);
   const tabbed = Array.isArray(cfg.tabs) && cfg.tabs.length > 1;
   // the count lives under the rule, bottom left, the same on every page that has one
-  const countLine = tabbed ? '' : `<div class="countline"><span>${countText}</span></div>`;
+  // the count lives once, at the end of the list, small and to the right
+  const countLine = '';
   if(!shown.length) return controlRow(key,cfg,countText,pool) + countLine + cfg.empty(p);
   return controlRow(key,cfg,countText,pool) + countLine + groupItems(shown, p.group).map(([k,list])=>
     `<section style="display:flex;flex-direction:column">
@@ -1275,16 +1276,18 @@ function viewHighlights(){
           </div></div>`:''}
         </div>`:''}
       </div>
-      <div class="countline"><span>${countText}</span>${marks?`<button class="lk" data-hexport="1">Export</button>`:''}</div>
       ${!list.length?`<div class="empty">
         <h2>Nothing marked yet.</h2>
         <p>Select a sentence while you are reading and press Highlight. Your highlights, your one
         note per piece and your tags all collect here, and search finds them.</p>
         <button class="btn" data-go="feed">Open the Feed</button>
-      </div>`:groups().map(([k,group])=>`<section style="display:flex;flex-direction:column;gap:20px">
+      </div>`:groups().map(([k,group])=>`<section style="display:flex;flex-direction:column;gap:20px;${k?'':'border-top:2px solid var(--divider)'}">
         ${k?`<div class="ghead"><h2 class="lbl">${esc(k)}</h2></div>`:''}
         ${group.map(card).join('')}
       </section>`).join('')}
+      ${list.length?`<div class="listcount" style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+        ${marks?`<button class="lk" data-hexport="1" style="font-size:13px">Export</button>`:'<span></span>'}<span>${countText}</span>
+      </div>`:''}
     </main>
   </div></div>`;
 }
@@ -1408,8 +1411,7 @@ function viewSources(){
           <button class="chip ${p.attention?'on':''}" data-fattention="sources">Needs attention</button>
         </div></div>
       </div>`:''}
-    </div>
-    <div class="countline"><span>${S.sources.filter(x=>!x.oneoff).length} following${attention.length?' · '+attention.length+' need attention':''}</span></div>`:''}
+    </div>`:''}
 
     ${!S.sources.length?`<div class="empty"><h2>No sources yet.</h2>
       <p>Paste a link to a blog, a newsletter, a channel or a podcast and it starts filling your Feed.</p>

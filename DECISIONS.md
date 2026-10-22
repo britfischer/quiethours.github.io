@@ -81,3 +81,6 @@ One line per decision, newest at the bottom. Date, the decision, and why.
   replaced on every page by the list's rule and a small right-aligned count.
   This retires principle 1 ("Every list finishes with a sentence"); the spec
   needs updating to match.
+- 2026-10-22: **One count per list, at the end, small and right-aligned.** The
+  count under the list's opening rule is removed everywhere. Export on
+  Highlights & Notes sits on that end line, opposite the count.
