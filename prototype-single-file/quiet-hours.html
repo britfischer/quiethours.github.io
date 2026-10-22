@@ -1053,7 +1053,7 @@ function viewFeed(){
     <aside class="rail">
       <nav class="side" aria-label="All items">
         <div class="sh"><h2 class="lbl">Feed</h2></div>
-        <button data-folder="" class="${!V.folder?'on':''}">Everything</button>
+        <button data-folder="" class="${!V.folder&&!V.source?'on':''}">Everything</button>
       </nav>
       <nav class="side" aria-label="Folders">
         <div class="sh"><h2 class="lbl">Folders</h2>
@@ -1070,15 +1070,7 @@ function viewFeed(){
     <main class="col">
       <div>${folder?`<p class="lbl" style="color:var(--ink-muted)">Feed · folder</p>`:''}
         <h1 class="page" style="${folder?'margin-top:6px':''}">${folder?esc(folder.name):'Feed'}</h1>
-        ${source?`<p style="margin:10px 0 0;display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:15px;color:var(--ink-muted)">
-          Showing
-          <span class="chip on" style="gap:8px">
-            <span style="width:14px;height:14px;border-radius:4px;background:${source.color};flex:none" aria-hidden="true"></span>
-            ${esc(source.title)}
-            <button class="tagx" data-unsource="1" aria-label="Stop filtering by ${esc(source.title)}">${I.close}</button>
-          </span>
-          <button class="lk" data-go="sources">Source settings</button>
-        </p>`:''}</div>
+        </div>
       ${listBlock(key, cfg, items)}
     </main>
   </div></div>`;
