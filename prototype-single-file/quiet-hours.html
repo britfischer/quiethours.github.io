@@ -16,6 +16,7 @@
   --serif:'Literata',Georgia,'Times New Roman',serif;
   --sans:'Figtree',system-ui,-apple-system,'Segoe UI',sans-serif;
   --menu-shadow:0 16px 48px rgba(47,48,32,.22);
+  --chevron:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235e5d46' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --page:#1b1c14; --card:#24251b; --soft:#2d2e22; --softer:#343527; --control:#343527;
@@ -26,6 +27,7 @@
   --m1:#4b4556; --m2:#5b4639; --m3:#6a6848; --m4:#434434; --m5:#2c2d1e; --m6:#575937;
   --problem:#3d2a24; --scrim:rgba(8,9,5,.6);
   --menu-shadow:0 16px 48px rgba(0,0,0,.5);
+  --chevron:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b3b19b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   color-scheme:dark;
 }}
 :root[data-theme="dark"]{
@@ -37,6 +39,7 @@
   --m1:#4b4556; --m2:#5b4639; --m3:#6a6848; --m4:#434434; --m5:#2c2d1e; --m6:#575937;
   --problem:#3d2a24; --scrim:rgba(8,9,5,.6);
   --menu-shadow:0 16px 48px rgba(0,0,0,.5);
+  --chevron:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b3b19b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -47,6 +50,12 @@ a:hover{color:var(--attention)}
 button{font-family:inherit;color:inherit}
 .serif{font-family:var(--serif)}
 .wrap{max-width:1240px;margin:0 auto;width:100%;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* header: full-bleed band, contents on the same grid as the page */
+.topband{position:sticky;top:env(safe-area-inset-top,0px);z-index:35;background:var(--page);
+  border-bottom:1px solid transparent;transition:border-color .15s ease}
+.topband.stuck{border-bottom-color:var(--divider)}
+@media (prefers-reduced-motion:reduce){.topband{transition:none}}
 
 /* header */
 .top{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;padding-block:20px}
@@ -63,10 +72,10 @@ button{font-family:inherit;color:inherit}
 .rail{flex:1 1 220px;max-width:260px;min-width:0;display:flex;flex-direction:column;gap:20px}
 .col{flex:999 1 560px;min-width:0;display:flex;flex-direction:column;gap:24px}
 .side{display:flex;flex-direction:column;gap:2px}
-.side button{min-height:44px;display:flex;align-items:center;gap:8px;padding:0 12px;border-radius:12px;border:none;background:none;font:400 16px var(--sans);cursor:pointer;text-align:left;width:100%}
-.side button:hover{background:var(--softer)}
-.side button.on{background:var(--action);color:var(--card);font-weight:600}
-.side button.on::before{content:"";width:6px;height:6px;border-radius:999px;background:var(--coral);flex:none}
+.side > button{min-height:44px;display:flex;align-items:center;gap:8px;padding:0 12px;border-radius:12px;border:none;background:none;font:400 16px var(--sans);cursor:pointer;text-align:left;width:100%}
+.side > button:hover{background:var(--softer)}
+.side > button.on{background:var(--action);color:var(--card);font-weight:600}
+.side > button.on::before{content:"";width:6px;height:6px;border-radius:999px;background:var(--coral);flex:none}
 .sh{display:flex;justify-content:space-between;align-items:center;border-top:2px solid var(--divider);padding-top:4px;margin-bottom:4px}
 .lbl{margin:0;font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase}
 h1.page{margin:0;font-family:var(--serif);font-weight:400;font-size:32px;line-height:1.2;text-wrap:balance}
@@ -78,7 +87,8 @@ h1.display{margin:0;font-family:var(--serif);font-weight:400;font-size:44px;line
 .tabs{display:flex;flex-wrap:wrap;gap:16px}
 .tabs button{padding:12px 0 10px;background:none;border:none;font:400 15px var(--sans);color:var(--ink-muted);cursor:pointer}
 .tabs button.on{color:var(--ink);font-weight:600;border-bottom:2px solid var(--attention)}
-.ctl{display:flex;align-items:center;gap:4px;color:var(--ink-muted);font-size:15px}
+.ctlgroup{display:flex;align-items:center;flex-wrap:wrap;gap:4px 16px;min-width:0}
+.ctl{display:flex;align-items:center;gap:4px;color:var(--ink-muted);font-size:15px;min-width:0}
 .ctl select{height:44px;border:none;background:transparent;color:var(--ink);font:500 15px var(--sans);cursor:pointer;max-width:9.5em}
 .vr{width:1px;height:20px;background:var(--divider)}
 .fbtn{height:44px;padding:0 16px;border:none;border-radius:999px;background:var(--soft);color:var(--action);font:600 14px var(--sans);display:inline-flex;align-items:center;gap:8px;cursor:pointer}
@@ -103,11 +113,10 @@ h1.display{margin:0;font-family:var(--serif);font-weight:400;font-size:44px;line
 .tt:hover{color:var(--attention)}
 .meta{font-size:13px;color:var(--ink-muted);display:flex;flex-wrap:wrap;align-items:center;gap:8px}
 .b{height:22px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:600;display:inline-flex;align-items:center;background:var(--soft);color:var(--action)}
-.b.video{background:var(--action);color:var(--card)}
-.b.podcast{background:var(--softer);color:var(--action)}
-.fchip{font-size:12px;padding:3px 9px;background:var(--soft);border-radius:999px;flex:none;color:var(--ink-muted)}
 .acts{display:flex;gap:6px;flex:none;opacity:0;transition:opacity .12s ease}
 .row:hover .acts,.row:focus-within .acts{opacity:1}
+.row.plain{cursor:pointer}
+.row.plain:hover .tt,.row.plain:focus-visible .tt{color:var(--attention)}
 .act{width:40px;height:40px;border:1px solid var(--divider);background:var(--card);border-radius:999px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink-muted)}
 .act:hover{border-color:var(--action);color:var(--action)}
 .more{width:44px;height:44px;border:none;background:none;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:none;color:var(--ink-muted)}
@@ -125,9 +134,7 @@ h1.display{margin:0;font-family:var(--serif);font-weight:400;font-size:44px;line
   box-shadow:0 12px 36px rgba(47,48,32,.18);animation:drop .2s cubic-bezier(.2,.8,.3,1) both}
 .toast.out{animation:lift .16s ease-in both}
 .toast .tick{width:32px;height:32px;border-radius:999px;background:var(--softer);display:flex;align-items:center;justify-content:center;flex:none}
-.toast .tmsg{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
-.toast .tverb{font-size:15px;font-weight:600;line-height:1.3}
-.toast .tsub{font-size:13px;color:var(--ink-muted);line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.toast .tmsg{flex:1;min-width:0;font-size:15px;font-weight:500;line-height:1.35}
 .toast .tundo{min-height:40px;padding:0 16px;border:none;border-radius:999px;background:var(--softer);color:var(--action);
   font:600 15px var(--sans);cursor:pointer;flex:none}
 .toast .tundo:hover{background:var(--action);color:var(--card)}
@@ -156,14 +163,28 @@ h1.display{margin:0;font-family:var(--serif);font-weight:400;font-size:44px;line
 .btn.soft{background:var(--control);color:var(--ink)}
 .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--divider);height:40px}
 .field{width:100%;height:48px;border:1px solid var(--border);border-radius:12px;padding:0 16px;font:400 15px var(--sans);color:var(--ink);background:var(--card)}
+select.field{appearance:none;-webkit-appearance:none;padding-right:46px;text-overflow:ellipsis;
+  background-image:var(--chevron);background-repeat:no-repeat;background-position:right 16px center;background-size:16px 16px}
+.ctl select{appearance:none;-webkit-appearance:none;padding-right:26px;text-overflow:ellipsis;
+  background-image:var(--chevron);background-repeat:no-repeat;background-position:right 4px center;background-size:14px 14px}
 label.stack{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600;color:var(--ink-muted)}
 .card{background:var(--card);border-radius:24px;padding:24px;display:flex;flex-direction:column;gap:12px}
 
 /* overlays */
-.scrim{position:fixed;inset:0;background:var(--scrim);z-index:60;display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;
-  padding:10vh max(16px,env(safe-area-inset-right,0px)) 16px max(16px,env(safe-area-inset-left,0px))}
-.dialog{width:100%;max-width:560px;background:var(--card);border-radius:24px;padding:24px;display:flex;flex-direction:column;gap:20px}
-.search-box{width:100%;max-width:720px;background:var(--card);border-radius:24px;box-shadow:var(--menu-shadow);overflow:hidden}
+.scrim{position:fixed;inset:0;background:var(--scrim);z-index:60;display:flex;align-items:center;justify-content:center;overflow-y:auto;
+  padding:max(24px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(24px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+/* height follows the content until it hits the cap, then the body scrolls.
+   Nothing inside resizes the dialog, so it never jumps as content changes. */
+.dialog{width:100%;max-width:560px;max-height:min(760px,calc(100vh - 48px));background:var(--card);border-radius:24px;
+  display:flex;flex-direction:column;overflow:hidden}
+.dialog .dhead{flex:none;padding:24px 24px 16px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.dialog .dbody{flex:1 1 auto;min-height:0;overflow-y:auto;padding:0 24px;display:flex;flex-direction:column;gap:20px}
+.dialog .dfoot{flex:none;padding:16px 24px 24px;display:flex;gap:8px;justify-content:flex-end}
+.dialog.wide{max-width:720px}
+.picklist{min-height:300px;max-height:420px;overflow-y:auto}
+.search-box{width:100%;max-width:720px;max-height:min(760px,calc(100vh - 48px));background:var(--card);border-radius:24px;
+  box-shadow:var(--menu-shadow);overflow:hidden;display:flex;flex-direction:column}
+.search-hits{flex:1 1 auto;min-height:260px;max-height:50vh;overflow-y:auto;padding:8px 8px 16px}
 .alert{margin:0;background:var(--problem);border-radius:12px;padding:12px 16px;font-size:14px;color:var(--attention-deep)}
 
 /* reader */
@@ -184,8 +205,9 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .greet .left{flex:1 1 420px;min-width:0}
 .stamp{margin:0 0 8px;font-size:15px;color:var(--ink-muted)}
 h1.hero{margin:0;font-family:var(--serif);font-weight:400;font-size:clamp(34px,6vw,60px);line-height:1.08;letter-spacing:-.02em;text-wrap:balance}
-.timecard{flex:0 1 300px;background:var(--card);border-radius:24px;padding:20px 24px;display:flex;flex-direction:column;gap:12px}
-.timecard .trow{display:flex;justify-content:space-between;gap:12px;font-size:14px}
+.timecard{flex:0 1 360px;min-width:300px;background:var(--card);border-radius:24px;padding:20px 24px;display:flex;flex-direction:column;gap:12px}
+.timecard .trow{display:flex;justify-content:space-between;align-items:center;gap:16px;font-size:14px;font-variant-numeric:tabular-nums}
+.timecard .tnum{white-space:nowrap;flex:none}
 .bar{height:8px;background:var(--control);border-radius:4px}
 .bar span{display:block;height:8px;background:var(--action-light);border-radius:4px}
 .h2{margin:0;font-family:var(--serif);font-weight:400;font-size:32px;line-height:1.2;text-wrap:balance}
@@ -196,17 +218,22 @@ h1.hero{margin:0;font-family:var(--serif);font-weight:400;font-size:clamp(34px,6
 .featured .fbody{flex:1 1 340px;min-width:0;padding:28px;display:flex;flex-direction:column;gap:12px;justify-content:center}
 .featured h2{margin:0;font-family:var(--serif);font-weight:400;font-size:28px;line-height:1.22;text-wrap:balance}
 .fcols{display:flex;flex-wrap:wrap;gap:16px}
-.fcard{flex:1 1 220px;min-width:0;background:var(--card);border-radius:20px;padding:20px;border:none;cursor:pointer;
-  text-align:left;display:flex;flex-direction:column;gap:10px}
+.fcard{flex:1 1 220px;min-width:0;background:var(--card);border-radius:20px;padding:16px 18px;border:none;cursor:pointer;
+  text-align:left;display:flex;flex-direction:column;gap:4px}
 .fcard:hover{box-shadow:0 10px 28px rgba(47,48,32,.1)}
-.fcard .ftop{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.fcard .fname{font-family:var(--serif);font-size:22px;line-height:1.2;color:var(--ink)}
+.fcard .ftop{display:flex;align-items:center;gap:10px;min-width:0}
+.fcard .fname{font-family:var(--serif);font-size:20px;line-height:1.2;color:var(--ink);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .fcard:hover .fname{color:var(--attention)}
-.fcard .fmeta{font-size:14px;color:var(--ink-muted)}
+.fcard .fmeta{font-size:13px;color:var(--ink-muted);padding-left:34px}
 .fcol{flex:1 1 220px;min-width:0;border-top:2px solid var(--divider);padding-top:16px;display:flex;flex-direction:column}
 .fcol .ch{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding-bottom:8px}
 .fcol h3{margin:0;font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;gap:8px}
-.ficon{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:999px;background:var(--problem);flex:none}
+.pickrow{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:12px;padding:8px 8px 8px 8px;cursor:grab}
+.pickrow:active{cursor:grabbing}
+.pickrow.dragging{opacity:.45}
+.pickrow.dropping{outline:2px dashed var(--action);outline-offset:-2px}
+.griphandle{display:inline-flex;align-items:center;justify-content:center;width:24px;flex:none}
+.ficon{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:999px;background:var(--problem);flex:none}
 .fcol button.pick{font-family:var(--serif);font-size:20px;line-height:26px;height:52px;padding:16px 0 0;margin-bottom:16px;
   border:none;border-top:1px solid var(--divider);background:none;text-align:left;cursor:pointer;color:var(--ink);
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;width:100%}
@@ -214,6 +241,7 @@ h1.hero{margin:0;font-family:var(--serif);font-weight:400;font-size:clamp(34px,6
 .fcol .none{font-size:15px;color:var(--ink-muted);border-top:1px solid var(--divider);padding-top:16px;margin:0}
 .walkgrid{display:flex;flex-wrap:wrap;gap:20px}
 .walkcard{flex:1 1 340px;min-width:0;background:var(--softer);border-radius:24px;padding:20px;display:flex;gap:16px;align-items:center}
+.walkcard.on{outline:2px solid var(--action);outline-offset:-2px}
 .walkcard .art{width:120px;aspect-ratio:16/9;flex:none;border-radius:12px;max-width:100%}
 .walkcard .wtx{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px;text-align:left}
 .walkcard .wtx .wt{font-family:var(--serif);font-size:20px;line-height:1.25;background:none;border:none;padding:0;text-align:left;cursor:pointer;color:var(--ink)}
@@ -242,8 +270,8 @@ h1.hero{margin:0;font-family:var(--serif);font-weight:400;font-size:clamp(34px,6
   .columns{gap:24px}
   .rail{max-width:none;flex:1 1 100%}
   .side{flex-direction:row;flex-wrap:wrap;gap:6px}
-  .side button{width:auto;background:var(--soft)}
-  .side button.on{background:var(--action)}
+  .side > button{width:auto;background:var(--soft)}
+  .side > button.on{background:var(--action)}
   .sh{border-top:none;width:100%}
 }
 @media (max-width:600px){
@@ -257,8 +285,14 @@ h1.hero{margin:0;font-family:var(--serif);font-weight:400;font-size:clamp(34px,6
   .meta{font-size:12px}
   .acts{opacity:1}
   .reader h1{font-size:30px}
-  .controls{margin-top:-6px}
-  .ctl select{max-width:7em}
+  .controls{margin-top:-6px;flex-direction:column;align-items:stretch;gap:8px}
+  .tabs{gap:14px}
+  .ctlgroup{width:100%;gap:6px 12px;justify-content:space-between}
+  .ctl{font-size:14px}
+  .ctl select{max-width:8.5em;font-size:14px}
+  .vr{display:none}
+  .fbtn{padding:0 12px}
+  .panel{top:auto;left:0;right:0;width:auto;position:absolute;margin-top:4px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -280,11 +314,16 @@ const I = {
   play:'<svg width="22" height="22" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>',
   playDark:'<svg width="18" height="18" viewBox="0 0 24 24" fill="var(--ink)" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>',
   playOlive:'<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>',
+  pauseWhite:'<svg width="18" height="18" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>',
   pause:'<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>',
   trash:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>',
   back:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>',
   close:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
   plus:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
+  grip:'<svg width="18" height="18" viewBox="0 0 24 24" fill="var(--border)" aria-hidden="true"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg>',
+  up:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>',
+  down:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>',
+  pencil:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg>',
   folder:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--attention)" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h6l2 2h10v10H3z"/></svg>',
   arrow:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--attention)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-4px;margin-left:6px"><path d="M7 17L17 7M9 7h8v8"/></svg>',
 };
@@ -395,6 +434,38 @@ function load(){
   return makeSeed();
 }
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+const HOME_MAX = 3;
+const FRESH_COUNT = 9;
+
+/* Fresh today is a snapshot of the newest content as the day started. It does
+   not clear as you read, save or archive: it is the morning's front page, and
+   the Feed is where the rest lives. Rebuilt once a day. */
+function todayKey(){ const d = new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
+function snapshot(){
+  const key = todayKey();
+  if(!S.snapshot || S.snapshot.date !== key){
+    const pool = S.items.filter(i=>!i.deletedAt)
+      .sort((a,b)=>new Date(b.publishedAt)-new Date(a.publishedAt));
+    const feat = pool.find(i=>i.kind==='article'||i.kind==='discussion');
+    S.snapshot = {
+      date: key,
+      featuredId: feat ? feat.id : null,
+      ids: pool.filter(i=>!feat || i.id!==feat.id).slice(0, FRESH_COUNT).map(i=>i.id)
+    };
+    save();
+  }
+  const byId = id => S.items.find(i=>i.id===id && !i.deletedAt);
+  return {
+    featured: S.snapshot.featuredId ? byId(S.snapshot.featuredId) : null,
+    fresh: S.snapshot.ids.map(byId).filter(Boolean)
+  };
+}
+function homeFolders(){
+  if(!Array.isArray(S.homeFolders)) S.homeFolders = S.folders.slice(0,HOME_MAX).map(f=>f.id);
+  // drop any folder that no longer exists
+  S.homeFolders = S.homeFolders.filter(id=>S.folders.some(f=>f.id===id)).slice(0,HOME_MAX);
+  return S.homeFolders.map(id=>S.folders.find(f=>f.id===id)).filter(Boolean);
+}
 function patch(id, p){ const it = S.items.find(i=>i.id===id); if(!it) return; Object.assign(it,p); save(); }
 function src(it){ return S.sources.find(s=>s.id===it.sourceId); }
 function foldersOf(it){ const s = src(it); if(!s) return []; return s.folders.map(f=>(S.folders.find(x=>x.id===f)||{}).name).filter(Boolean); }
@@ -435,7 +506,7 @@ let V = {
   overlay:null,            // 'add' | 'search'
   menuFor:null, filterOpen:false,
   undo:null,               // {text, apply}
-  readSize:20,
+  readSize:20, sizeOpen:false, editGoal:false,
   player:null, playing:false,  // {itemId}
   prefs:{}                 // per list: {tab, group, sort, kinds, folder, length}
 };
@@ -458,8 +529,7 @@ function playerHTML(){
   if(!it) return '';
   const s = src(it) || {};
   return `<div class="player" role="region" aria-label="Now playing">
-    <span style="width:36px;height:36px;border-radius:10px;background:${s.color||'var(--m1)'};flex:none" aria-hidden="true"></span>
-    <span style="min-width:0;flex:0 1 200px;font-size:13px;line-height:1.3">
+    <span style="min-width:0;flex:0 1 200px;font-size:13px;line-height:1.3;padding-left:6px">
       <b style="font-weight:600;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(it.title)}</b>
       <span style="color:var(--softer)">${esc(s.title||'')} · ${it.minutes} min</span>
     </span>
@@ -480,8 +550,9 @@ function go(view, extra){
 
 /* ---------------------------------------------------------------- shared pieces */
 function header(){
+  // the band fills the width; what is in it lines up with the page's 1240 grid
   const places = [['home','Home'],['feed','Feed'],['library','Library'],['listen','Listen'],['sources','Sources']];
-  return `<div class="wrap"><header class="top">
+  return `<div class="topband" id="topband"><div class="wrap"><header class="top">
     <button class="brand" data-go="home" style="border:none;background:none;cursor:pointer">${I.mark}quiet hours</button>
     <nav class="nav" aria-label="Main">
       ${places.map(([v,l])=>`<button data-go="${v}" class="${V.view===v||(v==='library'&&V.view==='library')?'on':''}">${l}</button>`).join('')}
@@ -490,7 +561,7 @@ function header(){
       <button class="ib" aria-label="Search" data-overlay="search">${I.search}</button>
       <button class="add" data-overlay="add"><span aria-hidden="true" style="margin-right:6px">+</span>Add</button>
     </div>
-  </header></div>`;
+  </header></div></div>`;
 }
 
 function controlRow(key, cfg){
@@ -501,7 +572,7 @@ function controlRow(key, cfg){
     <nav class="tabs" aria-label="Show">
       ${cfg.tabs.map(t=>`<button data-tab="${key}|${t.id}" class="${p.tab===t.id?'on':''}" ${p.tab===t.id?'aria-current="true"':''}>${t.label}</button>`).join('')}
     </nav>
-    <div style="display:flex;gap:16px;align-items:center">
+    <div class="ctlgroup">
       <label class="ctl">Group by
         <select data-pref="${key}|group">${cfg.groups.map(g=>`<option ${p.group===g?'selected':''}>${g}</option>`).join('')}</select>
       </label>
@@ -573,17 +644,31 @@ function groupItems(list, mode){
   return [...map.entries()];
 }
 
-function rowHTML(it){
+function rowHTML(it, opts){
+  // on Home a row carries no folder and no "Article": the thumbnail and its play
+  // glyph already say whether something is read, watched or heard. Video and
+  // podcast keep their badge, because the medium is worth naming.
+  const quietBadge = !!(opts && opts.quietBadge);
+  // plain rows carry no actions at all: the whole row opens the item
+  const plain = !!(opts && opts.plain);
   const s = src(it) || {};
-  const f = foldersOf(it)[0];
-  const badge = it.kind==='video' ? 'b video' : it.kind==='podcast' ? 'b podcast' : 'b';
+  const badge = 'b';
   const media = (it.kind==='video'||it.kind==='podcast') ? I.play : '';
+  if(plain) return `<article class="row plain" data-read="${it.id}" role="link" tabindex="0" aria-label="${esc(it.title)}">
+    <span class="dot ${it.seenAt?'off':''}">${it.seenAt?'':'<span style="position:absolute;left:-9999px">New</span>'}</span>
+    <div class="th" style="background:${s.color||'var(--m4)'}">${media}</div>
+    <div class="tx">
+      <span class="tt">${esc(it.title)}</span>
+      <span class="meta">${esc(s.title||'')} · ${it.minutes} min · ${timeAgo(it.publishedAt)}</span>
+    </div>
+  </article>`;
+
   return `<article class="row">
     <span class="dot ${it.seenAt?'off':''}">${it.seenAt?'':'<span style="position:absolute;left:-9999px">New</span>'}</span>
     <div class="th" style="background:${s.color||'var(--m4)'}">${media}</div>
     <div class="tx">
       <button class="tt" data-read="${it.id}">${esc(it.title)}</button>
-      <span class="meta"><span class="${badge}">${KIND[it.kind]}</span>${esc(s.title||'')} · ${it.minutes} min · ${timeAgo(it.publishedAt)}${f?` <span class="fchip">${esc(f)}</span>`:''}</span>
+      <span class="meta">${quietBadge ? '' : `<span class="${badge}">${KIND[it.kind]}</span>`}${esc(s.title||'')} · ${it.minutes} min · ${timeAgo(it.publishedAt)}</span>
     </div>
     <div class="acts">
       <button class="act" data-act="later|${it.id}" aria-label="${it.savedAt?'Remove from Later':'Save to Later'}" title="${it.savedAt?'Remove from Later':'Save to Later'}">${I.clock}</button>
@@ -605,7 +690,7 @@ function rowHTML(it){
    Rendered outside the app's markup so a re-render never kills the timer. */
 const TOAST_MS = 10000;
 let toastSeq = 0;
-function showToast(verb, subject, undoFn){
+function showToast(message, undoFn){
   const layer = document.getElementById('toast-layer');
   if(!layer) return;
   // one at a time: the newest replaces the last, so they never stack up
@@ -616,7 +701,7 @@ function showToast(verb, subject, undoFn){
   el.id = id;
   el.setAttribute('role','status');
   el.innerHTML = `<span class="tick">${I.check}</span>
-    <span class="tmsg"><span class="tverb">${esc(verb)}</span><span class="tsub">${esc(subject)}</span></span>
+    <span class="tmsg">${esc(message)}</span>
     ${undoFn?'<button class="tundo">Undo</button>':''}
     <button class="tx" aria-label="Dismiss">${I.close}</button>`;
   layer.appendChild(el);
@@ -632,7 +717,7 @@ function showToast(verb, subject, undoFn){
   // pausing on hover, so a toast you are reading does not vanish mid-sentence
   // hovering holds it open, so a toast you are reading does not vanish mid-sentence
   el.addEventListener('mouseenter', ()=>clearTimeout(timer));
-  el.addEventListener('mouseleave', ()=>{ timer = setTimeout(close, 4000); });
+  el.addEventListener('mouseleave', ()=>{ timer = setTimeout(close, TOAST_MS); });
 }
 
 function listBlock(key, cfg, items){
@@ -643,7 +728,7 @@ function listBlock(key, cfg, items){
   return controlRow(key,cfg) + groupItems(shown, p.group).map(([k,list])=>
     `<section style="display:flex;flex-direction:column">
       ${k?`<div class="ghead"><h2 class="lbl">${esc(k)}</h2></div>`:''}
-      <div class="list" ${k?'style="border-top:none"':''}>${list.map(rowHTML).join('')}</div>
+      <div class="list" ${k?'style="border-top:none"':''}>${list.map(i=>rowHTML(i)).join('')}</div>
     </section>`).join('') + `<p class="ending">${esc(cfg.ending(shown.length, tabLabel))}</p>`;
 }
 
@@ -677,13 +762,17 @@ function viewHome(){
   // reading time: minutes cleared in the last 24 hours, against a 30 minute quiet hour
   const readToday = live().filter(i=>i.seenAt && (Date.now()-new Date(i.seenAt)) < 86400000)
                           .reduce((n,i)=>n+i.minutes,0);
-  const goal = 30, pct = Math.min(100, Math.round(readToday/goal*100)), left = Math.max(0, goal-readToday);
+  const goal = S.settings.readingGoal || 30;
+  const pct = Math.min(100, Math.round(readToday/goal*100));
 
   const byNew = (a,b)=>new Date(b.publishedAt)-new Date(a.publishedAt);
-  const featured = unseen.filter(i=>i.kind==='article'||i.kind==='discussion').sort(byNew)[0];
-  const fresh = unseen.filter(i=>!featured || i.id!==featured.id).sort(byNew).slice(0,5);
-  const walk = unseen.filter(i=>i.kind==='podcast'||i.kind==='video').sort(byNew).slice(0,2);
-  const waiting = later.slice().sort((a,b)=>new Date(a.savedAt||0)-new Date(b.savedAt||0)).slice(0,3);
+  const snap = snapshot();
+  const featured = snap.featured;
+  const fresh = snap.fresh;
+  // the two newest things to play, whatever their state: this section refreshes
+  // daily rather than emptying as you use it, so nothing vanishes when you click
+  const walk = live().filter(i=>(i.kind==='podcast'||i.kind==='video') && !isArchived(i))
+                     .sort(byNew).slice(0,2);
   const fs = featured ? (src(featured)||{}) : {};
   const ffolder = featured ? (foldersOf(featured)[0]||'') : '';
 
@@ -696,9 +785,20 @@ function viewHome(){
         <h1 class="hero">${greet}<br><span class="accent">${unseen.length?"Here's what's new.":"You're all caught up."}</span></h1>
       </div>
       <div class="timecard">
-        <div class="trow"><span style="font-weight:600">Today's reading time</span><span style="color:var(--ink-muted)">${readToday} of ${goal} min</span></div>
+        <div class="trow">
+          <span style="font-weight:600;min-width:0">Today's reading time</span>
+          ${V.editGoal
+            ? `<span class="tnum" style="display:flex;align-items:center;gap:6px">
+                 <input id="goal-input" type="number" min="5" max="240" step="5" value="${goal}"
+                   style="width:68px;height:36px;border:1px solid var(--border);border-radius:8px;padding:0 8px;font:500 14px var(--sans);background:var(--card);color:var(--ink)">
+                 <span style="color:var(--ink-muted)">min</span>
+                 <button class="lk" data-goalsave="1">Save</button>
+               </span>`
+            : `<span class="tnum" style="display:flex;align-items:center;gap:4px;color:var(--ink-muted)">${readToday} of ${goal} min
+                 <button class="ib bare" data-goaledit="1" aria-label="Edit your daily goal" title="Edit your daily goal" style="width:32px;height:32px;color:var(--action)">${I.pencil}</button>
+               </span>`}
+        </div>
         <div class="bar" role="img" aria-label="${readToday} of ${goal} minutes read today"><span style="width:${pct}%"></span></div>
-        <p style="margin:0;font-size:13px;color:var(--ink-muted);line-height:1.4">${left?left+" minutes left in today's quiet hour.":"That's your quiet hour done. Anything more is a bonus."}</p>
       </div>
     </section>
 
@@ -711,71 +811,54 @@ function viewHome(){
         <span class="meta">${esc(fs.title||'')} · ${featured.minutes} min read</span>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
           <button class="btn" data-read="${featured.id}">Read now</button>
-          <button class="btn soft" data-act="later|${featured.id}">${featured.savedAt?'In Later':'Later'}</button>
         </div>
       </div>
     </section>`:''}
 
     ${fresh.length?`<section aria-label="Fresh today" style="display:flex;flex-direction:column;gap:20px">
       <div class="sechead">
-        <div style="flex:1 1 320px;min-width:0">
-          <h2 class="h2">Fresh today</h2>
-          <p style="margin:8px 0 0;font-size:15px;color:var(--ink-muted);line-height:1.55">New since you last stopped by. Skim, save or let it go.</p>
-        </div>
+        <h2 class="h2">Fresh today</h2>
         <button class="lk" data-go="feed">Open the Feed${I.arrow}</button>
       </div>
-      <div class="list">${fresh.map(rowHTML).join('')}</div>
-    </section>`:`<section aria-label="Caught up" class="empty">
-      <h2>You're all caught up.</h2>
-      <p>Go enjoy your day. New things will be here when you come back.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
-        ${later.length?`<button class="btn" data-go="library">Open Later</button>`:''}
-        <button class="btn soft" data-go="feed">Browse seen</button>
-      </div>
+      <div class="list">${fresh.map(i=>rowHTML(i,{quietBadge:true, plain:true})).join('')}</div>
+    </section>`:`<section aria-label="Nothing yet" class="empty">
+      <h2>Nothing has come in yet.</h2>
+      <p>Follow a source and tomorrow morning this is where the day starts.</p>
+      <button class="btn" data-overlay="add">${I.plus}Add a source</button>
     </section>`}
 
     <section aria-label="Your folders" style="display:flex;flex-direction:column;gap:20px">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
         <h2 class="h2">Your folders</h2>
-        ${S.folders.length>4?`<button class="lk" data-go="feed" style="margin-left:auto;margin-right:8px">All ${S.folders.length} folders</button>`:''}
-        <button class="gear" data-go="sources" aria-label="Choose and order folders" title="Choose and order folders">
+        <button class="gear" data-overlay="folders" aria-label="Choose and order folders" title="Choose and order folders">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
         </button>
       </div>
-      <div class="fcols">${S.folders.slice(0,4).map(f=>{
+      <div class="fcols">${homeFolders().map(f=>{
         const mine = unseen.filter(i=>inFolder(f,i));
         const mins = mine.reduce((n,i)=>n+i.minutes,0);
         return `<button class="fcard" data-folder="${f.id}">
-          <span class="ftop"><span class="ficon">${I.folder}</span>${mine.length?`<span class="fmeta">${mins} min</span>`:''}</span>
-          <span class="fname">${esc(f.name)}</span>
-          <span class="fmeta">${mine.length?mine.length+' to look at':'Nothing new'}</span>
+          <span class="ftop"><span class="ficon">${I.folder}</span><span class="fname">${esc(f.name)}</span></span>
+          <span class="fmeta">${mine.length?mine.length+' to look at · '+mins+' min':'Nothing new'}</span>
         </button>`;
-      }).join('')}</div>
+      }).join('')}${homeFolders().length?'':`<p class="note" style="font-size:15px">No folders on Home yet. Use the gear to pick up to three.</p>`}</div>
     </section>
 
-    ${walk.length?`<section aria-label="For your walk" style="display:flex;flex-direction:column;gap:20px">
-      <h2 class="h2">For your walk</h2>
+    ${walk.length?`<section aria-label="For your listen" style="display:flex;flex-direction:column;gap:20px">
+      <h2 class="h2">For your listen</h2>
       <div class="walkgrid">${walk.map(i=>{
         const sc = src(i)||{};
-        return `<article class="walkcard">
+        return `<article class="walkcard ${V.player===i.id?'on':''}">
           <div class="art" style="background:${sc.color||'var(--m3)'}"></div>
           <div class="wtx">
             <span style="font-size:13px;color:var(--ink-muted)">${KIND[i.kind]} · ${i.minutes} min</span>
             <button class="wt" data-read="${i.id}">${esc(i.title)}</button>
           </div>
-          <button class="playbtn" data-play="${i.id}" aria-label="Play ${i.kind==='podcast'?'episode':'video'}">${I.play}</button>
+          <button class="playbtn" data-play="${i.id}" aria-label="${V.player===i.id&&V.playing?'Pause':'Play'} ${i.kind==='podcast'?'episode':'video'}">${V.player===i.id&&V.playing?I.pauseWhite:I.play}</button>
         </article>`;
       }).join('')}</div>
     </section>`:''}
 
-    ${waiting.length?`<section aria-label="Waiting on your Later shelf" style="display:flex;flex-direction:column;gap:20px">
-      <div class="sechead"><h2 class="h2">Waiting for you later</h2>
-        <button class="lk" data-go="library">Open Later${I.arrow}</button></div>
-      <div class="latergrid">${waiting.map(i=>`<button class="latercard" data-read="${i.id}">
-        <span style="font-size:13px;color:var(--ink-muted)">Saved ${esc(timeAgo(i.savedAt||i.publishedAt).toLowerCase())}</span>
-        <span class="lt">${esc(i.title)}</span>
-      </button>`).join('')}</div>
-    </section>`:''}
   </main></div>`;
 }
 
@@ -804,11 +887,14 @@ function viewFeed(){
     <aside class="rail">
       <nav class="side" aria-label="All items"><button data-folder="" class="${!V.folder?'on':''}">Everything</button></nav>
       <nav class="side" aria-label="Folders">
-        <div class="sh"><h2 class="lbl">Folders</h2></div>
+        <div class="sh"><h2 class="lbl">Folders</h2>
+          <button class="ib bare" data-overlay="newfolder" aria-label="New folder" title="New folder"
+            style="width:36px;height:36px;margin-right:-8px;color:var(--attention)">${I.plus}</button>
+        </div>
         ${S.folders.map(f=>`<button data-folder="${f.id}" class="${V.folder===f.id?'on':''}">${esc(f.name)}</button>`).join('')}
       </nav>
       <nav class="side" aria-label="Sources">
-        <div class="sh"><h2 class="lbl">Sources</h2><button class="lk" data-go="sources" style="color:var(--attention)">Manage</button></div>
+        <div class="sh"><h2 class="lbl">Sources</h2><button class="lk" data-go="sources" style="color:var(--attention);margin-left:auto">Manage</button></div>
         ${S.sources.slice(0,6).map(s=>`<button data-go="sources"><span style="width:20px;height:20px;border-radius:6px;background:${s.color};flex:none" aria-hidden="true"></span>${esc(s.title)}</button>`).join('')}
       </nav>
     </aside>
@@ -886,18 +972,16 @@ function viewSources(){
       ${tabs.map(t=>`<button data-stab="${t[0]}" class="${p.tab===t[0]?'on':''}">${t[1]}</button>`).join('')}
       ${attention.length?`<button data-stab="attention" class="${p.tab==='attention'?'on':''}" style="color:var(--attention);font-weight:500">Needs attention · ${attention.length}</button>`:''}
     </nav></div>
-        ${!S.sources.length?`<div class="empty"><h2>No sources yet.</h2>
+    ${!S.sources.length?`<div class="empty"><h2>No sources yet.</h2>
       <p>Paste a link to a blog, a newsletter, a channel or a podcast and it starts filling your Feed.</p>
       <button class="btn" data-overlay="add">${I.plus}Add your first source</button></div>`
     :`<div class="list">${shown.map(s=>{
       const its = live().filter(i=>i.sourceId===s.id).sort((a,b)=>new Date(b.publishedAt)-new Date(a.publishedAt));
-      const f = (s.folders.map(x=>(S.folders.find(y=>y.id===x)||{}).name).filter(Boolean))[0];
       return `<article class="row">
         <span style="width:40px;height:40px;border-radius:10px;background:${s.color};flex:none" aria-hidden="true"></span>
         <div class="tx"><span style="font-size:16px;font-weight:500">${esc(s.title)}</span>
           <span class="meta"><span class="b">${KIND[s.kind]}</span>${its.length?'Last post '+timeAgo(its[0].publishedAt).toLowerCase():'Nothing yet'}
           ${s.status==='needs_attention'?`<span style="color:var(--attention);font-weight:500">· Not updating, check the link</span>`:''}</span></div>
-        ${f?`<span class="fchip">${esc(f)}</span>`:''}
         <button class="lk" data-sfeed="${s.folders[0]||''}" style="flex:none">View items</button>
       </article>`;
     }).join('')}</div>
@@ -939,15 +1023,25 @@ function viewRead(){
   return `<div class="rbar"><div class="wrap" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;padding-block:6px">
       <button class="lk" data-back="1" style="display:inline-flex;align-items:center;gap:6px;min-height:44px">${I.back} Back</button>
       <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-        <button class="ib bare" data-size="1" aria-label="Text size" title="Text size" style="font-family:var(--serif);font-size:16px;font-weight:500">Aa</button>
+        <span style="position:relative;display:inline-flex">
+          <button class="ib bare" data-sizeopen="1" aria-label="Text size" aria-expanded="${V.sizeOpen?'true':'false'}" title="Text size"
+            style="font-family:var(--serif);font-size:16px;font-weight:500;${V.sizeOpen?'background:var(--soft)':''}">Aa</button>
+          ${V.sizeOpen?`<span class="menu" style="top:48px;left:0;width:200px" role="menu" aria-label="Text size">
+            <span class="lbl" style="color:var(--ink-muted);padding:6px 12px 8px">Text size</span>
+            ${[['Small',17],['Comfortable',20],['Large',23],['Largest',26]].map(([label,px])=>
+              `<button class="mi" data-size="${px}" style="justify-content:space-between">
+                 <span class="serif" style="font-size:${Math.min(px,22)}px">${label}</span>
+                 ${V.readSize===px?I.check:''}
+               </button>`).join('')}
+          </span>`:''}
+        </span>
         <button class="btn ghost" data-act="later|${it.id}">${I.clock} ${it.savedAt?'In Later':'Later'}</button>
         <button class="btn ghost" data-act="archive|${it.id}">${I.box} Archive</button>
         <button class="ib bare" data-act="delete|${it.id}" aria-label="Delete" title="Delete">${I.trash}</button>
       </div>
-    </div><div class="progress"><span style="width:34%"></span></div></div>
+    </div><div class="progress" role="img" aria-label="How far through this item you are"><span id="read-progress" style="width:0%"></span></div></div>
     <div class="wrap"><article class="reader">
       <div class="meta" style="margin-bottom:16px">
-        <span style="width:24px;height:24px;border-radius:6px;background:${s.color};flex:none" aria-hidden="true"></span>
         <span style="font-weight:600;color:var(--ink)">${esc(s.title||'')}</span><span>·</span>
         <span>${timeAgo(it.publishedAt)}</span><span>·</span><span>${it.minutes} min</span>
         <span class="b">${KIND[it.kind]}</span>
@@ -961,24 +1055,108 @@ function viewRead(){
 }
 
 /* ---------------------------------------------------------------- overlays */
-let addError = null, searchQ = '', searchScope = 'Everywhere';
+let addError = null, folderError = null, searchQ = '', searchScope = 'Everywhere';
 
 function overlayAdd(){
   return `<div class="scrim" data-scrim="1"><div class="dialog" role="dialog" aria-label="Follow something new" aria-modal="true">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
-      <div><p class="lbl" style="color:var(--ink-muted)">Add</p>
-        <h2 class="serif" style="margin:6px 0 0;font-weight:400;font-size:28px">Follow something new</h2></div>
+    <div class="dhead">
+      <div>
+        <p class="lbl" style="color:var(--ink-muted)">Add</p>
+        <h2 class="serif" style="margin:6px 0 0;font-weight:400;font-size:28px">Follow something new</h2>
+      </div>
       <button class="ib" aria-label="Close" data-close="1" style="background:var(--soft)">${I.close}</button>
     </div>
-    <p style="margin:0;font-size:15px;line-height:1.6;color:var(--ink-body)">Paste a blog, a newsletter, a YouTube channel, a podcast or a subreddit. A feed link works too. In the finished app this resolves the feed and pulls in real posts.</p>
-    <label class="stack">Link<input class="field" id="add-url" placeholder="fieldnotes.example" autofocus></label>
-    ${S.folders.length?`<label class="stack">Folder<select class="field" id="add-folder">
-      <option value="">No folder</option>${S.folders.map(f=>`<option value="${f.id}">${esc(f.name)}</option>`).join('')}
-    </select></label>`:''}
-    ${addError?`<p class="alert" role="alert">${esc(addError)}</p>`:''}
-    <div style="display:flex;gap:8px;justify-content:flex-end">
+
+    <div class="dbody">
+      <p style="margin:0;font-size:15px;line-height:1.6;color:var(--ink-body)">
+        Paste a blog, a newsletter, a YouTube channel, a podcast or a subreddit. A feed link works
+        too. In the finished app this resolves the feed and pulls in real posts.
+      </p>
+
+      <label class="stack">Link
+        <input class="field" id="add-url" placeholder="fieldnotes.example" autofocus>
+      </label>
+
+      ${S.folders.length?`<label class="stack">Folder
+        <select class="field" id="add-folder">
+          <option value="">No folder</option>
+          ${S.folders.map(f=>`<option value="${f.id}">${esc(f.name)}</option>`).join('')}
+        </select>
+      </label>`:''}
+
+      ${addError?`<p class="alert" role="alert">${esc(addError)}</p>`:''}
+    </div>
+
+    <div class="dfoot">
       <button class="btn soft" data-close="1">Cancel</button>
       <button class="btn" data-follow="1">Follow</button>
+    </div>
+  </div></div>`;
+}
+
+function overlayFolders(){
+  const on = homeFolders();
+  const onIds = on.map(f=>f.id);
+  const available = S.folders.filter(f=>!onIds.includes(f.id));
+  const full = on.length >= HOME_MAX;
+  return `<div class="scrim" data-scrim="1"><div class="dialog wide" role="dialog" aria-label="Edit folders" aria-modal="true">
+    <div class="dhead">
+      <div>
+        <h2 class="serif" style="margin:0;font-weight:400;font-size:28px">Edit folders</h2>
+        <p style="margin:6px 0 0;font-size:15px;color:var(--ink-muted);line-height:1.5">Select up to three folders to display on your homepage.</p>
+      </div>
+      <button class="ib" aria-label="Close" data-close="1" style="background:var(--soft)">${I.close}</button>
+    </div>
+
+    <div class="dbody">
+      <div style="display:flex;flex-wrap:wrap;gap:20px">
+        <div style="flex:1 1 260px;min-width:0;border:1px solid var(--control);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:8px">
+          <div style="padding-bottom:8px;border-bottom:2px solid var(--divider);flex:none"><span class="lbl">Available · ${available.length}</span></div>
+          <div class="picklist">
+            ${available.length?available.map(f=>`<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:48px;border-bottom:1px solid var(--divider);font-size:16px">
+              ${esc(f.name)}
+              <button class="chip" data-fadd="${f.id}" ${full?'disabled style="opacity:.45;cursor:not-allowed"':''}>+ Add</button>
+            </div>`).join(''):`<p class="note" style="padding-top:12px">Every folder is on your homepage.</p>`}
+          </div>
+          ${full?`<p class="note" style="flex:none">Your homepage is full. Remove one to add another.</p>`:''}
+        </div>
+
+        <div style="flex:1 1 260px;min-width:0;background:var(--page);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:8px">
+          <div style="padding-bottom:8px;border-bottom:2px solid var(--divider);flex:none"><span class="lbl">On your homepage · ${on.length} of ${HOME_MAX}</span></div>
+          <div class="picklist" style="display:flex;flex-direction:column;gap:8px">
+            ${on.length?on.map((f,n)=>`<div class="pickrow" draggable="true" data-fdrag="${f.id}" tabindex="0"
+                aria-label="${esc(f.name)}, position ${n+1} of ${on.length}. Drag to reorder, or use the arrow keys.">
+              <span class="griphandle" aria-hidden="true">${I.grip}</span>
+              <span style="width:26px;height:26px;border-radius:999px;background:var(--attention);color:#fff;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;flex:none">${n+1}</span>
+              <span style="flex:1;min-width:0;font-size:16px;font-weight:500">${esc(f.name)}</span>
+              <button class="ib bare" data-fremove="${f.id}" aria-label="Remove ${esc(f.name)}" title="Remove" style="width:36px;height:36px">${I.close}</button>
+            </div>`).join(''):`<p class="note" style="padding-top:12px">Nothing on your homepage yet. Add up to three from the left.</p>`}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dfoot">
+      <button class="btn" data-close="1">Done</button>
+    </div>
+  </div></div>`;
+}
+
+function overlayNewFolder(){
+  return `<div class="scrim" data-scrim="1"><div class="dialog" role="dialog" aria-label="New folder" aria-modal="true" style="max-width:480px">
+    <div class="dhead">
+      <h2 class="serif" style="margin:0;font-weight:400;font-size:28px">New folder</h2>
+      <button class="ib" aria-label="Close" data-close="1" style="background:var(--soft)">${I.close}</button>
+    </div>
+    <div class="dbody">
+      <label class="stack">Folder name
+        <input class="field" id="folder-name" placeholder="Design leadership" autofocus>
+      </label>
+      ${folderError?`<p class="alert" role="alert">${esc(folderError)}</p>`:''}
+    </div>
+    <div class="dfoot">
+      <button class="btn soft" data-close="1">Cancel</button>
+      <button class="btn" data-newfolder="1">Create folder</button>
     </div>
   </div></div>`;
 }
@@ -1003,17 +1181,17 @@ function overlaySearch(){
     if(i<0) return esc(text);
     return esc(text.slice(0,i))+'<mark style="background:var(--problem);color:var(--ink);padding:0 2px">'+esc(text.slice(i,i+term.length))+'</mark>'+esc(text.slice(i+term.length));
   };
-  return `<div class="scrim" data-scrim="1" style="padding-top:8vh"><div class="search-box" role="dialog" aria-label="Search" aria-modal="true">
-    <div style="display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--divider)">
+  return `<div class="scrim" data-scrim="1" style="align-items:flex-start;padding-top:8vh"><div class="search-box" role="dialog" aria-label="Search" aria-modal="true">
+    <div style="flex:none;display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--divider)">
       ${I.search}
       <input id="search-q" value="${esc(searchQ)}" placeholder="Search everything you follow" autofocus
         style="flex:1;min-width:0;border:none;outline:none;font-size:18px;font-family:var(--sans);color:var(--ink);background:transparent">
       <button class="lk" data-close="1" style="border:1px solid var(--divider);border-radius:6px;padding:2px 6px;font-size:12px;color:var(--ink-muted)">esc</button>
     </div>
-    <div style="display:flex;gap:6px;padding:12px 20px;flex-wrap:wrap;border-bottom:1px solid var(--divider)">
+    <div style="flex:none;display:flex;gap:6px;padding:12px 20px;flex-wrap:wrap;border-bottom:1px solid var(--divider)">
       ${['Everywhere','Feed','Library','Sources'].map(s=>`<button class="chip ${searchScope===s?'on':''}" data-scope="${s}">${s}</button>`).join('')}
     </div>
-    <div style="max-height:50vh;overflow-y:auto;padding:8px 8px 16px">
+    <div class="search-hits">
       ${!term?`<p style="margin:0;padding:24px 12px;color:var(--ink-muted);font-size:15px">Type to search titles, descriptions and source names.</p>`:''}
       ${term && !items.length && !sources.length?`<p style="margin:0;padding:24px 12px;color:var(--ink-muted);font-size:15px">Nothing matches “${esc(searchQ.trim())}”. Try fewer words.</p>`:''}
       ${items.map(i=>`<button class="mi" data-read="${i.id}" style="align-items:flex-start;padding:12px;min-height:56px">
@@ -1043,8 +1221,13 @@ function render(){
   const foot = V.view==='read' ? '' : `<div class="wrap"><p class="note" style="padding-block:0 32px">
     Prototype on sample data in your browser. <button class="lk" data-go="settings">Settings</button> can reset it or empty it to see day one.</p></div>`;
   document.getElementById('app').innerHTML = chrome + body + foot + playerHTML()
-    + (V.overlay==='add' ? overlayAdd() : V.overlay==='search' ? overlaySearch() : '');
-  const focus = document.getElementById(V.overlay==='add' ? 'add-url' : V.overlay==='search' ? 'search-q' : '');
+    + (V.overlay==='add' ? overlayAdd() : V.overlay==='search' ? overlaySearch()
+      : V.overlay==='folders' ? overlayFolders()
+      : V.overlay==='newfolder' ? overlayNewFolder() : '');
+  wireReaderProgress();
+  wireHeaderShadow();
+  const focus = document.getElementById(V.overlay==='add' ? 'add-url' : V.overlay==='search' ? 'search-q'
+    : V.overlay==='newfolder' ? 'folder-name' : '');
   if(focus){ focus.focus(); if(focus.value) focus.setSelectionRange(focus.value.length, focus.value.length); }
 }
 
@@ -1054,20 +1237,21 @@ function doAct(verb, id){
   if(!it) return;
   const before = {seenAt:it.seenAt, savedAt:it.savedAt, archivedAt:it.archivedAt, deletedAt:it.deletedAt};
   const now = new Date().toISOString();
+  const kind = KIND[it.kind];
   let text = '';
   if(verb==='later'){
-    if(it.savedAt){ patch(id,{savedAt:null}); text='Removed from Later'; }
-    else { patch(id,{savedAt:now}); text='Saved to Later'; }
+    if(it.savedAt){ patch(id,{savedAt:null}); text=kind+' removed from Later.'; }
+    else { patch(id,{savedAt:now}); text=kind+' saved for later.'; }
   } else if(verb==='archive'){
-    patch(id,{archivedAt:now, seenAt:it.seenAt||now}); text='Archived';
+    patch(id,{archivedAt:now, seenAt:it.seenAt||now}); text=kind+' archived.';
   } else if(verb==='seen'){
-    if(it.seenAt){ patch(id,{seenAt:null}); text='Marked as unseen'; }
-    else { patch(id,{seenAt:now}); text='Marked as seen'; }
+    if(it.seenAt){ patch(id,{seenAt:null}); text=kind+' marked as unseen.'; }
+    else { patch(id,{seenAt:now}); text=kind+' marked as seen.'; }
   } else if(verb==='delete'){
-    patch(id,{deletedAt:now}); text='Deleted';
+    patch(id,{deletedAt:now}); text=kind+' deleted.';
   }
   V.menuFor = null;
-  showToast(text, it.title, ()=>{ patch(id, before); });
+  showToast(text, ()=>{ patch(id, before); });
   if(V.view==='read' && (verb==='archive'||verb==='delete')){
     setTimeout(()=>{ V.view='feed'; render(); }, 450);
   }
@@ -1103,17 +1287,41 @@ function followSource(){
   V.overlay = null; addError = null;
   V.view = 'feed'; V.folder = null;
   render();
-  showToast('is now in your Feed, with 3 posts', name, ()=>{
+  const fname = folderId ? (S.folders.find(f=>f.id===folderId)||{}).name : null;
+  showToast(name + (fname ? ' added to ' + fname + '.' : ' added to your feed.'), ()=>{
     S.sources = S.sources.filter(s=>s.id!==id);
     S.items = S.items.filter(i=>i.sourceId!==id);
     save();
   });
 }
 
+function createFolder(){
+  const field = document.getElementById('folder-name');
+  const name = (field ? field.value : '').trim();
+  folderError = null;
+  if(!name){ folderError = 'Give the folder a name first.'; render(); return; }
+  if(S.folders.some(f=>f.name.toLowerCase() === name.toLowerCase())){
+    folderError = 'You already have a folder with that name.'; render(); return;
+  }
+  const id = 'folder-' + Date.now();
+  S.folders.push({id, name});
+  save();
+  V.overlay = null; folderError = null;
+  V.view = 'feed'; V.folder = id;
+  render();
+  showToast(name + ' created.', ()=>{
+    S.folders = S.folders.filter(f=>f.id !== id);
+    S.sources.forEach(sc=>{ sc.folders = sc.folders.filter(x=>x !== id); });
+    if(Array.isArray(S.homeFolders)) S.homeFolders = S.homeFolders.filter(x=>x !== id);
+    save();
+    V.folder = null; V.view = 'feed';
+  });
+}
+
 /* ---------------------------------------------------------------- events */
 document.addEventListener('click', e => {
-  const t = e.target.closest('[data-go],[data-overlay],[data-folder],[data-shelf],[data-read],[data-act],[data-menu],[data-tab],[data-filter],[data-fk],[data-ff],[data-fl],[data-close],[data-scrim],[data-follow],[data-scope],[data-stab],[data-sfeed],[data-seed],[data-size],[data-back],[data-play],[data-pp],[data-pclose]');
-  if(!t){ if(V.menuFor || V.filterOpen){ V.menuFor = null; V.filterOpen = false; render(); } return; }
+  const t = e.target.closest('[data-go],[data-overlay],[data-folder],[data-shelf],[data-read],[data-act],[data-menu],[data-tab],[data-filter],[data-fk],[data-ff],[data-fl],[data-close],[data-scrim],[data-follow],[data-scope],[data-stab],[data-sfeed],[data-seed],[data-size],[data-back],[data-play],[data-pp],[data-pclose],[data-fadd],[data-fremove],[data-goaledit],[data-goalsave],[data-sizeopen],[data-newfolder]');
+  if(!t){ if(V.menuFor || V.filterOpen || V.sizeOpen){ V.menuFor = null; V.filterOpen = false; V.sizeOpen = false; render(); } return; }
 
   const d = t.dataset;
   if(d.scrim !== undefined && t === e.target){ V.overlay = null; addError = null; render(); return; }
@@ -1136,21 +1344,73 @@ document.addEventListener('click', e => {
   if(d.ff){ const [key,f] = d.ff.split('|'); setPref(key,{folder:f}); return; }
   if(d.fl){ const [key,l] = d.fl.split('|'); setPref(key,{length:l}); return; }
   if(d.follow){ followSource(); return; }
+  if(d.newfolder){ createFolder(); return; }
   if(d.scope){ searchScope = d.scope; render(); return; }
   if(d.seed){ S = d.seed==='demo' ? makeSeed() : emptySeed(); save();
     V.prefs = {}; V.player = null;
     if(d.seed==='empty'){ go('home'); } else { render(); }
-    showToast(d.seed==='demo' ? 'is back: 8 sources, 40 items' : 'is empty, so you can see day one', 'Sample content');
+    showToast(d.seed==='demo' ? 'Sample content restored.' : 'Everything cleared.');
     return; }
-  if(d.play){ V.player = d.play; V.playing = true;
-    const it = S.items.find(i=>i.id===d.play);
-    if(it && !it.seenAt) patch(it.id,{seenAt:new Date().toISOString()});
+  if(d.fadd){ homeFolders(); if(S.homeFolders.length < HOME_MAX && !S.homeFolders.includes(d.fadd)){ S.homeFolders.push(d.fadd); save(); } render(); return; }
+  if(d.fremove){ homeFolders(); S.homeFolders = S.homeFolders.filter(id=>id!==d.fremove); save(); render(); return; }
+  if(d.fup || d.fdown){
+    homeFolders();
+    const id = d.fup || d.fdown, i = S.homeFolders.indexOf(id), j = d.fup ? i-1 : i+1;
+    if(i>-1 && j>-1 && j<S.homeFolders.length){
+      S.homeFolders.splice(j, 0, S.homeFolders.splice(i,1)[0]); save();
+    }
+    render(); return;
+  }
+  if(d.goaledit){ V.editGoal = true; render(); const f = document.getElementById('goal-input'); if(f){ f.focus(); f.select(); } return; }
+  if(d.goalsave){
+    const f = document.getElementById('goal-input');
+    const n = f ? parseInt(f.value, 10) : NaN;
+    if(!isNaN(n)) { S.settings.readingGoal = Math.min(240, Math.max(5, n)); save(); }
+    V.editGoal = false; render(); return;
+  }
+  if(d.play){
+    // starting playback is not finishing it, so this does not mark the item seen
+    if(V.player === d.play){ V.playing = !V.playing; } else { V.player = d.play; V.playing = true; }
     render(); return; }
   if(d.pp){ V.playing = !V.playing; render(); return; }
   if(d.pclose){ V.player = null; V.playing = false; render(); return; }
-  if(d.size){ V.readSize = V.readSize>=24 ? 18 : V.readSize+2; render(); return; }
+  if(d.sizeopen){ V.sizeOpen = !V.sizeOpen; render(); return; }
+  if(d.size){ V.readSize = parseInt(d.size,10); V.sizeOpen = false;
+    S.settings.readerSize = V.readSize; save(); render(); return; }
   if(d.back){ V.view = 'feed'; render(); return; }
 });
+
+document.addEventListener('dragstart', e => {
+  const r = e.target.closest && e.target.closest('[data-fdrag]');
+  if(!r) return;
+  V._drag = r.dataset.fdrag;
+  r.classList.add('dragging');
+  if(e.dataTransfer){ e.dataTransfer.effectAllowed = 'move'; try{ e.dataTransfer.setData('text/plain', V._drag); }catch(_){} }
+});
+document.addEventListener('dragover', e => {
+  const r = e.target.closest && e.target.closest('[data-fdrag]');
+  if(!r || !V._drag) return;
+  e.preventDefault();
+  r.classList.add('dropping');
+});
+document.addEventListener('dragleave', e => {
+  const r = e.target.closest && e.target.closest('[data-fdrag]');
+  if(r) r.classList.remove('dropping');
+});
+document.addEventListener('drop', e => {
+  const r = e.target.closest && e.target.closest('[data-fdrag]');
+  if(!r || !V._drag) return;
+  e.preventDefault();
+  const from = V._drag, to = r.dataset.fdrag;
+  V._drag = null;
+  if(from !== to){
+    homeFolders();
+    const a = S.homeFolders.indexOf(from), b = S.homeFolders.indexOf(to);
+    if(a > -1 && b > -1){ S.homeFolders.splice(b, 0, S.homeFolders.splice(a, 1)[0]); save(); }
+  }
+  render();
+});
+document.addEventListener('dragend', () => { if(V._drag){ V._drag = null; render(); } });
 
 document.addEventListener('change', e => {
   const d = e.target.dataset;
@@ -1163,16 +1423,72 @@ document.addEventListener('input', e => {
 });
 
 document.addEventListener('keydown', e => {
+  // arrow keys reorder a focused folder, for keyboards and touch
+  const row = document.activeElement && document.activeElement.closest && document.activeElement.closest('[data-fdrag]');
+  if(row && (e.key === 'ArrowUp' || e.key === 'ArrowDown')){
+    e.preventDefault();
+    homeFolders();
+    const id = row.dataset.fdrag, i = S.homeFolders.indexOf(id), j = e.key === 'ArrowUp' ? i-1 : i+1;
+    if(i > -1 && j > -1 && j < S.homeFolders.length){
+      S.homeFolders.splice(j, 0, S.homeFolders.splice(i, 1)[0]); save(); render();
+      const next = document.querySelector('[data-fdrag="'+id+'"]'); if(next) next.focus();
+    }
+    return;
+  }
+  if((e.key === 'Enter' || e.key === ' ') && document.activeElement && document.activeElement.classList
+     && document.activeElement.classList.contains('plain')){
+    const id = document.activeElement.dataset.read;
+    if(id){ e.preventDefault(); go('read', {itemId:id});
+      const it = S.items.find(i=>i.id===id); if(it && !it.seenAt) patch(it.id,{seenAt:new Date().toISOString()});
+      return; }
+  }
   if(e.key === 'Escape'){
-    if(V.overlay){ V.overlay = null; addError = null; render(); }
-    else if(V.menuFor || V.filterOpen){ V.menuFor = null; V.filterOpen = false; render(); }
+    if(V.overlay){ V.overlay = null; addError = null; folderError = null; render(); }
+    else if(V.menuFor || V.filterOpen || V.sizeOpen){ V.menuFor = null; V.filterOpen = false; V.sizeOpen = false; render(); }
+  }
+  if(e.key === 'Enter' && document.activeElement && document.activeElement.id === 'goal-input'){
+    const n = parseInt(document.activeElement.value, 10);
+    if(!isNaN(n)) { S.settings.readingGoal = Math.min(240, Math.max(5, n)); save(); }
+    V.editGoal = false; render(); return;
+  }
+  if(e.key === 'Escape' && V.editGoal){ V.editGoal = false; render(); return; }
+  if(e.key === 'Enter' && V.overlay === 'newfolder' && document.activeElement && document.activeElement.id === 'folder-name'){
+    createFolder(); return;
   }
   if(e.key === 'Enter' && V.overlay === 'add' && document.activeElement && document.activeElement.id === 'add-url'){
     followSource();
   }
 });
 
+/* the header band shows its hairline only once the page has scrolled */
+function wireHeaderShadow(){
+  if(V._hscroll){ window.removeEventListener('scroll', V._hscroll); V._hscroll = null; }
+  const band = document.getElementById('topband');
+  if(!band) return;
+  const update = ()=>{ band.classList.toggle('stuck', window.scrollY > 4); };
+  V._hscroll = update;
+  window.addEventListener('scroll', update, {passive:true});
+  update();
+}
+
+/* the reader hairline tracks real scroll position */
+function wireReaderProgress(){
+  if(V._pscroll){ window.removeEventListener('scroll', V._pscroll); V._pscroll = null; }
+  if(V.view !== 'read') return;
+  const el = document.getElementById('read-progress');
+  if(!el) return;
+  const update = ()=>{
+    const h = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = h > 0 ? Math.min(100, Math.max(0, (window.scrollY / h) * 100)) : 0;
+    el.style.width = pct.toFixed(1) + '%';
+  };
+  V._pscroll = update;
+  window.addEventListener('scroll', update, {passive:true});
+  update();
+}
+
 /* open the view named in the artifact link, if any */
+if(S.settings && S.settings.readerSize) V.readSize = S.settings.readerSize;
 const h = (location.hash || '').replace('#','');
 if(VIEWS.includes(h)) V.view = h;
 render();
