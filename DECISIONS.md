@@ -91,3 +91,11 @@ One line per decision, newest at the bottom. Date, the decision, and why.
 - 2026-10-22: **A tag is a place, not a filter.** A tag in the Library rail opens
   its own page of everything carrying it, like a folder; Filter there is Type and
   Length only.
+- 2026-10-22: **Folders can be renamed and deleted** from a ⋯ beside the folder
+  page's heading. Delete asks first in a dialog (an exception to inline
+  confirmation, by request). Deleting removes the label only: sources stay
+  followed and every item stays in the Feed. Undo restores it.
+- 2026-10-22: **Fixes from a usability pass:** Resume really resumes a paused
+  source; archived items can be moved back out; the Feed rail lists every
+  source; Back returns to the exact page, folder or source you came from; row
+  menu Add tags opens the tag field; on phones the site header scrolls away.

@@ -451,6 +451,16 @@ h1.hero{margin:0;font-family:var(--serif);font-weight:400;font-size:clamp(34px,6
   .fbtn{padding:0 12px}
   .panel{top:auto;left:0;right:0;width:auto;position:absolute;margin-top:4px}
 }
+/* phone: the site header scrolls away instead of holding a third of the screen,
+   and the reader bar keeps to one line */
+@media (max-width:600px){
+  .topband{position:static}
+  .rbar .wrap{flex-wrap:nowrap!important;gap:4px!important}
+  .rbar .wrap > div{flex-wrap:nowrap!important;gap:2px!important}
+  .rbar .btn.ghost{height:36px;padding:0 12px;font-size:13px}
+  .rbar [data-back]{font-size:14px!important;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .rbar .ib{width:40px;height:40px}
+}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 
@@ -881,8 +891,10 @@ function rowHTML(it, opts){
       <span class="meta one">${quietBadge ? '' : `<span class="${badge}">${KIND[it.kind]}</span>`}${metaLine}</span>
     </div>
     <div class="acts">
-      <button class="act" data-act="later|${it.id}" aria-label="${it.savedAt?'Remove from Later':'Save to Later'}" data-tip="${it.savedAt?'Remove from Later':'Save to Later'}">${I.clock}</button>
-      <button class="act" data-act="archive|${it.id}" aria-label="Archive" data-tip="Archive">${I.box}</button>
+      ${it.archivedAt
+        ? `<button class="act" data-act="unarchive|${it.id}" aria-label="Move out of Archive" data-tip="Move out of Archive">${I.box}</button>`
+        : `<button class="act" data-act="later|${it.id}" aria-label="${it.savedAt?'Remove from Later':'Save to Later'}" data-tip="${it.savedAt?'Remove from Later':'Save to Later'}">${I.clock}</button>
+      <button class="act" data-act="archive|${it.id}" aria-label="Archive" data-tip="Archive">${I.box}</button>`}
       <button class="act" data-act="seen|${it.id}" aria-label="${it.seenAt?'Mark as unseen':'Mark as seen'}" data-tip="${it.seenAt?'Mark as unseen':'Mark as seen'}">${I.eye}</button>
     </div>
     <button class="more" data-menu="${it.id}" aria-label="More actions" aria-expanded="${V.menuFor===it.id}">${I.dots}</button>
@@ -894,7 +906,7 @@ function rowHTML(it, opts){
         <button class="mi" data-movenew="${it.id}">${I.plus} New folder</button>
       `:`
         <button class="mi" data-sub="folder">${I.folder} Move to folder<span class="k">${I.chev}</span></button>
-        <button class="mi" data-soon="Tags">${I.tag} Add tags<span class="k">T</span></button>
+        <button class="mi" data-tagopen="${it.id}">${I.tag} Add tags<span class="k">T</span></button>
         <div class="sep"></div>
         <button class="mi" data-original="${it.id}">${I.external} Open original</button>
         <button class="mi" data-copy="${it.id}">${I.link} Copy link</button>
@@ -1129,14 +1141,24 @@ function viewFeed(){
       </nav>
       <nav class="side" aria-label="Sources">
         <div class="sh"><h2 class="lbl">Sources</h2><button class="act" data-go="sources">Manage</button></div>
-        ${S.sources.filter(sc=>!sc.oneoff).slice(0,6).map(sc=>`<button data-source="${sc.id}" class="${V.source===sc.id?'on':''}">
+        ${S.sources.filter(sc=>!sc.oneoff).map(sc=>`<button data-source="${sc.id}" class="${V.source===sc.id?'on':''}">
           <span style="width:20px;height:20px;border-radius:6px;background:${sc.color};flex:none" aria-hidden="true"></span>${esc(sc.title)}</button>`).join('')}
       </nav>
     </aside>
     <main class="col">
       <div>${folder?`<p class="lbl" style="color:var(--ink-muted)">Feed · folder</p>`
           :source?`<p class="lbl" style="color:var(--ink-muted)">Feed · source</p>`:''}
-        <h1 class="page" style="${folder||source?'margin-top:6px':''}">${folder?esc(folder.name):source?esc(source.title):'Feed'}</h1>
+        <div style="display:flex;align-items:center;gap:8px;${folder||source?'margin-top:6px':''}">
+          <h1 class="page">${folder?esc(folder.name):source?esc(source.title):'Feed'}</h1>
+          ${folder?`<span style="position:relative;display:inline-flex">
+            <button class="more" data-menu="folder-${folder.id}" aria-label="Folder options" aria-expanded="${V.menuFor==='folder-'+folder.id}" data-tip="Folder options">${I.dots}</button>
+            ${V.menuFor==='folder-'+folder.id?`<div class="menu" role="menu" aria-label="Folder options" style="left:0;right:auto;width:220px">
+              <button class="mi" data-frename="${folder.id}">${I.pencil} Rename folder</button>
+              <div class="sep"></div>
+              <button class="mi danger" data-fdelete="${folder.id}">${I.trash} Delete folder</button>
+            </div>`:''}
+          </span>`:''}
+        </div>
         </div>
       ${listBlock(key, cfg, items)}
     </main>
@@ -1551,8 +1573,12 @@ function viewRead(){
   const highs = it.highlights || [];
   const fnames = sc.folders || [];
   const currentFolder = fnames[0] || '';
+  const fromFolder = V.readFolder && S.folders.find(f=>f.id===V.readFolder);
+  const fromSource = V.readSource && S.sources.find(x=>x.id===V.readSource);
   const backLabel = V.readFrom === 'home' ? 'Home' : V.readFrom === 'library' ? 'Later'
-    : V.readFrom === 'archive' ? 'Archive' : V.readFrom === 'highlights' ? 'Highlights & Notes' : V.readFrom === 'tag' ? '#'+(V.readTag||'') : V.readFrom === 'listen' ? 'Listen' : 'Feed';
+    : V.readFrom === 'archive' ? 'Archive' : V.readFrom === 'highlights' ? 'Highlights & Notes' : V.readFrom === 'tag' ? '#'+(V.readTag||'')
+    : V.readFrom === 'listen' ? 'Listen' : V.readFrom === 'sources' ? 'Sources' : V.readFrom === 'settings' ? 'Settings'
+    : fromFolder ? fromFolder.name : fromSource ? fromSource.title : 'Feed';
 
   // what to read next: something else in the same folder, then the newest unseen
   const sameFolder = audible().filter(x=>x.id!==it.id && !isArchived(x) && isUnseen(x))
@@ -1581,7 +1607,7 @@ function viewRead(){
           </span>`:''}
         </span>
         <button class="btn ghost" data-act="later|${it.id}">${it.savedAt?'In Later':'Later'}</button>
-        <button class="btn ghost" data-act="archive|${it.id}">Archive</button>
+        <button class="btn ghost" data-act="${it.archivedAt?'unarchive':'archive'}|${it.id}">${it.archivedAt?'Unarchive':'Archive'}</button>
         <span style="position:relative;display:inline-flex">
           <button class="ib bare" data-menu="read-${it.id}" aria-label="More actions" aria-expanded="${V.menuFor==='read-'+it.id}" data-tip="More">${I.dots}</button>
           ${V.menuFor==='read-'+it.id?`<span class="menu" role="menu" aria-label="Item actions" style="top:48px;right:0;left:auto;width:min(260px,calc(100vw - 32px))">
@@ -1886,6 +1912,48 @@ function overlayFolders(){
   </div></div>`;
 }
 
+function overlayRenameFolder(){
+  const f = S.folders.find(x=>x.id===V.editFolder) || {name:''};
+  return `<div class="scrim" data-scrim="1"><div class="dialog" role="dialog" aria-label="Rename folder" aria-modal="true" style="max-width:480px">
+    <div class="dhead">
+      <h2 class="serif" style="margin:0;font-weight:400;font-size:28px">Rename folder</h2>
+      <button class="ib" aria-label="Close" data-close="1" style="background:var(--soft)">${I.close}</button>
+    </div>
+    <div class="dbody">
+      <label class="stack">Folder name
+        <input class="field" id="folder-name" value="${esc(f.name)}" autofocus>
+      </label>
+      ${folderError?`<p class="alert" role="alert">${esc(folderError)}</p>`:''}
+    </div>
+    <div class="dfoot">
+      <button class="btn soft" data-close="1">Cancel</button>
+      <button class="btn" data-fsaverename="1">Save</button>
+    </div>
+  </div></div>`;
+}
+
+/* Deleting a folder only removes the label. Its sources and everything they
+   published stay in the Feed, so the dialog says exactly that. */
+function overlayDeleteFolder(){
+  const f = S.folders.find(x=>x.id===V.editFolder) || {name:''};
+  const n = S.sources.filter(sc=>sc.folders.includes(f.id)).length;
+  return `<div class="scrim" data-scrim="1"><div class="dialog" role="alertdialog" aria-label="Delete folder" aria-modal="true" style="max-width:480px">
+    <div class="dhead">
+      <h2 class="serif" style="margin:0;font-weight:400;font-size:28px">Delete ${esc(f.name)}?</h2>
+      <button class="ib" aria-label="Close" data-close="1" style="background:var(--soft)">${I.close}</button>
+    </div>
+    <div class="dbody">
+      <p style="margin:0;font-size:16px;line-height:1.6;color:var(--ink-body)">
+        Nothing you follow is deleted. ${n?`The ${n} source${n===1?'':'s'} in it stay${n===1?'s':''} followed, and `:''}everything stays in your Feed. It just won't be grouped under ${esc(f.name)} anymore.
+      </p>
+    </div>
+    <div class="dfoot">
+      <button class="btn soft" data-close="1">Cancel</button>
+      <button class="btn" data-fconfirmdelete="1" style="background:var(--attention-deep)">Delete folder</button>
+    </div>
+  </div></div>`;
+}
+
 function overlayNewFolder(){
   return `<div class="scrim" data-scrim="1"><div class="dialog" role="dialog" aria-label="New folder" aria-modal="true" style="max-width:480px">
     <div class="dhead">
@@ -2034,6 +2102,8 @@ function render(){
     + (V.overlay==='add' ? overlayAdd() : V.overlay==='search' ? overlaySearch()
       : V.overlay==='folders' ? overlayFolders()
       : V.overlay==='newfolder' ? overlayNewFolder()
+      : V.overlay==='renamefolder' ? overlayRenameFolder()
+      : V.overlay==='deletefolder' ? overlayDeleteFolder()
       : V.overlay==='editsource' ? overlayEditSource() : '');
   wireReaderProgress();
   if(V.view==='read' && V.jump!=null && V.jump!=='top'){
@@ -2044,11 +2114,22 @@ function render(){
   } else if(V.jump==='top'){ V.jump = null; }
   wireHeaderShadow();
   const focus = document.getElementById(V.overlay==='add' ? 'add-url' : V.overlay==='search' ? 'search-q'
-    : V.overlay==='newfolder' ? 'folder-name' : '');
+    : (V.overlay==='newfolder' || V.overlay==='renamefolder') ? 'folder-name' : '');
   if(focus){ focus.focus(); if(focus.value) focus.setSelectionRange(focus.value.length, focus.value.length); }
 }
 
 /* ---------------------------------------------------------------- actions */
+/* Back goes to the exact place you opened the piece from. */
+function goBack(){
+  const f = V.readFrom, tag = V.readTag, folder = V.readFolder, source = V.readSource;
+  if(f === 'tag') return go('library', {tag});
+  if(f === 'library') return go('library', {shelf:'later'});
+  if(f === 'archive') return go('library', {shelf:'archive'});
+  if(f === 'highlights') return go('library', {shelf:'highlights'});
+  if(f === 'home' || f === 'listen' || f === 'sources' || f === 'settings') return go(f);
+  return go('feed', {folder: folder || null, source: source || null});
+}
+
 function doAct(verb, id){
   const it = S.items.find(i=>i.id===id);
   if(!it) return;
@@ -2061,6 +2142,8 @@ function doAct(verb, id){
     else { patch(id,{savedAt:now}); text=kind+' saved for later.'; }
   } else if(verb==='archive'){
     patch(id,{archivedAt:now, seenAt:it.seenAt||now}); text=kind+' archived.';
+  } else if(verb==='unarchive'){
+    patch(id,{archivedAt:null}); text=kind+' moved out of the Archive.';
   } else if(verb==='seen'){
     if(it.seenAt){ patch(id,{seenAt:null}); text=kind+' marked as unseen.'; }
     else { patch(id,{seenAt:now}); text=kind+' marked as seen.'; }
@@ -2070,7 +2153,7 @@ function doAct(verb, id){
   V.menuFor = null;
   showToast(text, ()=>{ patch(id, before); });
   if(V.view==='read' && (verb==='archive'||verb==='delete')){
-    setTimeout(()=>{ V.view='feed'; render(); }, 450);
+    setTimeout(()=>{ if(V.view==='read' && V.itemId===id) goBack(); }, 450);
   }
   render();
 }
@@ -2116,6 +2199,21 @@ function followSource(){
   });
 }
 
+function renameFolder(){
+  const field = document.getElementById('folder-name');
+  const name = (field ? field.value : '').trim();
+  const f = S.folders.find(x=>x.id===V.editFolder);
+  folderError = null;
+  if(!f){ V.overlay = null; render(); return; }
+  if(!name){ folderError = 'A folder needs a name.'; render(); return; }
+  if(S.folders.some(x=>x.id!==f.id && x.name.toLowerCase()===name.toLowerCase())){
+    folderError = 'You already have a folder with that name.'; render(); return;
+  }
+  const old = f.name; f.name = name; save();
+  V.overlay = null; V.editFolder = null; render();
+  showToast('Renamed to ' + name + '.', ()=>{ f.name = old; save(); });
+}
+
 function createFolder(){
   const field = document.getElementById('folder-name');
   const name = (field ? field.value : '').trim();
@@ -2141,7 +2239,7 @@ function createFolder(){
 
 /* ---------------------------------------------------------------- events */
 document.addEventListener('click', e => {
-  const t = e.target.closest('[data-go],[data-overlay],[data-folder],[data-shelf],[data-read],[data-act],[data-menu],[data-tab],[data-filter],[data-fk],[data-ff],[data-fl],[data-fsrc],[data-ftag],[data-fattention],[data-close],[data-scrim],[data-follow],[data-scope],[data-sfeed],[data-seed],[data-size],[data-back],[data-play],[data-pp],[data-pclose],[data-fadd],[data-fremove],[data-goaledit],[data-goalsave],[data-sizeopen],[data-newfolder],[data-tagstart],[data-untag],[data-highlight],[data-unhigh],[data-readat],[data-hmark],[data-focusnote],[data-unsource],[data-addmode],[data-saveone],[data-saveto],[data-htab],[data-railtag],[data-libtag],[data-tagpick],[data-hexport],[data-sub],[data-subback],[data-smenu],[data-ssub],[data-sfolder],[data-srename],[data-savesource],[data-unfollow],[data-source],[data-movefolder],[data-movenew],[data-mute],[data-copy],[data-original],[data-soon]');
+  const t = e.target.closest('[data-go],[data-overlay],[data-folder],[data-shelf],[data-read],[data-act],[data-menu],[data-tab],[data-filter],[data-fk],[data-ff],[data-fl],[data-fsrc],[data-ftag],[data-fattention],[data-close],[data-scrim],[data-follow],[data-scope],[data-sfeed],[data-seed],[data-size],[data-back],[data-play],[data-pp],[data-pclose],[data-fadd],[data-fremove],[data-goaledit],[data-goalsave],[data-sizeopen],[data-newfolder],[data-frename],[data-fdelete],[data-fsaverename],[data-fconfirmdelete],[data-tagstart],[data-untag],[data-highlight],[data-unhigh],[data-readat],[data-hmark],[data-focusnote],[data-unsource],[data-addmode],[data-saveone],[data-saveto],[data-htab],[data-railtag],[data-libtag],[data-tagopen],[data-tagpick],[data-hexport],[data-sub],[data-subback],[data-smenu],[data-ssub],[data-sfolder],[data-srename],[data-savesource],[data-unfollow],[data-source],[data-movefolder],[data-movenew],[data-mute],[data-copy],[data-original],[data-soon]');
   if(!t){ if(V.menuFor || V.filterOpen || V.sizeOpen){ V.menuFor = null; V.menuSub = null; V.filterOpen = false; V.sizeOpen = false; render(); } return; }
 
   const d = t.dataset;
@@ -2216,8 +2314,9 @@ document.addEventListener('click', e => {
   }
   if(d.read){
     const from = V.view==='home' ? 'home' : V.view==='library' ? (V.tag?'tag':V.shelf==='archive'?'archive':V.shelf==='highlights'?'highlights':'library')
-      : V.view==='listen' ? 'listen' : 'feed';
-    const readTag = V.tag; V.overlay = null; go('read', {itemId:d.read, readFrom:from, readTag}); const it = S.items.find(i=>i.id===d.read); if(it && !it.seenAt){ patch(it.id,{seenAt:new Date().toISOString()}); } return; }
+      : V.view==='listen' ? 'listen' : V.view==='sources' ? 'sources' : V.view==='settings' ? 'settings' : 'feed';
+    V.readFolder = V.view==='feed' ? V.folder : null; V.readSource = V.view==='feed' ? V.source : null;
+    const readTag = V.tag, readFolder = V.readFolder, readSource = V.readSource; V.overlay = null; go('read', {itemId:d.read, readFrom:from, readTag, readFolder, readSource}); const it = S.items.find(i=>i.id===d.read); if(it && !it.seenAt){ patch(it.id,{seenAt:new Date().toISOString()}); } return; }
   if(d.act){ const [verb,id] = d.act.split('|'); doAct(verb,id); return; }
   if(d.menu){ V.menuFor = V.menuFor===d.menu ? null : d.menu; V.menuSub = null; render(); return; }
   if(d.sub){ V.menuSub = d.sub; render(); return; }
@@ -2238,8 +2337,9 @@ document.addEventListener('click', e => {
   if(d.movenew){ V.menuFor = null; V.menuSub = null; V.overlay = 'newfolder'; render(); return; }
   if(d.mute){
     const sc = S.sources.find(x=>x.id===d.mute);
-    if(sc){ sc.muted = true; save();
-      showToast(sc.title + ' muted.', ()=>{ sc.muted = false; save(); }); }
+    // the same control pauses and resumes, so it has to read the current state
+    if(sc){ const was = !!sc.muted; sc.muted = !was; save();
+      showToast(sc.title + (was ? ' resumed.' : ' paused.'), ()=>{ sc.muted = was; save(); }); }
     V.menuFor = null; render(); return;
   }
   if(d.copy){
@@ -2262,6 +2362,13 @@ document.addEventListener('click', e => {
   if(d.filter === 'toggle'){ V.filterOpen = !V.filterOpen; render(); return; }
   if(d.filter && d.filter.startsWith('clear|')){ setPref(d.filter.split('|')[1], {kinds:[], folder:'Any', length:'Any', attention:false, only:'Everything', tag:null, sources:[]}); return; }
   if(d.htab){ setPref('high', {only:d.htab}); return; }
+  if(d.tagopen){
+    const from = V.view==='library' ? (V.shelf==='archive'?'archive':'library') : V.view==='listen' ? 'listen' : 'feed';
+    const readFolder = V.view==='feed' ? V.folder : null, readSource = V.view==='feed' ? V.source : null;
+    go('read', {itemId:d.tagopen, readFrom:from, readFolder, readSource, tagging:d.tagopen});
+    const f = document.getElementById('tag-input'); if(f){ f.scrollIntoView({block:'center'}); f.focus(); }
+    return;
+  }
   if(d.libtag){ go('library', {tag:d.libtag}); return; }
   if(d.railtag){
     const [key, tg] = d.railtag.split('|'); const p = prefs(key,{});
@@ -2299,6 +2406,30 @@ document.addEventListener('click', e => {
   if(d.saveone){ saveOneThing(); return; }
   if(d.follow){ followSource(); return; }
   if(d.newfolder){ createFolder(); return; }
+  if(d.frename){ V.menuFor = null; V.editFolder = d.frename; folderError = null; V.overlay = 'renamefolder'; render(); return; }
+  if(d.fdelete){ V.menuFor = null; V.editFolder = d.fdelete; V.overlay = 'deletefolder'; render(); return; }
+  if(d.fsaverename){ renameFolder(); return; }
+  if(d.fconfirmdelete){
+    const f = S.folders.find(x=>x.id===V.editFolder);
+    if(f){
+      const at = S.folders.indexOf(f);
+      const had = S.sources.filter(sc=>sc.folders.includes(f.id)).map(sc=>sc.id);
+      const home = Array.isArray(S.homeFolders) ? S.homeFolders.slice() : null;
+      S.folders = S.folders.filter(x=>x.id!==f.id);
+      S.sources.forEach(sc=>{ sc.folders = sc.folders.filter(x=>x!==f.id); });
+      if(home) S.homeFolders = home.filter(x=>x!==f.id);
+      save();
+      V.overlay = null; V.editFolder = null;
+      go('feed');
+      showToast(f.name + ' deleted. Everything in it is still in your Feed.', ()=>{
+        S.folders.splice(at, 0, f);
+        S.sources.forEach(sc=>{ if(had.includes(sc.id) && !sc.folders.includes(f.id)) sc.folders.push(f.id); });
+        if(home) S.homeFolders = home;
+        save();
+      });
+    }
+    return;
+  }
   if(d.scope){ searchScope = d.scope; render(); return; }
   if(d.seed){ S = d.seed==='demo' ? makeSeed() : emptySeed(); save();
     V.prefs = {}; V.player = null;
@@ -2373,13 +2504,7 @@ document.addEventListener('click', e => {
   if(d.sizeopen){ V.sizeOpen = !V.sizeOpen; render(); return; }
   if(d.size){ V.readSize = parseInt(d.size,10); V.sizeOpen = false;
     S.settings.readerSize = V.readSize; save(); render(); return; }
-  if(d.back){
-    const to = V.readFrom === 'home' ? 'home' : V.readFrom === 'library' ? 'library'
-      : V.readFrom === 'archive' || V.readFrom === 'highlights' ? 'library' : V.readFrom === 'listen' ? 'listen' : 'feed';
-    const shelf = V.readFrom === 'archive' ? 'archive' : V.readFrom === 'highlights' ? 'highlights' : 'later';
-    if(V.readFrom === 'tag'){ go('library', {tag:V.readTag}); return; }
-    go(to, {shelf}); return;
-  }
+  if(d.back){ goBack(); return; }
 });
 
 document.addEventListener('dragstart', e => {
@@ -2497,6 +2622,9 @@ document.addEventListener('keydown', e => {
   if(e.key === 'Enter' && V.overlay === 'newfolder' && document.activeElement && document.activeElement.id === 'folder-name'){
     createFolder(); return;
   }
+  if(e.key === 'Enter' && V.overlay === 'renamefolder' && document.activeElement && document.activeElement.id === 'folder-name'){
+    renameFolder(); return;
+  }
   if(e.key === 'Enter' && V.overlay === 'add' && document.activeElement && document.activeElement.id === 'add-url'){
     followSource();
   }
@@ -2510,7 +2638,9 @@ function wireHeaderShadow(){
   const update = ()=>{
     band.classList.toggle('stuck', window.scrollY > 4);
     // the reader's own bar sticks directly under the site header
-    document.documentElement.style.setProperty('--hh', band.offsetHeight + 'px');
+    // on a phone the site header scrolls away, so the reader bar sticks to the very top
+    const sticky = getComputedStyle(band).position === 'sticky';
+    document.documentElement.style.setProperty('--hh', (sticky ? band.offsetHeight : 0) + 'px');
   };
   V._hscroll = update;
   window.addEventListener('scroll', update, {passive:true});
