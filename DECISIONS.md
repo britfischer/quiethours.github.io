@@ -113,3 +113,8 @@ One line per decision, newest at the bottom. Date, the decision, and why.
   Article text stays placeholder, because the repo and site are public. Video
   lengths are placeholders; YouTube's feed omits them. The two Substacks show
   their real state: not updating.
+- 2026-10-26: **The prototype shows real images and plays real media.** Pictures
+  fill the 16:9 frame (falling back to the source colour); YouTube videos play in
+  YouTube's embedded player; podcast episodes play for real in the mini player;
+  Open original opens the real page. Full article text waits for the private
+  app, because the prototype is public.
