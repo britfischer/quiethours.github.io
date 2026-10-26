@@ -43,6 +43,41 @@ def minutes(e, kind, words):
     return max(2, round(words / 230))
 
 
+def image_of(e, feed):
+    for key in ("media_thumbnail", "media_content"):
+        for m in e.get(key, []) or []:
+            if m.get("url") and (key == "media_thumbnail" or "image" in (m.get("type") or "image") or m.get("medium") == "image"):
+                return m["url"]
+    for l in e.get("links", []):
+        if (l.get("type") or "").startswith("image"):
+            return l.get("href")
+    if isinstance(e.get("image"), dict) and e["image"].get("href"):
+        return e["image"]["href"]
+    body = (e.get("content") or [{}])[0].get("value", "") + (e.get("summary") or "")
+    m = re.search(r'<img[^>]+src=["\']([^"\']+)', body)
+    if m:
+        return m.group(1)
+    return None
+
+
+def og_image(url):
+    """The share image a page declares, which is what readers use when a feed sends none."""
+    try:
+        h = fetch(url).decode("utf-8", "replace")[:300000]
+    except Exception:
+        return None
+    m = re.search(r'<meta[^>]+property=["\']og:image["\'][^>]*content=["\']([^"\']+)', h, re.I) or \
+        re.search(r'<meta[^>]+content=["\']([^"\']+)["\'][^>]*property=["\']og:image', h, re.I)
+    return html.unescape(m.group(1)) if m else None
+
+
+def audio_of(e):
+    for l in e.get("links", []):
+        if l.get("rel") == "enclosure" and (l.get("type") or "").startswith("audio"):
+            return l.get("href")
+    return None
+
+
 def main():
     rows = json.loads((HERE / "results" / "results.json").read_text())
     out = []
@@ -62,7 +97,15 @@ def main():
                 words = sum(len(p.split()) for p in body)
                 stand = (body[0] if body else "")
                 stand = stand if len(stand) <= 180 else stand[:177].rsplit(" ", 1)[0] + "…"
+                img = image_of(e, f)
+                if not img and r["kind"] in ("blog", "newsletter") and e.get("link"):
+                    img = og_image(e["link"])
+                if not img and r["kind"] == "podcast":
+                    img = (f.feed.get("image") or {}).get("href")
                 src["items"].append({
+                    "image": img,
+                    "video_id": e.get("yt_videoid"),
+                    "audio": audio_of(e),
                     "title": html.unescape(e.get("title", "")).strip(),
                     "published": e.get("published") or e.get("updated"),
                     "published_parsed": list(e.get("published_parsed") or e.get("updated_parsed") or [])[:6],
