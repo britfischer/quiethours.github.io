@@ -158,6 +158,17 @@ h1.display{margin:0;font-family:var(--serif);font-weight:400;font-size:44px;line
 .art{position:relative;overflow:hidden}
 .hero{position:relative;overflow:hidden;aspect-ratio:16/9;max-width:100%;border-radius:20px}
 .hero iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.pod{display:flex;flex-direction:column;gap:10px;padding:20px;border-radius:20px;background:var(--softer)}
+.podrow{display:flex;align-items:center;gap:12px}
+.podskip{min-width:48px;height:40px;padding:0 12px;border:1px solid var(--border);border-radius:999px;background:var(--card);
+  font:600 13px var(--sans);color:var(--ink);cursor:pointer;font-variant-numeric:tabular-nums}
+.podskip:hover{border-color:var(--action);color:var(--action)}
+.podrange{width:100%;accent-color:var(--action)}
+.podtimes{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-muted);font-variant-numeric:tabular-nums}
+.rblock{display:flex;flex-direction:column;gap:12px;border-top:2px solid var(--divider);padding-top:18px}
+.extlink{color:var(--action);font-weight:600;font-size:15px;text-decoration:underline;align-self:flex-start}
+.pending{margin:0;font-size:15px;line-height:1.6;color:var(--ink-muted)}
+.ttsbar{display:flex;align-items:center;gap:14px;padding:12px 14px;border-radius:16px;background:var(--softer);font-family:var(--sans)}
 .origcard{display:flex;flex-direction:column;gap:6px;padding:16px 20px;border-radius:16px;background:var(--softer);font-family:var(--sans);font-size:15px;line-height:1.5}
 .origcard a{color:var(--action);font-weight:600;text-decoration:underline}
 /* one row pattern, however long the title: the title takes at most two lines and
@@ -706,6 +717,7 @@ function playerHTML(){
 }
 
 function go(view, extra){
+  if(V.tts) stopReading();
   V.view = view; V.folder = null; V.source = null; V.tag = null; V.itemId = null; V.menuFor = null; V.menuSub = null; V.filterOpen = false;
   Object.assign(V, extra||{});
   if(VIEWS.includes(view)) { try{ history.replaceState(null,'','#'+view); }catch(e){} }
@@ -1551,6 +1563,132 @@ function marked(text, it){
   return out + esc(text.slice(cursor));
 }
 
+/* ---------------------------------------------------------------- reader bodies
+   Each kind gets the page it needs: an article reads, a video watches, a podcast
+   listens. Items you followed in the prototype keep the original placeholder page. */
+function readOld(it, sc){
+  return `      <article class="readcol">
+        <div class="meta">
+          <span style="font-weight:600;color:var(--ink)">${esc(sc.title||'')}</span><span>·</span>
+          <span>${timeAgo(it.publishedAt)}</span><span>·</span><span>${it.minutes} min read</span>
+        </div>
+        <h1>${esc(it.title)}</h1>
+        ${it.videoId
+          ? `<div class="hero" style="background:#000"><iframe src="https://www.youtube-nocookie.com/embed/${esc(it.videoId)}?rel=0" title="${esc(it.title)}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>`
+          : `<div class="hero" style="background:${sc.color||'var(--m6)'}">${pic(it)}</div>`}
+
+        ${it.link ? `<div class="bodycopy" id="read-body" style="font-size:${V.readSize}px">
+          ${(it.body||[]).map(p=>`<p>${marked(p, it)}</p>`).join('')}
+          ${it.audio ? `<div style="background:var(--softer);border-radius:20px;padding:16px;display:flex;gap:16px;align-items:center;font-family:var(--sans)">
+            <button class="playbtn" data-play="${it.id}" aria-label="${V.player===it.id&&V.playing?'Pause':'Play'} episode" style="width:48px;height:48px">${V.player===it.id&&V.playing?I.pauseWhite:I.play}</button>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px">
+              <span style="font-size:15px;font-weight:500">${V.player===it.id&&V.playing?'Playing':'Play this episode'}</span>
+              <span style="font-size:13px;color:var(--ink-muted)">${it.minutes} min · keeps playing in the mini player when you leave</span>
+            </div>
+          </div>` : ''}
+          <div class="origcard">
+            <span>${it.videoId ? 'Watch it right here, or on YouTube.' : it.audio ? 'Show notes and links live on the episode page.' : 'This is the preview the feed sends.'}
+              <a href="${esc(it.link)}" target="_blank" rel="noopener">${it.videoId ? 'Open on YouTube' : it.audio ? 'Open the episode page' : 'Read the full piece on ' + esc((sc.site||'').split('/')[0])}</a></span>
+            ${!it.videoId && !it.audio ? `<span style="font-size:13px;color:var(--ink-muted)">In the real app the whole article appears here. This prototype is public, so it does not copy other writers' articles.</span>` : ''}
+          </div>
+        </div>` : `<div class="bodycopy" id="read-body" style="font-size:${V.readSize}px">
+          <p>${marked(it.body[0]||'', it)}</p>
+          <p>${marked(it.body[1]||'', it)}</p>
+          <figure style="margin:8px 0;padding:8px 0 8px 24px;border-left:3px solid var(--attention)">
+            <blockquote style="margin:0;font-size:${Math.round(V.readSize*1.2)}px;line-height:1.4">${esc((it.body[2]||'').split('. ')[0] || it.title)}.</blockquote>
+          </figure>
+          <p>${marked(it.body[2]||'', it)}</p>
+          <div style="background:var(--softer);border-radius:20px;padding:16px;display:flex;gap:16px;align-items:center">
+            <button class="playbtn" data-play="${it.id}" aria-label="Listen to this article" style="width:48px;height:48px">${V.player===it.id&&V.playing?I.pauseWhite:I.play}</button>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px">
+              <span style="font-size:15px;font-weight:500">Listen to this article</span>
+              <div style="height:4px;background:var(--border);border-radius:2px"><div style="width:${V.player===it.id&&V.playing?'34%':'0%'};height:4px;background:var(--action);border-radius:2px"></div></div>
+            </div>
+            <span style="font-size:13px;color:var(--ink-muted)">${it.minutes}:00</span>
+          </div>
+          <p>${marked(it.body[3]||'', it)}</p>
+        </div>`}
+      </article>`;
+}
+
+function readMain(it, sc){
+  const site = (sc.site||'').split('/')[0];
+  const when = timeAgo(it.publishedAt);
+  const kindLabel = it.kind==='podcast' ? 'Podcast' : it.kind==='video' ? 'Video' : 'Article';
+  const head = `<div class="meta">
+      <span class="lbl" style="color:var(--attention)">${kindLabel}</span><span>·</span>
+      <span style="font-weight:600;color:var(--ink)">${esc(sc.title||'')}</span><span>·</span>
+      <span>${when}</span><span>·</span><span>${it.minutes} min${it.kind==='article'?' read':''}</span>
+    </div>
+    <h1>${esc(it.title)}</h1>`;
+  const notes = (it.body||[]).map(p=>`<p>${marked(p, it)}</p>`).join('');
+
+  if(it.kind === 'podcast'){
+    const on = V.player===it.id, a = audioEl();
+    const cur = on && a ? a.currentTime : 0, dur = on && a && a.duration ? a.duration : it.minutes*60;
+    return `<article class="readcol">
+      ${head}
+      <div class="hero" style="background:${sc.color||'var(--m6)'}">${pic(it)}</div>
+      <section class="pod" aria-label="Player">
+        <div class="podrow">
+          <button class="podskip" data-skip="-15" aria-label="Back 15 seconds">−15</button>
+          <button class="playbtn" data-play="${it.id}" aria-label="${on&&V.playing?'Pause':'Play'} episode" style="width:56px;height:56px">${on&&V.playing?I.pauseWhite:I.play}</button>
+          <button class="podskip" data-skip="30" aria-label="Forward 30 seconds">+30</button>
+          <button class="podskip" data-rate="1" aria-label="Playback speed">${(on&&a?a.playbackRate:1)}×</button>
+        </div>
+        <input type="range" class="podrange" id="rp-range" min="0" max="${Math.round(dur)}" value="${Math.round(cur)}" step="1" aria-label="Position in episode" ${on?'':'disabled'}>
+        <div class="podtimes"><span id="rp-time">${fmtTime(cur)}</span><span>${fmtTime(dur)}</span></div>
+        <span class="note">${on?'Keeps playing in the mini player when you leave this page.':'Press play. It keeps going in the mini player while you browse.'}</span>
+      </section>
+      <section class="rblock" aria-label="Show notes">
+        <h2 class="lbl">Show notes</h2>
+        <div class="bodycopy" id="read-body" style="font-size:${Math.min(V.readSize,20)}px;margin-top:0">${notes || '<p>No notes came with this episode.</p>'}</div>
+        <a class="extlink" href="${esc(it.link || ('https://' + (sc.site||'')))}" target="_blank" rel="noopener">${it.link ? 'Full show notes on the episode page' : 'Open the show’s page'} ↗</a>
+      </section>
+      <section class="rblock" aria-label="Transcript">
+        <h2 class="lbl">Transcript</h2>
+        <p class="pending">The real app transcribes each episode as it arrives, so you can read along, search it and highlight lines. This prototype cannot run that step.</p>
+      </section>
+    </article>`;
+  }
+
+  if(it.kind === 'video'){
+    return `<article class="readcol">
+      ${head}
+      <div class="hero" style="background:#000"><iframe src="https://www.youtube-nocookie.com/embed/${esc(it.videoId)}?rel=0" title="${esc(it.title)}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>
+      <section class="rblock" aria-label="Description">
+        <h2 class="lbl">Description</h2>
+        <div class="bodycopy" id="read-body" style="font-size:${Math.min(V.readSize,20)}px;margin-top:0">${notes || '<p>This video came without a description worth showing, mostly sponsor links.</p>'}</div>
+        <a class="extlink" href="${esc(it.link)}" target="_blank" rel="noopener">Open on YouTube ↗</a>
+      </section>
+      <section class="rblock" aria-label="Transcript">
+        <h2 class="lbl">Transcript</h2>
+        <p class="pending">YouTube only lets a channel's owner download its transcripts. Use the CC button in the player to read along while it plays.</p>
+      </section>
+    </article>`;
+  }
+
+  // article
+  const speaking = V.tts === it.id;
+  return `<article class="readcol">
+    ${head}
+    <div class="hero" style="background:${sc.color||'var(--m6)'}">${pic(it)}</div>
+    <div class="ttsbar">
+      <button class="playbtn" data-tts="${it.id}" aria-label="${speaking?'Pause reading':'Listen to this article'}" style="width:44px;height:44px">${speaking && !V.ttsPaused?I.pauseWhite:I.play}</button>
+      <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
+        <b style="font-weight:500;font-size:15px">${speaking ? (V.ttsPaused ? 'Paused' : 'Reading aloud') : 'Listen to this article'}</b>
+        <span style="font-size:13px;color:var(--ink-muted)">Your device's voice reads what is on this page</span>
+      </span>
+      ${speaking?`<button class="podskip" data-ttsstop="1" aria-label="Stop reading">Stop</button>`:''}
+    </div>
+    <div class="bodycopy" id="read-body" style="font-size:${V.readSize}px">${notes || ''}</div>
+    <div class="origcard">
+      <span>That is the preview the feed sends. <a href="${esc(it.link)}" target="_blank" rel="noopener">Read the full piece on ${esc(site)}</a></span>
+      <span style="font-size:13px;color:var(--ink-muted)">In the real app the whole article and its pictures appear here, and listening reads all of it. This prototype is public, so it does not copy other writers' articles.</span>
+    </div>
+  </article>`;
+}
+
 function viewRead(){
   const it = S.items.find(i=>i.id===V.itemId);
   if(!it) return `<div class="wrap"><div class="reader"><h1>That item isn't here.</h1>
@@ -1609,48 +1747,7 @@ function viewRead(){
     </div><div class="progress" role="img" aria-label="How far through this item you are"><span id="read-progress" style="width:0%"></span></div></div>
 
     <div class="wrap"><div class="readgrid">
-      <article class="readcol">
-        <div class="meta">
-          <span style="font-weight:600;color:var(--ink)">${esc(sc.title||'')}</span><span>·</span>
-          <span>${timeAgo(it.publishedAt)}</span><span>·</span><span>${it.minutes} min read</span>
-        </div>
-        <h1>${esc(it.title)}</h1>
-        ${it.videoId
-          ? `<div class="hero" style="background:#000"><iframe src="https://www.youtube-nocookie.com/embed/${esc(it.videoId)}?rel=0" title="${esc(it.title)}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>`
-          : `<div class="hero" style="background:${sc.color||'var(--m6)'}">${pic(it)}</div>`}
-
-        ${it.link ? `<div class="bodycopy" id="read-body" style="font-size:${V.readSize}px">
-          ${(it.body||[]).map(p=>`<p>${marked(p, it)}</p>`).join('')}
-          ${it.audio ? `<div style="background:var(--softer);border-radius:20px;padding:16px;display:flex;gap:16px;align-items:center;font-family:var(--sans)">
-            <button class="playbtn" data-play="${it.id}" aria-label="${V.player===it.id&&V.playing?'Pause':'Play'} episode" style="width:48px;height:48px">${V.player===it.id&&V.playing?I.pauseWhite:I.play}</button>
-            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px">
-              <span style="font-size:15px;font-weight:500">${V.player===it.id&&V.playing?'Playing':'Play this episode'}</span>
-              <span style="font-size:13px;color:var(--ink-muted)">${it.minutes} min · keeps playing in the mini player when you leave</span>
-            </div>
-          </div>` : ''}
-          <div class="origcard">
-            <span>${it.videoId ? 'Watch it right here, or on YouTube.' : it.audio ? 'Show notes and links live on the episode page.' : 'This is the preview the feed sends.'}
-              <a href="${esc(it.link)}" target="_blank" rel="noopener">${it.videoId ? 'Open on YouTube' : it.audio ? 'Open the episode page' : 'Read the full piece on ' + esc((sc.site||'').split('/')[0])}</a></span>
-            ${!it.videoId && !it.audio ? `<span style="font-size:13px;color:var(--ink-muted)">In the real app the whole article appears here. This prototype is public, so it does not copy other writers' articles.</span>` : ''}
-          </div>
-        </div>` : `<div class="bodycopy" id="read-body" style="font-size:${V.readSize}px">
-          <p>${marked(it.body[0]||'', it)}</p>
-          <p>${marked(it.body[1]||'', it)}</p>
-          <figure style="margin:8px 0;padding:8px 0 8px 24px;border-left:3px solid var(--attention)">
-            <blockquote style="margin:0;font-size:${Math.round(V.readSize*1.2)}px;line-height:1.4">${esc((it.body[2]||'').split('. ')[0] || it.title)}.</blockquote>
-          </figure>
-          <p>${marked(it.body[2]||'', it)}</p>
-          <div style="background:var(--softer);border-radius:20px;padding:16px;display:flex;gap:16px;align-items:center">
-            <button class="playbtn" data-play="${it.id}" aria-label="Listen to this article" style="width:48px;height:48px">${V.player===it.id&&V.playing?I.pauseWhite:I.play}</button>
-            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px">
-              <span style="font-size:15px;font-weight:500">Listen to this article</span>
-              <div style="height:4px;background:var(--border);border-radius:2px"><div style="width:${V.player===it.id&&V.playing?'34%':'0%'};height:4px;background:var(--action);border-radius:2px"></div></div>
-            </div>
-            <span style="font-size:13px;color:var(--ink-muted)">${it.minutes}:00</span>
-          </div>
-          <p>${marked(it.body[3]||'', it)}</p>
-        </div>`}
-      </article>
+      ${(it.link || it.audio || it.videoId) ? readMain(it, sc) : readOld(it, sc)}
 
       <aside class="readside" aria-label="Organize">
         <div class="rsec">
@@ -2243,7 +2340,7 @@ function createFolder(){
 
 /* ---------------------------------------------------------------- events */
 document.addEventListener('click', e => {
-  const t = e.target.closest('[data-go],[data-overlay],[data-folder],[data-shelf],[data-read],[data-act],[data-menu],[data-tab],[data-filter],[data-fk],[data-ff],[data-fl],[data-fsrc],[data-ftag],[data-fattention],[data-close],[data-scrim],[data-follow],[data-scope],[data-sfeed],[data-seed],[data-size],[data-back],[data-play],[data-pp],[data-pclose],[data-fadd],[data-fremove],[data-goaledit],[data-goalsave],[data-sizeopen],[data-newfolder],[data-frename],[data-fdelete],[data-fsaverename],[data-fconfirmdelete],[data-tagstart],[data-untag],[data-highlight],[data-unhigh],[data-readat],[data-hmark],[data-focusnote],[data-unsource],[data-addmode],[data-saveone],[data-saveto],[data-htab],[data-railtag],[data-libtag],[data-tagopen],[data-tagpick],[data-hexport],[data-sub],[data-subback],[data-smenu],[data-ssub],[data-spausesub],[data-spause],[data-sfolder],[data-srename],[data-savesource],[data-unfollow],[data-source],[data-movefolder],[data-movenew],[data-mute],[data-copy],[data-original],[data-soon]');
+  const t = e.target.closest('[data-go],[data-overlay],[data-folder],[data-shelf],[data-read],[data-act],[data-menu],[data-tab],[data-filter],[data-fk],[data-ff],[data-fl],[data-fsrc],[data-ftag],[data-fattention],[data-close],[data-scrim],[data-follow],[data-scope],[data-sfeed],[data-seed],[data-size],[data-back],[data-play],[data-skip],[data-rate],[data-tts],[data-ttsstop],[data-pp],[data-pclose],[data-fadd],[data-fremove],[data-goaledit],[data-goalsave],[data-sizeopen],[data-newfolder],[data-frename],[data-fdelete],[data-fsaverename],[data-fconfirmdelete],[data-tagstart],[data-untag],[data-highlight],[data-unhigh],[data-readat],[data-hmark],[data-focusnote],[data-unsource],[data-addmode],[data-saveone],[data-saveto],[data-htab],[data-railtag],[data-libtag],[data-tagopen],[data-tagpick],[data-hexport],[data-sub],[data-subback],[data-smenu],[data-ssub],[data-spausesub],[data-spause],[data-sfolder],[data-srename],[data-savesource],[data-unfollow],[data-source],[data-movefolder],[data-movenew],[data-mute],[data-copy],[data-original],[data-soon]');
   if(!t){ if(V.menuFor || V.filterOpen || V.sizeOpen){ V.menuFor = null; V.menuSub = null; V.filterOpen = false; V.sizeOpen = false; render(); } return; }
 
   const d = t.dataset;
@@ -2386,7 +2483,8 @@ document.addEventListener('click', e => {
   if(d.original){
     const it = S.items.find(i=>i.id===d.original);
     const sc = it ? null : S.sources.find(x=>x.id===d.original);
-    const url = it && it.link ? it.link : sc && sc.site && sc.site!=='saved' ? 'https://' + sc.site.replace(/^https?:\/\//,'') : null;
+    const isc = it ? S.sources.find(x=>x.id===it.sourceId) : null;
+    const url = it && it.link ? it.link : isc && isc.site ? 'https://' + isc.site : sc && sc.site && sc.site!=='saved' ? 'https://' + sc.site.replace(/^https?:\/\//,'') : null;
     V.menuFor = null; render();
     if(url) window.open(url, '_blank', 'noopener'); else showToast('This one has no original page in the prototype.');
     return;
@@ -2499,6 +2597,10 @@ document.addEventListener('click', e => {
     }
     if(V.player === d.play){ V.playing = !V.playing; } else { V.player = d.play; V.playing = true; }
     render(); return; }
+  if(d.skip){ const a = audioEl(); if(a && a.src){ a.currentTime = Math.max(0, Math.min((a.duration||1e9), a.currentTime + Number(d.skip))); } return; }
+  if(d.rate){ const a = audioEl(); if(a){ const r = [1,1.25,1.5,2]; a.playbackRate = r[(r.indexOf(a.playbackRate)+1) % r.length]; t.textContent = a.playbackRate + '×'; } return; }
+  if(d.tts){ readAloud(d.tts); return; }
+  if(d.ttsstop){ stopReading(); render(); return; }
   if(d.pp){
     const a = audioEl();
     if(a && a.src){ if(a.paused) a.play().catch(()=>{}); else a.pause(); return; }
@@ -2608,6 +2710,7 @@ document.addEventListener('change', e => {
 });
 
 document.addEventListener('input', e => {
+  if(e.target.id === 'rp-range'){ const a = audioEl(); if(a && a.src) a.currentTime = Number(e.target.value); return; }
   if(e.target.id === 'search-q'){ searchQ = e.target.value; render(); }
   if(e.target.id === 'add-url'){
     addUrl = e.target.value;
@@ -2736,11 +2839,33 @@ document.addEventListener('keyup', e => { if(e.shiftKey || e.key==='Shift') offe
   a.addEventListener('play', ()=>{ V.playing = true; render(); });
   a.addEventListener('pause', ()=>{ V.playing = false; render(); });
   a.addEventListener('timeupdate', ()=>{
+    const r = document.getElementById('rp-range'), rt = document.getElementById('rp-time');
+    if(r && document.activeElement !== r){ r.value = Math.round(a.currentTime); if(a.duration) r.max = Math.round(a.duration); }
+    if(rt) rt.textContent = fmtTime(a.currentTime);
     const f = document.getElementById('ptrack-fill'), t = document.getElementById('ptime');
     if(f && a.duration) f.style.width = (a.currentTime/a.duration*100).toFixed(1) + '%';
     if(t) t.textContent = fmtTime(a.currentTime);
   });
 })();
+
+/* Listen to an article: the device's own voice reads the title and the text on
+   the page. Free and offline; the real app can swap in a more natural voice. */
+function readAloud(id){
+  const synth = window.speechSynthesis;
+  if(!synth){ showToast("This browser can't read aloud."); return; }
+  if(V.tts === id){
+    if(synth.paused){ synth.resume(); V.ttsPaused = false; } else { synth.pause(); V.ttsPaused = true; }
+    render(); return;
+  }
+  stopReading();
+  const it = S.items.find(i=>i.id===id); if(!it) return;
+  const u = new SpeechSynthesisUtterance([it.title, ...(it.body||[])].join('. '));
+  u.rate = 1;
+  u.onend = ()=>{ if(V.tts === id){ V.tts = null; V.ttsPaused = false; render(); } };
+  V.tts = id; V.ttsPaused = false;
+  synth.speak(u); render();
+}
+function stopReading(){ if(window.speechSynthesis) window.speechSynthesis.cancel(); V.tts = null; V.ttsPaused = false; }
 
 /* the reader hairline tracks real scroll position */
 function wireReaderProgress(){

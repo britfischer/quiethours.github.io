@@ -118,3 +118,10 @@ One line per decision, newest at the bottom. Date, the decision, and why.
   YouTube's embedded player; podcast episodes play for real in the mini player;
   Open original opens the real page. Full article text waits for the private
   app, because the prototype is public.
+- 2026-10-26: **Each kind of item gets its own page.** Podcast: cover, a real
+  player (play, back 15, forward 30, speed, scrub), show notes, transcript.
+  Video: the YouTube player, description, transcript. Article: picture, Listen
+  (the device's own voice reads the page), text, link to the full piece.
+- 2026-10-26: **Transcripts:** podcasts get them in the real app by transcribing
+  each episode. YouTube transcripts are not available for other people's
+  channels through YouTube's rules; the video page points to captions instead.
