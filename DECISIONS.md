@@ -106,3 +106,5 @@ One line per decision, newest at the bottom. Date, the decision, and why.
   Feed rows seen as they leave the top of the window. Show unread counts adds a
   small count beside Everything, folders and sources in the Feed rail, off by
   default. Open the original skips the reading view. No "With notes" filter.
+- 2026-10-26: **No mark-as-seen-on-scroll.** Something stops being new only when
+  you mark it seen or open it. The setting is removed.

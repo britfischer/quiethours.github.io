@@ -604,10 +604,10 @@ function makeSeed(){
     };
   });
   return {version:1, sources:SOURCES.map(s=>({...s})), folders:FOLDERS.map(f=>({...f})), items,
-    settings:{markSeenOnScroll:false, showCounts:false, openOriginal:false}};
+    settings:{showCounts:false, openOriginal:false}};
 }
 function emptySeed(){
-  return {version:1, sources:[], folders:[], items:[], settings:{markSeenOnScroll:false, showCounts:false, openOriginal:false}};
+  return {version:1, sources:[], folders:[], items:[], settings:{showCounts:false, openOriginal:false}};
 }
 
 /* ---------------------------------------------------------------- store */
@@ -1529,8 +1529,7 @@ function checkWords(){
 }
 
 function viewSettings(){
-  const t = [['markSeenOnScroll','Mark as seen when I scroll past','In the Feed, anything you scroll past stops being new'],
-    ['showCounts','Show unread counts','A small number beside Everything, each folder and each source in the Feed'],
+  const t = [['showCounts','Show unread counts','A small number beside Everything, each folder and each source in the Feed'],
     ['openOriginal','Open the original site instead of the reading view','Skips the reading view and goes straight to the source']];
   return `<div class="wrap"><div class="columns"><main class="col" style="flex:1 1 100%;max-width:720px">
     <h1 class="page">Settings</h1>
@@ -2135,7 +2134,6 @@ function render(){
     if(target) requestAnimationFrame(()=>target.scrollIntoView({block:'center'}));
   } else if(V.jump==='top'){ V.jump = null; }
   wireHeaderShadow();
-  wireSeenOnScroll();
   const focus = document.getElementById(V.overlay==='add' ? 'add-url' : V.overlay==='search' ? 'search-q'
     : (V.overlay==='newfolder' || V.overlay==='renamefolder') ? 'folder-name' : '');
   if(focus){ focus.focus(); if(focus.value) focus.setSelectionRange(focus.value.length, focus.value.length); }
@@ -2730,30 +2728,6 @@ function offerHighlight(){
 
 document.addEventListener('mouseup', ()=>{ setTimeout(offerHighlight, 0); });
 document.addEventListener('keyup', e => { if(e.shiftKey || e.key==='Shift') offerHighlight(); });
-
-/* Mark as seen when I scroll past: in the Feed, a row that scrolls off the top
-   of the window is marked seen. The dot goes quietly, without redrawing the list
-   under your thumb; the next redraw picks it up. */
-function wireSeenOnScroll(){
-  if(V._seenObs){ V._seenObs.disconnect(); V._seenObs = null; }
-  if(V.view !== 'feed' || !S.settings || !S.settings.markSeenOnScroll || !('IntersectionObserver' in window)) return;
-  const obs = new IntersectionObserver(entries=>{
-    let changed = false;
-    entries.forEach(en=>{
-      if(en.isIntersecting || en.boundingClientRect.bottom > 0) return;
-      const id = en.target.dataset.row;
-      const it = S.items.find(i=>i.id===id);
-      if(it && !it.seenAt){
-        it.seenAt = new Date().toISOString(); changed = true;
-        const dot = en.target.querySelector('.dot'); if(dot){ dot.classList.add('off'); dot.innerHTML = ''; }
-      }
-      obs.unobserve(en.target);
-    });
-    if(changed) save();
-  }, {threshold:0});
-  document.querySelectorAll('.list .row[data-row]').forEach(r=>obs.observe(r));
-  V._seenObs = obs;
-}
 
 /* the reader hairline tracks real scroll position */
 function wireReaderProgress(){
