@@ -1,6 +1,6 @@
 # Feed test results
 
-Run on GitHub's servers, 2026-10-26 17:53 UTC.
+Run on GitHub's servers, 2026-10-26 18:08 UTC.
 
 | Source | Type | Verdict | Feed found by | Items | Newest | Full text | Image | Media |
 |---|---|---|---|---|---|---|---|---|
@@ -17,8 +17,8 @@ Run on GitHub's servers, 2026-10-26 17:53 UTC.
 
 ## Notes
 
-- **Cup of Jo**: feed `https://cupofjo.com/feed/`; article page fetch: status 200, about 6842 words of page text
-- **Wit & Delight**: feed `https://witanddelight.com/feed/`; article page fetch: status 200, about 11969 words of page text
+- **Cup of Jo**: feed `https://cupofjo.com/feed/`; article page fetch: status 200, about 7878 words of page text
+- **Wit & Delight**: feed `https://witanddelight.com/feed/`; article page fetch: status 200, about 12012 words of page text
 - **Camille Styles**: feed `https://camillestyles.com/feed`
 - **Jenn Eats Goood**: feed `none`; home page status 403; /feed with browser agent: 403; /feed with Feedly agent: 403; /feed with QuietHours agent: 403; /feed with curl agent: 403; no feed found on the page or at common addresses
 - **Justine Snacks**: feed `none`; home page status 403; /feed with browser agent: 403; /feed with Feedly agent: 403; /feed with QuietHours agent: 403; /feed with curl agent: 403; no feed found on the page or at common addresses
