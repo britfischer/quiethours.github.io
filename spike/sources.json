@@ -1,0 +1,12 @@
+[
+  {"name": "Cup of Jo", "kind": "blog", "url": "https://cupofjo.com/"},
+  {"name": "Wit & Delight", "kind": "blog", "url": "https://witanddelight.com/"},
+  {"name": "Camille Styles", "kind": "blog", "url": "https://camillestyles.com/"},
+  {"name": "Jenn Eats Goood", "kind": "newsletter", "url": "https://jenneatsgoood.substack.com/"},
+  {"name": "Justine Snacks", "kind": "newsletter", "url": "https://justinesnacks.substack.com/"},
+  {"name": "Caroline Winkler", "kind": "video", "url": "https://www.youtube.com/@Caroline_Winkler"},
+  {"name": "Jenn Im", "kind": "video", "url": "https://www.youtube.com/@imjennim"},
+  {"name": "Sophia Chang", "kind": "video", "url": "https://www.youtube.com/@sophiachang"},
+  {"name": "Healthy Emmie", "kind": "video", "url": "https://www.youtube.com/@HealthyEmmie/videos"},
+  {"name": "Dear Gabby", "kind": "podcast", "url": "https://gabbybernstein.com/podcast/", "search": "Dear Gabby Gabby Bernstein"}
+]

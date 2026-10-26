@@ -1,0 +1,34 @@
+# Feed test. Runs on GitHub's servers whenever the test or its source list
+# changes on the feed-spike branch, and saves the results back to that branch.
+name: Feed test
+
+on:
+  push:
+    branches: [feed-spike]
+    paths:
+      - "spike/check_feeds.py"
+      - "spike/sources.json"
+      - ".github/workflows/feed-spike.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install feedparser==6.0.11
+      - run: python spike/check_feeds.py
+      - name: Save the results to the branch
+        run: |
+          git config user.name "feed-test"
+          git config user.email "feed-test@users.noreply.github.com"
+          git add spike/results
+          git commit -m "Feed test results" || echo "no changes"
+          git push
