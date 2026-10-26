@@ -8,6 +8,7 @@ on:
     paths:
       - "spike/check_feeds.py"
       - "spike/sources.json"
+      - "spike/snapshot.py"
       - ".github/workflows/feed-spike.yml"
   workflow_dispatch:
 
@@ -25,6 +26,7 @@ jobs:
           python-version: "3.12"
       - run: pip install feedparser==6.0.11
       - run: python spike/check_feeds.py
+      - run: python spike/snapshot.py
       - name: Save the results to the branch
         run: |
           git config user.name "feed-test"
