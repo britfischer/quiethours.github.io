@@ -7,7 +7,7 @@
   "found_by": "advertised on the page",
   "notes": [],
   "feed_status": 200,
-  "feed_ms": 42,
+  "feed_ms": 74,
   "feed_title": "Cup of Jo",
   "items_in_feed": 6,
   "sample": [
@@ -43,7 +43,7 @@
    }
   ],
   "article_page_status": 200,
-  "article_page_words": 6234,
+  "article_page_words": 6842,
   "newest_date": "Mon, 26 Oct 2026 15:49:18 +0000",
   "verdict": "partly: teaser in feed, full article fetchable"
  },
@@ -55,7 +55,7 @@
   "found_by": "advertised on the page",
   "notes": [],
   "feed_status": 200,
-  "feed_ms": 76,
+  "feed_ms": 279,
   "feed_title": "",
   "items_in_feed": 35,
   "sample": [
@@ -91,7 +91,7 @@
    }
   ],
   "article_page_status": 200,
-  "article_page_words": 12012,
+  "article_page_words": 11969,
   "newest_date": "Thu, 15 Oct 2026 11:00:00 +0000",
   "verdict": "partly: teaser in feed, full article fetchable"
  },
@@ -103,7 +103,7 @@
   "found_by": "common feed address",
   "notes": [],
   "feed_status": 200,
-  "feed_ms": 173,
+  "feed_ms": 482,
   "feed_title": "Camille Styles",
   "items_in_feed": 16,
   "sample": [
@@ -181,7 +181,7 @@
   "found_by": "channel page",
   "notes": [],
   "feed_status": 200,
-  "feed_ms": 101,
+  "feed_ms": 338,
   "feed_title": "Caroline Winkler",
   "items_in_feed": 15,
   "sample": [
@@ -227,7 +227,7 @@
   "found_by": "channel page",
   "notes": [],
   "feed_status": 200,
-  "feed_ms": 126,
+  "feed_ms": 167,
   "feed_title": "Jenn Im",
   "items_in_feed": 15,
   "sample": [
@@ -273,7 +273,7 @@
   "found_by": "channel page",
   "notes": [],
   "feed_status": 200,
-  "feed_ms": 154,
+  "feed_ms": 136,
   "feed_title": "Sophia Chang",
   "items_in_feed": 15,
   "sample": [
@@ -319,7 +319,7 @@
   "found_by": "channel page",
   "notes": [],
   "feed_status": 200,
-  "feed_ms": 131,
+  "feed_ms": 151,
   "feed_title": "Healthy Emmie",
   "items_in_feed": 15,
   "sample": [
@@ -367,7 +367,7 @@
    "matched Apple Podcasts listing: Dear Gabby by Gabby Bernstein"
   ],
   "feed_status": 200,
-  "feed_ms": 196,
+  "feed_ms": 174,
   "feed_title": "Dear Gabby",
   "items_in_feed": 342,
   "sample": [
