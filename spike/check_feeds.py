@@ -16,8 +16,8 @@ HERE = pathlib.Path(__file__).parent
 OUT = HERE / "results"
 
 
-def get(url, timeout=20):
-    req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "*/*"})
+def get(url, timeout=20, ua=None):
+    req = urllib.request.Request(url, headers={"User-Agent": ua or UA, "Accept": "application/rss+xml, application/xml;q=0.9, */*;q=0.8"})
     t = time.time()
     try:
         with urllib.request.urlopen(req, timeout=timeout) as r:
@@ -61,6 +61,16 @@ def find_feed(src):
             return f"https://www.youtube.com/feeds/videos.xml?channel_id={m.group(1)}", "channel page", notes
         notes.append(f"channel page status {page['status']}, no channel ID found")
         return None, None, notes
+    if kind == "podcast" and src.get("search"):
+        q = urllib.parse.quote(src["search"])
+        r = get(f"https://itunes.apple.com/search?media=podcast&entity=podcast&limit=5&term={q}")
+        try:
+            for res in json.loads(text_of(r["body"])).get("results", []):
+                if res.get("feedUrl"):
+                    notes.append(f"matched Apple Podcasts listing: {res.get('collectionName')} by {res.get('artistName')}")
+                    return res["feedUrl"], "Apple Podcasts directory", notes
+        except Exception as ex:
+            notes.append(f"podcast directory lookup failed: {ex}")
     page = get(url)
     h = text_of(page["body"])
     if page["status"] != 200:
@@ -68,6 +78,13 @@ def find_feed(src):
     adv = [f for f in advertised_feeds(h, page["url"]) if "comments" not in f.lower()]
     if adv:
         return adv[0], "advertised on the page", notes
+    if "substack.com" in url:
+        for ua in (None, "Feedly/1.0 (+http://www.feedly.com/fetcher.html)", "QuietHours/0.1 (+https://github.com/britfischer/quiethours.github.io)", "curl/8.5.0"):
+            r = get(urllib.parse.urljoin(url, "/feed"), ua=ua)
+            notes.append(f"/feed with {'browser' if ua is None else ua.split('/')[0]} agent: {r['status']}")
+            if r["status"] == 200 and re.search(r"<(rss|feed)", text_of(r["body"])[:2000], re.I):
+                src["_ua"] = ua
+                return urllib.parse.urljoin(url, "/feed"), "Substack feed address", notes
     candidates = ["feed", "feed/", "rss", "rss.xml", "feed.xml", "atom.xml", "index.xml"]
     for c in candidates:
         cu = urllib.parse.urljoin(url if url.endswith("/") else url + "/", c)
@@ -120,7 +137,7 @@ def check(src):
     if not feed_url:
         row["verdict"] = "no feed"
         return row
-    r = get(feed_url)
+    r = get(feed_url, ua=src.get("_ua"))
     row["feed_status"], row["feed_ms"] = r["status"], r["ms"]
     if r["status"] != 200:
         row["verdict"] = "feed blocked"
@@ -155,7 +172,7 @@ def check(src):
     row["newest_date"] = (newest.get("published") or newest.get("updated")) if newest else None
     full_share = sum(1 for i in items if i["has_full_text"])
     if src["kind"] == "video" or src["kind"] == "podcast":
-        row["verdict"] = "works" if items and all(i["media"] or i["image"] for i in items) else "partly"
+        row["verdict"] = "works" if items and all(i["media"] for i in items) else "partly: no audio or video in the items"
     elif full_share == len(items) and items:
         row["verdict"] = "works"
     elif items and row.get("article_page_status") == 200:
