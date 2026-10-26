@@ -1,0 +1,398 @@
+[
+ {
+  "name": "Cup of Jo",
+  "kind": "blog",
+  "url": "https://cupofjo.com/",
+  "feed_url": "https://cupofjo.com/feed/",
+  "found_by": "advertised on the page",
+  "notes": [],
+  "feed_status": 200,
+  "feed_ms": 105,
+  "feed_title": "Cup of Jo",
+  "items_in_feed": 6,
+  "sample": [
+   {
+    "title": "A Parenting Moment That Moved Me",
+    "published": "Mon, 26 Oct 2026 15:49:18 +0000",
+    "link": "https://cupofjo.com/2026/10/26/kindness-of-strangers-moms/",
+    "words_in_feed": 47,
+    "has_full_text": false,
+    "image": true,
+    "media": null,
+    "paywall_hint": false
+   },
+   {
+    "title": "Have a Beautiful Weekend.",
+    "published": "Fri, 23 Oct 2026 19:40:02 +0000",
+    "link": "https://cupofjo.com/2026/10/23/have-a-beautiful-weekend-27/",
+    "words_in_feed": 63,
+    "has_full_text": false,
+    "image": true,
+    "media": null,
+    "paywall_hint": false
+   },
+   {
+    "title": "Pro Tip: A Gift to Send Instead of Flowers",
+    "published": "Fri, 23 Oct 2026 16:37:06 +0000",
+    "link": "https://cupofjo.com/2026/10/23/pro-tip-best-unique-hostess-gift/",
+    "words_in_feed": 59,
+    "has_full_text": false,
+    "image": true,
+    "media": null,
+    "paywall_hint": false
+   }
+  ],
+  "article_page_status": 200,
+  "article_page_words": 6234,
+  "newest_date": "Mon, 26 Oct 2026 15:49:18 +0000",
+  "verdict": "partly: teaser in feed, full article fetchable"
+ },
+ {
+  "name": "Wit & Delight",
+  "kind": "blog",
+  "url": "https://witanddelight.com/",
+  "feed_url": "https://witanddelight.com/feed/",
+  "found_by": "advertised on the page",
+  "notes": [],
+  "feed_status": 200,
+  "feed_ms": 144,
+  "feed_title": "",
+  "items_in_feed": 35,
+  "sample": [
+   {
+    "title": "20 Journaling Prompts I Swear By to Get You Out of Your Head",
+    "published": "Thu, 15 Oct 2026 11:00:00 +0000",
+    "link": "https://witanddelight.com/2026/10/journaling-prompts/",
+    "words_in_feed": 45,
+    "has_full_text": false,
+    "image": false,
+    "media": null,
+    "paywall_hint": false
+   },
+   {
+    "title": "I Tested 7 Bed Pillows: Here\u2019s My Honest Review of Each One",
+    "published": "Thu, 24 Sep 2026 11:00:00 +0000",
+    "link": "https://witanddelight.com/2026/09/bed-pillows-review/",
+    "words_in_feed": 51,
+    "has_full_text": false,
+    "image": false,
+    "media": null,
+    "paywall_hint": false
+   },
+   {
+    "title": "12 Fall Wardrobe Essentials So Effortless I Forget I\u2019m Wearing Them",
+    "published": "Thu, 17 Sep 2026 14:00:00 +0000",
+    "link": "https://witanddelight.com/2026/09/fall-wardrobe-essentials/",
+    "words_in_feed": 46,
+    "has_full_text": false,
+    "image": false,
+    "media": null,
+    "paywall_hint": false
+   }
+  ],
+  "article_page_status": 200,
+  "article_page_words": 12012,
+  "newest_date": "Thu, 15 Oct 2026 11:00:00 +0000",
+  "verdict": "partly: teaser in feed, full article fetchable"
+ },
+ {
+  "name": "Camille Styles",
+  "kind": "blog",
+  "url": "https://camillestyles.com/",
+  "feed_url": "https://camillestyles.com/feed",
+  "found_by": "common feed address",
+  "notes": [],
+  "feed_status": 200,
+  "feed_ms": 528,
+  "feed_title": "Camille Styles",
+  "items_in_feed": 16,
+  "sample": [
+   {
+    "title": "6 Ways to Wear the \u201cSense and Sensibility\u201d Fashion Trend Without Looking Like a Costume",
+    "published": "Thu, 22 Oct 2026 10:00:00 +0000",
+    "link": "https://camillestyles.com/style/fashion/sense-sensibility-movie-fashion-trend/",
+    "words_in_feed": 972,
+    "has_full_text": true,
+    "image": true,
+    "media": null,
+    "paywall_hint": false
+   },
+   {
+    "title": "An Effortless Thanksgiving Hosting Plan: What to Make, Buy, and Delegate",
+    "published": "Wed, 21 Oct 2026 10:00:00 +0000",
+    "link": "https://camillestyles.com/entertaining/dinner-parties/holiday-dinner-parties/effortless-thanksgiving-ideas/",
+    "words_in_feed": 1476,
+    "has_full_text": true,
+    "image": true,
+    "media": null,
+    "paywall_hint": false
+   },
+   {
+    "title": "I Had to Recreate the Olive Oil Sundae From Our Local Pizza Spot",
+    "published": "Tue, 20 Oct 2026 10:00:00 +0000",
+    "link": "https://camillestyles.com/food/recipes/dessert/olive-oil-pistachio-affogato/",
+    "words_in_feed": 774,
+    "has_full_text": true,
+    "image": true,
+    "media": null,
+    "paywall_hint": false
+   }
+  ],
+  "newest_date": "Thu, 22 Oct 2026 10:00:00 +0000",
+  "verdict": "works"
+ },
+ {
+  "name": "Jenn Eats Goood",
+  "kind": "newsletter",
+  "url": "https://jenneatsgoood.substack.com/",
+  "feed_url": null,
+  "found_by": null,
+  "notes": [
+   "home page status 403",
+   "no feed found on the page or at common addresses"
+  ],
+  "verdict": "no feed"
+ },
+ {
+  "name": "Justine Snacks",
+  "kind": "newsletter",
+  "url": "https://justinesnacks.substack.com/",
+  "feed_url": null,
+  "found_by": null,
+  "notes": [
+   "home page status 403",
+   "no feed found on the page or at common addresses"
+  ],
+  "verdict": "no feed"
+ },
+ {
+  "name": "Caroline Winkler",
+  "kind": "video",
+  "url": "https://www.youtube.com/@Caroline_Winkler",
+  "feed_url": "https://www.youtube.com/feeds/videos.xml?channel_id=UC8JOgFXp-I3YV6dsKqqQdUw",
+  "found_by": "channel page",
+  "notes": [],
+  "feed_status": 200,
+  "feed_ms": 366,
+  "feed_title": "Caroline Winkler",
+  "items_in_feed": 15,
+  "sample": [
+   {
+    "title": "Healing my cats, too \ud83c\udf42",
+    "published": "2026-10-19T16:33:03+00:00",
+    "link": "https://www.youtube.com/shorts/7dDmec1Dx4s",
+    "words_in_feed": 11,
+    "has_full_text": false,
+    "image": true,
+    "media": "youtube video (plays in YouTube's embedded player)",
+    "paywall_hint": false
+   },
+   {
+    "title": "A full-circle love story :)",
+    "published": "2026-10-03T21:39:21+00:00",
+    "link": "https://www.youtube.com/shorts/zH_QXWK0FPM",
+    "words_in_feed": 23,
+    "has_full_text": false,
+    "image": true,
+    "media": "youtube video (plays in YouTube's embedded player)",
+    "paywall_hint": false
+   },
+   {
+    "title": "Fixing the Sins of my Generation",
+    "published": "2026-09-25T17:39:45+00:00",
+    "link": "https://www.youtube.com/watch?v=2WrEEflHL9U",
+    "words_in_feed": 495,
+    "has_full_text": true,
+    "image": true,
+    "media": "youtube video (plays in YouTube's embedded player)",
+    "paywall_hint": false
+   }
+  ],
+  "newest_date": "2026-10-19T16:33:03+00:00",
+  "verdict": "works"
+ },
+ {
+  "name": "Jenn Im",
+  "kind": "video",
+  "url": "https://www.youtube.com/@imjennim",
+  "feed_url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCgWfS_47YPVbKx5EK4FLm4A",
+  "found_by": "channel page",
+  "notes": [],
+  "feed_status": 200,
+  "feed_ms": 156,
+  "feed_title": "Jenn Im",
+  "items_in_feed": 15,
+  "sample": [
+   {
+    "title": "Life Lessons at 36",
+    "published": "2026-10-14T16:00:32+00:00",
+    "link": "https://www.youtube.com/watch?v=mxwdDbOxRss",
+    "words_in_feed": 103,
+    "has_full_text": false,
+    "image": true,
+    "media": "youtube video (plays in YouTube's embedded player)",
+    "paywall_hint": false
+   },
+   {
+    "title": "what my son eats in a day",
+    "published": "2026-10-08T19:14:18+00:00",
+    "link": "https://www.youtube.com/shorts/TRIuK-rIjDo",
+    "words_in_feed": 0,
+    "has_full_text": false,
+    "image": true,
+    "media": "youtube video (plays in YouTube's embedded player)",
+    "paywall_hint": false
+   },
+   {
+    "title": "What I Eat In A Day (Healthy Korean Recipes)",
+    "published": "2026-10-07T16:00:03+00:00",
+    "link": "https://www.youtube.com/watch?v=mss_vXACsiQ",
+    "words_in_feed": 374,
+    "has_full_text": true,
+    "image": true,
+    "media": "youtube video (plays in YouTube's embedded player)",
+    "paywall_hint": false
+   }
+  ],
+  "newest_date": "2026-10-14T16:00:32+00:00",
+  "verdict": "works"
+ },
+ {
+  "name": "Sophia Chang",
+  "kind": "video",
+  "url": "https://www.youtube.com/@sophiachang",
+  "feed_url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCLhLyKIZYf4lCcilMujzXAA",
+  "found_by": "channel page",
+  "notes": [],
+  "feed_status": 200,
+  "feed_ms": 179,
+  "feed_title": "Sophia Chang",
+  "items_in_feed": 15,
+  "sample": [
+   {
+    "title": "finding balance in my 30s, morning runs, family time, & a much needed night out",
+    "published": "2026-10-08T22:51:38+00:00",
+    "link": "https://www.youtube.com/watch?v=pj7Ls65uUKU",
+    "words_in_feed": 99,
+    "has_full_text": false,
+    "image": true,
+    "media": "youtube video (plays in YouTube's embedded player)",
+    "paywall_hint": false
+   },
+   {
+    "title": "3 days on vancouver island",
+    "published": "2026-09-23T20:09:08+00:00",
+    "link": "https://www.youtube.com/watch?v=NMuND2QTWDY",
+    "words_in_feed": 122,
+    "has_full_text": false,
+    "image": true,
+    "media": "youtube video (plays in YouTube's embedded player)",
+    "paywall_hint": false
+   },
+   {
+    "title": "comfiest ballerinas! #VIVAIA, #VIVAIAREWORK, #VIVAIASNEAKERS, #OFFICEWEAR, #OFFICESHOES, #WORKWEAR",
+    "published": "2026-09-05T22:48:55+00:00",
+    "link": "https://www.youtube.com/shorts/ImC1nQ1vWVQ",
+    "words_in_feed": 0,
+    "has_full_text": false,
+    "image": true,
+    "media": "youtube video (plays in YouTube's embedded player)",
+    "paywall_hint": false
+   }
+  ],
+  "newest_date": "2026-10-08T22:51:38+00:00",
+  "verdict": "works"
+ },
+ {
+  "name": "Healthy Emmie",
+  "kind": "video",
+  "url": "https://www.youtube.com/@HealthyEmmie/videos",
+  "feed_url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCNMWCQx35DQGMjY46e6e_nQ",
+  "found_by": "channel page",
+  "notes": [],
+  "feed_status": 200,
+  "feed_ms": 129,
+  "feed_title": "Healthy Emmie",
+  "items_in_feed": 15,
+  "sample": [
+   {
+    "title": "a honest look at my life right now...",
+    "published": "2026-10-24T12:13:50+00:00",
+    "link": "https://www.youtube.com/watch?v=PKPty9PmuI0",
+    "words_in_feed": 259,
+    "has_full_text": true,
+    "image": true,
+    "media": "youtube video (plays in YouTube's embedded player)",
+    "paywall_hint": false
+   },
+   {
+    "title": "Self-Sabotaging Your Weight Loss? Here\u2019s How To Stop.",
+    "published": "2026-10-21T17:32:47+00:00",
+    "link": "https://www.youtube.com/watch?v=BYPDnSQHlOI",
+    "words_in_feed": 232,
+    "has_full_text": false,
+    "image": true,
+    "media": "youtube video (plays in YouTube's embedded player)",
+    "paywall_hint": false
+   },
+   {
+    "title": "Small Habits Have a BIG Impact \ud83d\udc40",
+    "published": "2026-10-19T15:10:54+00:00",
+    "link": "https://www.youtube.com/shorts/tDOlOGiM6-A",
+    "words_in_feed": 0,
+    "has_full_text": false,
+    "image": true,
+    "media": "youtube video (plays in YouTube's embedded player)",
+    "paywall_hint": false
+   }
+  ],
+  "newest_date": "2026-10-24T12:13:50+00:00",
+  "verdict": "works"
+ },
+ {
+  "name": "Dear Gabby",
+  "kind": "podcast",
+  "url": "https://gabbybernstein.com/podcast/",
+  "feed_url": "https://gabbybernstein.com/feed/",
+  "found_by": "advertised on the page",
+  "notes": [],
+  "feed_status": 200,
+  "feed_ms": 1130,
+  "feed_title": "Gabrielle Bernstein",
+  "items_in_feed": 10,
+  "sample": [
+   {
+    "title": "Internal Family Systems (IFS) Therapy",
+    "published": "Wed, 05 Jun 2024 15:05:25 +0000",
+    "link": "https://gabbybernstein.com/internal-family-systems-therapy/",
+    "words_in_feed": 2168,
+    "has_full_text": true,
+    "image": true,
+    "media": null,
+    "paywall_hint": false
+   },
+   {
+    "title": "how to connect with your spirit guides",
+    "published": "Fri, 05 May 2023 05:00:00 +0000",
+    "link": "https://gabbybernstein.com/spirit-guides/",
+    "words_in_feed": 3512,
+    "has_full_text": true,
+    "image": true,
+    "media": null,
+    "paywall_hint": false
+   },
+   {
+    "title": "how to manifest: the do\u2019s and don\u2019ts of manifesting",
+    "published": "Thu, 04 May 2023 05:00:00 +0000",
+    "link": "https://gabbybernstein.com/dos-donts-manifesting/",
+    "words_in_feed": 2300,
+    "has_full_text": true,
+    "image": true,
+    "media": null,
+    "paywall_hint": false
+   }
+  ],
+  "newest_date": "Wed, 05 Jun 2024 15:05:25 +0000",
+  "verdict": "works"
+ }
+]
