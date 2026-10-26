@@ -102,3 +102,7 @@ One line per decision, newest at the bottom. Date, the decision, and why.
 - 2026-10-22: **Pausing a source offers a length:** 3 days, 1 week, 2 weeks,
   1 month, or until you resume. The source comes back on its own when the date
   passes, and its row says "Paused until <date>". "Mute" is renamed "Pause".
+- 2026-10-26: **The three reading settings work.** Mark as seen on scroll marks
+  Feed rows seen as they leave the top of the window. Show unread counts adds a
+  small count beside Everything, folders and sources in the Feed rail, off by
+  default. Open the original skips the reading view. No "With notes" filter.

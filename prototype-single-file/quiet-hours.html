@@ -87,6 +87,8 @@ button{font-family:inherit;color:inherit}
 .side > button:hover{background:var(--softer)}
 .side > button.on{background:var(--action);color:var(--card);font-weight:600}
 .side > button.on:hover{background:var(--action);color:var(--card)}
+.rcount{margin-left:auto;font-size:13px;font-weight:500;color:var(--ink-muted);font-variant-numeric:tabular-nums}
+.side > button.on .rcount{color:inherit;opacity:.85}
 .lbl{margin:0;font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;line-height:1}
 h1.page{margin:0;font-family:var(--serif);font-weight:400;font-size:32px;line-height:1.2;text-wrap:balance}
 h1.display{margin:0;font-family:var(--serif);font-weight:400;font-size:44px;line-height:1.15;text-wrap:balance}
@@ -881,7 +883,7 @@ function rowHTML(it, opts){
     : (opts && opts.added === 'archived' && it.archivedAt) ? 'Archived ' + timeAgo(it.archivedAt)
     : timeAgo(it.publishedAt);
   const metaLine = `${esc(s.title||'')} · ${added} · ${it.minutes} min`;
-  if(plain) return `<article class="row plain" data-read="${it.id}" role="link" tabindex="0" aria-label="${esc(it.title)}">
+  if(plain) return `<article class="row plain" data-row="${it.id}" data-read="${it.id}" role="link" tabindex="0" aria-label="${esc(it.title)}">
     <span class="dot ${it.seenAt?'off':''}">${it.seenAt?'':'<span style="position:absolute;left:-9999px">New</span>'}</span>
     <div class="th" style="background:${s.color||'var(--m4)'}">${media}</div>
     <div class="tx">
@@ -890,7 +892,7 @@ function rowHTML(it, opts){
     </div>
   </article>`;
 
-  return `<article class="row">
+  return `<article class="row" data-row="${it.id}">
     <span class="dot ${it.seenAt?'off':''}">${it.seenAt?'':'<span style="position:absolute;left:-9999px">New</span>'}</span>
     <div class="th" style="background:${s.color||'var(--m4)'}">${media}</div>
     <div class="tx">
@@ -1109,6 +1111,13 @@ function viewHome(){
   </main></div>`;
 }
 
+/* Unread counts are off unless you switch them on in Settings. */
+function railCount(test){
+  if(!S.settings || !S.settings.showCounts) return '';
+  const n = audible().filter(i=>isUnseen(i) && test(i)).length;
+  return n ? `<span class="rcount" aria-label="${n} unread">${n}</span>` : '';
+}
+
 function viewFeed(){
   const folder = S.folders.find(f=>f.id===V.folder);
   const source = S.sources.find(x=>x.id===V.source);
@@ -1138,18 +1147,18 @@ function viewFeed(){
     <aside class="rail">
       <nav class="side" aria-label="All items">
         <div class="sh"><h2 class="lbl">Feed</h2></div>
-        <button data-folder="" class="${!V.folder&&!V.source?'on':''}">Everything</button>
+        <button data-folder="" class="${!V.folder&&!V.source?'on':''}">Everything${railCount(()=>true)}</button>
       </nav>
       <nav class="side" aria-label="Folders">
         <div class="sh"><h2 class="lbl">Folders</h2>
           <button class="act" data-overlay="newfolder" aria-label="New folder" data-tip="New folder">${I.plus}</button>
         </div>
-        ${S.folders.map(f=>`<button data-folder="${f.id}" class="${V.folder===f.id?'on':''}">${esc(f.name)}</button>`).join('')}
+        ${S.folders.map(f=>`<button data-folder="${f.id}" class="${V.folder===f.id?'on':''}">${esc(f.name)}${railCount(i=>{ const sc = src(i); return !!(sc && sc.folders.includes(f.id)); })}</button>`).join('')}
       </nav>
       <nav class="side" aria-label="Sources">
         <div class="sh"><h2 class="lbl">Sources</h2><button class="act" data-go="sources">Manage</button></div>
         ${S.sources.filter(sc=>!sc.oneoff).map(sc=>`<button data-source="${sc.id}" class="${V.source===sc.id?'on':''}">
-          <span style="width:20px;height:20px;border-radius:6px;background:${sc.color};flex:none" aria-hidden="true"></span>${esc(sc.title)}</button>`).join('')}
+          <span style="width:20px;height:20px;border-radius:6px;background:${sc.color};flex:none" aria-hidden="true"></span>${esc(sc.title)}${railCount(i=>i.sourceId===sc.id)}</button>`).join('')}
       </nav>
     </aside>
     <main class="col">
@@ -1520,9 +1529,9 @@ function checkWords(){
 }
 
 function viewSettings(){
-  const t = [['markSeenOnScroll','Mark as seen when I scroll past','Off means items stay new until you open or clear them'],
-    ['showCounts','Show unread counts','Off by default, and worth leaving off'],
-    ['openOriginal','Open the original site instead of the reading view','Only for sources that need it']];
+  const t = [['markSeenOnScroll','Mark as seen when I scroll past','In the Feed, anything you scroll past stops being new'],
+    ['showCounts','Show unread counts','A small number beside Everything, each folder and each source in the Feed'],
+    ['openOriginal','Open the original site instead of the reading view','Skips the reading view and goes straight to the source']];
   return `<div class="wrap"><div class="columns"><main class="col" style="flex:1 1 100%;max-width:720px">
     <h1 class="page">Settings</h1>
     <section style="display:flex;flex-direction:column">
@@ -2126,6 +2135,7 @@ function render(){
     if(target) requestAnimationFrame(()=>target.scrollIntoView({block:'center'}));
   } else if(V.jump==='top'){ V.jump = null; }
   wireHeaderShadow();
+  wireSeenOnScroll();
   const focus = document.getElementById(V.overlay==='add' ? 'add-url' : V.overlay==='search' ? 'search-q'
     : (V.overlay==='newfolder' || V.overlay==='renamefolder') ? 'folder-name' : '');
   if(focus){ focus.focus(); if(focus.value) focus.setSelectionRange(focus.value.length, focus.value.length); }
@@ -2335,6 +2345,17 @@ document.addEventListener('click', e => {
     V.overlay = null;
     go('read', {itemId:id, readFrom:'highlights', jump: (n==='top'||n==='note') ? n : Number(n)});
     const it = S.items.find(i=>i.id===id); if(it && !it.seenAt) patch(it.id,{seenAt:new Date().toISOString()});
+    return;
+  }
+  if(d.read && S.settings && S.settings.openOriginal){
+    // straight to the source. Sample items have no real pages, so the prototype says where it would go.
+    const it = S.items.find(i=>i.id===d.read);
+    if(it){
+      if(!it.seenAt) patch(it.id,{seenAt:new Date().toISOString()});
+      const site = (src(it)||{}).site || 'the source';
+      V.overlay = null; render();
+      showToast('Opened on ' + site + '. In the real app this is a new tab on the original page.');
+    }
     return;
   }
   if(d.read){
@@ -2585,7 +2606,7 @@ document.addEventListener('change', e => {
     return;
   }
   if(d.pref){ const [key,field] = d.pref.split('|'); setPref(key,{[field]: e.target.value}); }
-  if(d.set){ S.settings[d.set] = e.target.checked; save(); }
+  if(d.set){ S.settings[d.set] = e.target.checked; save(); render(); }
 });
 
 document.addEventListener('input', e => {
@@ -2709,6 +2730,30 @@ function offerHighlight(){
 
 document.addEventListener('mouseup', ()=>{ setTimeout(offerHighlight, 0); });
 document.addEventListener('keyup', e => { if(e.shiftKey || e.key==='Shift') offerHighlight(); });
+
+/* Mark as seen when I scroll past: in the Feed, a row that scrolls off the top
+   of the window is marked seen. The dot goes quietly, without redrawing the list
+   under your thumb; the next redraw picks it up. */
+function wireSeenOnScroll(){
+  if(V._seenObs){ V._seenObs.disconnect(); V._seenObs = null; }
+  if(V.view !== 'feed' || !S.settings || !S.settings.markSeenOnScroll || !('IntersectionObserver' in window)) return;
+  const obs = new IntersectionObserver(entries=>{
+    let changed = false;
+    entries.forEach(en=>{
+      if(en.isIntersecting || en.boundingClientRect.bottom > 0) return;
+      const id = en.target.dataset.row;
+      const it = S.items.find(i=>i.id===id);
+      if(it && !it.seenAt){
+        it.seenAt = new Date().toISOString(); changed = true;
+        const dot = en.target.querySelector('.dot'); if(dot){ dot.classList.add('off'); dot.innerHTML = ''; }
+      }
+      obs.unobserve(en.target);
+    });
+    if(changed) save();
+  }, {threshold:0});
+  document.querySelectorAll('.list .row[data-row]').forEach(r=>obs.observe(r));
+  V._seenObs = obs;
+}
 
 /* the reader hairline tracks real scroll position */
 function wireReaderProgress(){
