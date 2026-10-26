@@ -108,3 +108,8 @@ One line per decision, newest at the bottom. Date, the decision, and why.
   default. Open the original skips the reading view. No "With notes" filter.
 - 2026-10-26: **No mark-as-seen-on-scroll.** Something stops being new only when
   you mark it seen or open it. The setting is removed.
+- 2026-10-26: **The prototype runs on a snapshot of the owner's real sources**
+  (from the feed test): headlines, dates, links and a one-line preview only.
+  Article text stays placeholder, because the repo and site are public. Video
+  lengths are placeholders; YouTube's feed omits them. The two Substacks show
+  their real state: not updating.
