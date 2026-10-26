@@ -1012,22 +1012,6 @@ function viewHome(){
         <p class="stamp">${esc(stamp)}</p>
         <h1 class="hero">${greet}<br><span class="accent">${unseen.length?"Here's what's new.":"You're all caught up."}</span></h1>
       </div>
-      <div class="timecard">
-        <div class="trow">
-          <span style="font-weight:600;min-width:0">Today's reading time</span>
-          ${V.editGoal
-            ? `<span class="tnum" style="display:flex;align-items:center;gap:6px">
-                 <input id="goal-input" type="number" min="5" max="240" step="5" value="${goal}"
-                   style="width:68px;height:36px;border:1px solid var(--border);border-radius:8px;padding:0 8px;font:500 14px var(--sans);background:var(--card);color:var(--ink)">
-                 <span style="color:var(--ink-muted)">min</span>
-                 <button class="lk" data-goalsave="1">Save</button>
-               </span>`
-            : `<span class="tnum" style="display:flex;align-items:center;gap:4px;color:var(--ink-muted)">${readToday} of ${goal} min
-                 <button class="ib bare" data-goaledit="1" aria-label="Edit your daily goal" data-tip="Edit your daily goal" style="width:32px;height:32px;color:var(--action)">${I.pencil}</button>
-               </span>`}
-        </div>
-        <div class="bar" role="img" aria-label="${readToday} of ${goal} minutes read today"><span style="width:${pct}%"></span></div>
-      </div>
     </section>
 
     ${featured?`<section class="featured" aria-label="Featured">

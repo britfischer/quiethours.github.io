@@ -125,3 +125,6 @@ One line per decision, newest at the bottom. Date, the decision, and why.
 - 2026-10-26: **Transcripts:** podcasts get them in the real app by transcribing
   each episode. YouTube transcripts are not available for other people's
   channels through YouTube's rules; the video page points to captions instead.
+- 2026-10-26: **Reading time removed from Home for now.** It counted each
+  piece's estimated length when opened, not time actually spent, and it crowded
+  the greeting. Revisit if real time-spent tracking is built.
