@@ -1,5 +1,8 @@
 """Snapshot of the owner's real sources, for the prototype's sample data.
 
+Only headlines, dates, links and a one-line preview are kept: the repo and the
+site are public, so full article text from other publishers is not stored here.
+
 Reads the feeds the feed test found (results/results.json) and saves the newest
 items from each as plain text: title, date, link, a short standfirst, a few
 body paragraphs and a length estimate. Writes results/snapshot.json.
@@ -65,7 +68,6 @@ def main():
                     "published_parsed": list(e.get("published_parsed") or e.get("updated_parsed") or [])[:6],
                     "link": e.get("link"),
                     "standfirst": stand,
-                    "body": body[:6],
                     "full_text": words >= 250,
                     "minutes": minutes(e, r["kind"], words),
                 })
