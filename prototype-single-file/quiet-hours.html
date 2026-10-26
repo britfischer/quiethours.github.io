@@ -156,8 +156,8 @@ h1.display{margin:0;font-family:var(--serif);font-weight:400;font-size:44px;line
 .fill{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 .th > svg{position:relative;z-index:1;filter:drop-shadow(0 1px 3px rgba(0,0,0,.55))}
 .art{position:relative;overflow:hidden}
-.hero{position:relative;overflow:hidden;aspect-ratio:16/9;max-width:100%;border-radius:20px}
-.hero iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.rhero{position:relative;overflow:hidden;aspect-ratio:16/9;max-width:100%;border-radius:20px}
+.rhero iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .pod{display:flex;flex-direction:column;gap:10px;padding:20px;border-radius:20px;background:var(--softer)}
 .podrow{display:flex;align-items:center;gap:12px}
 .podskip{min-width:48px;height:40px;padding:0 12px;border:1px solid var(--border);border-radius:999px;background:var(--card);
@@ -1558,8 +1558,8 @@ function readOld(it, sc){
         </div>
         <h1>${esc(it.title)}</h1>
         ${it.videoId
-          ? `<div class="hero" style="background:#000"><iframe src="https://www.youtube-nocookie.com/embed/${esc(it.videoId)}?rel=0" title="${esc(it.title)}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>`
-          : `<div class="hero" style="background:${sc.color||'var(--m6)'}">${pic(it)}</div>`}
+          ? `<div class="rhero" style="background:#000"><iframe src="https://www.youtube-nocookie.com/embed/${esc(it.videoId)}?rel=0" title="${esc(it.title)}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>`
+          : `<div class="rhero" style="background:${sc.color||'var(--m6)'}">${pic(it)}</div>`}
 
         ${it.link ? `<div class="bodycopy" id="read-body" style="font-size:${V.readSize}px">
           ${(it.body||[]).map(p=>`<p>${marked(p, it)}</p>`).join('')}
@@ -1612,7 +1612,7 @@ function readMain(it, sc){
     const cur = on && a ? a.currentTime : 0, dur = on && a && a.duration ? a.duration : it.minutes*60;
     return `<article class="readcol">
       ${head}
-      <div class="hero" style="background:${sc.color||'var(--m6)'}">${pic(it)}</div>
+      <div class="rhero" style="background:${sc.color||'var(--m6)'}">${pic(it)}</div>
       <section class="pod" aria-label="Player">
         <div class="podrow">
           <button class="podskip" data-skip="-15" aria-label="Back 15 seconds">−15</button>
@@ -1639,7 +1639,7 @@ function readMain(it, sc){
   if(it.kind === 'video'){
     return `<article class="readcol">
       ${head}
-      <div class="hero" style="background:#000"><iframe src="https://www.youtube-nocookie.com/embed/${esc(it.videoId)}?rel=0" title="${esc(it.title)}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>
+      <div class="rhero" style="background:#000"><iframe src="https://www.youtube-nocookie.com/embed/${esc(it.videoId)}?rel=0" title="${esc(it.title)}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>
       <section class="rblock" aria-label="Description">
         <h2 class="lbl">Description</h2>
         <div class="bodycopy" id="read-body" style="font-size:${Math.min(V.readSize,20)}px;margin-top:0">${notes || '<p>This video came without a description worth showing, mostly sponsor links.</p>'}</div>
@@ -1656,7 +1656,7 @@ function readMain(it, sc){
   const speaking = V.tts === it.id;
   return `<article class="readcol">
     ${head}
-    <div class="hero" style="background:${sc.color||'var(--m6)'}">${pic(it)}</div>
+    <div class="rhero" style="background:${sc.color||'var(--m6)'}">${pic(it)}</div>
     <div class="ttsbar">
       <button class="playbtn" data-tts="${it.id}" aria-label="${speaking?'Pause reading':'Listen to this article'}" style="width:44px;height:44px">${speaking && !V.ttsPaused?I.pauseWhite:I.play}</button>
       <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
