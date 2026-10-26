@@ -7,7 +7,7 @@
   "found_by": "advertised on the page",
   "notes": [],
   "feed_status": 200,
-  "feed_ms": 105,
+  "feed_ms": 42,
   "feed_title": "Cup of Jo",
   "items_in_feed": 6,
   "sample": [
@@ -55,7 +55,7 @@
   "found_by": "advertised on the page",
   "notes": [],
   "feed_status": 200,
-  "feed_ms": 144,
+  "feed_ms": 76,
   "feed_title": "",
   "items_in_feed": 35,
   "sample": [
@@ -103,7 +103,7 @@
   "found_by": "common feed address",
   "notes": [],
   "feed_status": 200,
-  "feed_ms": 528,
+  "feed_ms": 173,
   "feed_title": "Camille Styles",
   "items_in_feed": 16,
   "sample": [
@@ -149,6 +149,10 @@
   "found_by": null,
   "notes": [
    "home page status 403",
+   "/feed with browser agent: 403",
+   "/feed with Feedly agent: 403",
+   "/feed with QuietHours agent: 403",
+   "/feed with curl agent: 403",
    "no feed found on the page or at common addresses"
   ],
   "verdict": "no feed"
@@ -161,6 +165,10 @@
   "found_by": null,
   "notes": [
    "home page status 403",
+   "/feed with browser agent: 403",
+   "/feed with Feedly agent: 403",
+   "/feed with QuietHours agent: 403",
+   "/feed with curl agent: 403",
    "no feed found on the page or at common addresses"
   ],
   "verdict": "no feed"
@@ -173,7 +181,7 @@
   "found_by": "channel page",
   "notes": [],
   "feed_status": 200,
-  "feed_ms": 366,
+  "feed_ms": 101,
   "feed_title": "Caroline Winkler",
   "items_in_feed": 15,
   "sample": [
@@ -219,7 +227,7 @@
   "found_by": "channel page",
   "notes": [],
   "feed_status": 200,
-  "feed_ms": 156,
+  "feed_ms": 126,
   "feed_title": "Jenn Im",
   "items_in_feed": 15,
   "sample": [
@@ -265,7 +273,7 @@
   "found_by": "channel page",
   "notes": [],
   "feed_status": 200,
-  "feed_ms": 179,
+  "feed_ms": 154,
   "feed_title": "Sophia Chang",
   "items_in_feed": 15,
   "sample": [
@@ -311,7 +319,7 @@
   "found_by": "channel page",
   "notes": [],
   "feed_status": 200,
-  "feed_ms": 129,
+  "feed_ms": 131,
   "feed_title": "Healthy Emmie",
   "items_in_feed": 15,
   "sample": [
@@ -353,46 +361,48 @@
   "name": "Dear Gabby",
   "kind": "podcast",
   "url": "https://gabbybernstein.com/podcast/",
-  "feed_url": "https://gabbybernstein.com/feed/",
-  "found_by": "advertised on the page",
-  "notes": [],
+  "feed_url": "https://feeds.megaphone.fm/DEARMEDIALLC3699944295",
+  "found_by": "Apple Podcasts directory",
+  "notes": [
+   "matched Apple Podcasts listing: Dear Gabby by Gabby Bernstein"
+  ],
   "feed_status": 200,
-  "feed_ms": 1130,
-  "feed_title": "Gabrielle Bernstein",
-  "items_in_feed": 10,
+  "feed_ms": 196,
+  "feed_title": "Dear Gabby",
+  "items_in_feed": 342,
   "sample": [
    {
-    "title": "Internal Family Systems (IFS) Therapy",
-    "published": "Wed, 05 Jun 2024 15:05:25 +0000",
-    "link": "https://gabbybernstein.com/internal-family-systems-therapy/",
-    "words_in_feed": 2168,
+    "title": "Your Master Self: The Intuition Shift That Will Change Your Reality",
+    "published": "Mon, 26 Oct 2026 07:01:00 -0000",
+    "link": null,
+    "words_in_feed": 443,
     "has_full_text": true,
     "image": true,
-    "media": null,
+    "media": "audio/mpeg",
     "paywall_hint": false
    },
    {
-    "title": "how to connect with your spirit guides",
-    "published": "Fri, 05 May 2023 05:00:00 +0000",
-    "link": "https://gabbybernstein.com/spirit-guides/",
-    "words_in_feed": 3512,
+    "title": "How to Tell if Your Spirit Guides Are Saying NO with Medium John Edward",
+    "published": "Mon, 19 Oct 2026 07:01:00 -0000",
+    "link": null,
+    "words_in_feed": 482,
     "has_full_text": true,
-    "image": true,
-    "media": null,
+    "image": false,
+    "media": "audio/mpeg",
     "paywall_hint": false
    },
    {
-    "title": "how to manifest: the do\u2019s and don\u2019ts of manifesting",
-    "published": "Thu, 04 May 2023 05:00:00 +0000",
-    "link": "https://gabbybernstein.com/dos-donts-manifesting/",
-    "words_in_feed": 2300,
+    "title": "Don\u2019t Let Fear Run Your Life: Channeled Message from Archangel Raphael with Kelly Kolodney",
+    "published": "Mon, 12 Oct 2026 07:01:00 -0000",
+    "link": null,
+    "words_in_feed": 387,
     "has_full_text": true,
-    "image": true,
-    "media": null,
+    "image": false,
+    "media": "audio/mpeg",
     "paywall_hint": false
    }
   ],
-  "newest_date": "Wed, 05 Jun 2024 15:05:25 +0000",
+  "newest_date": "Mon, 26 Oct 2026 07:01:00 -0000",
   "verdict": "works"
  }
 ]
