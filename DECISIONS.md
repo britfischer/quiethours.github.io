@@ -128,3 +128,6 @@ One line per decision, newest at the bottom. Date, the decision, and why.
 - 2026-10-26: **Reading time removed from Home for now.** It counted each
   piece's estimated length when opened, not time actually spent, and it crowded
   the greeting. Revisit if real time-spent tracking is built.
+- 2026-10-26: **Logo: the hour hand (direction C).** An olive clock ring with one
+  hand at ten and a red centre, beside the lowercase Literata wordmark. Chosen
+  from four directions on the "Quiet Hours logo" design canvas.
