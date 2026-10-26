@@ -7,7 +7,7 @@
   "found_by": "advertised on the page",
   "notes": [],
   "feed_status": 200,
-  "feed_ms": 74,
+  "feed_ms": 66,
   "feed_title": "Cup of Jo",
   "items_in_feed": 6,
   "sample": [
@@ -55,7 +55,7 @@
   "found_by": "advertised on the page",
   "notes": [],
   "feed_status": 200,
-  "feed_ms": 279,
+  "feed_ms": 153,
   "feed_title": "",
   "items_in_feed": 35,
   "sample": [
@@ -103,7 +103,7 @@
   "found_by": "common feed address",
   "notes": [],
   "feed_status": 200,
-  "feed_ms": 482,
+  "feed_ms": 418,
   "feed_title": "Camille Styles",
   "items_in_feed": 16,
   "sample": [
@@ -181,7 +181,7 @@
   "found_by": "channel page",
   "notes": [],
   "feed_status": 200,
-  "feed_ms": 338,
+  "feed_ms": 147,
   "feed_title": "Caroline Winkler",
   "items_in_feed": 15,
   "sample": [
@@ -227,7 +227,7 @@
   "found_by": "channel page",
   "notes": [],
   "feed_status": 200,
-  "feed_ms": 167,
+  "feed_ms": 180,
   "feed_title": "Jenn Im",
   "items_in_feed": 15,
   "sample": [
@@ -273,7 +273,7 @@
   "found_by": "channel page",
   "notes": [],
   "feed_status": 200,
-  "feed_ms": 136,
+  "feed_ms": 173,
   "feed_title": "Sophia Chang",
   "items_in_feed": 15,
   "sample": [
@@ -319,7 +319,7 @@
   "found_by": "channel page",
   "notes": [],
   "feed_status": 200,
-  "feed_ms": 151,
+  "feed_ms": 174,
   "feed_title": "Healthy Emmie",
   "items_in_feed": 15,
   "sample": [
@@ -367,7 +367,7 @@
    "matched Apple Podcasts listing: Dear Gabby by Gabby Bernstein"
   ],
   "feed_status": 200,
-  "feed_ms": 174,
+  "feed_ms": 550,
   "feed_title": "Dear Gabby",
   "items_in_feed": 342,
   "sample": [
